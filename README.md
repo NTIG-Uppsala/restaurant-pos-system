@@ -4,9 +4,13 @@
 
 [Click here for download](installer/POSS-Installer.msi)
 
+* Go to the link above
+* Press the download button as shown in the image below
+![Image of the download](documentation/images/installerDownload.png)
+
 ## Programming languages
 * C# version 12
-* .NET version 8.0.100
+* .NET version 6.0.202
 
 ## Coding standard
 * [Naming conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names)
@@ -20,4 +24,4 @@
 
 ## Further documentation
 
-[documentation](documentation.md)
+[documentation](documentation/documentation.md)
