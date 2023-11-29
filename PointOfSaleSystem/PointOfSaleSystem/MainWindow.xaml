@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PointOfSaleSystem"
         mc:Ignorable="d"
-        Title="PointOfSaleSystem" Height="450" Width="800">
+        Title="PointOfSaleSystem" Height="768" Width="1024">
     <Grid>
-        
+        <Button Content="Kaffe" x:Name="addProductButton" Click="OnButtonClick" HorizontalAlignment="Center" Margin="0,348,0,0" VerticalAlignment="Top" Height="150" Width="299" FontSize="48"/>
+        <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" HorizontalAlignment="Center" Margin="0,100,0,0" VerticalAlignment="Top" Height="100" Width="299" FontSize="48"/>
+        <Label Content="0,00 kr" x:Name="totalPrice" HorizontalAlignment="Center" Margin="0,230,0,0" VerticalAlignment="Top" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center"/>
     </Grid>
 </Window>
