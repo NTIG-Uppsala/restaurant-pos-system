@@ -8,6 +8,8 @@
 * Press the download button as shown in the image below
 ![Image of the download](documentation/images/installerDownload.png)
 
+<a href="installer/POSS-Installer.msi" download>Alternate download</a>
+
 ## Programming languages
 * C# version 12
 * .NET version 6.0.202
