@@ -7,8 +7,28 @@
         mc:Ignorable="d"
         Title="PointOfSaleSystem" Height="768" Width="1024">
     <Grid>
-        <Button Content="Kaffe" x:Name="addProductButton" Click="OnButtonClick" HorizontalAlignment="Center" Margin="0,348,0,0" VerticalAlignment="Top" Height="150" Width="299" FontSize="48"/>
-        <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" HorizontalAlignment="Center" Margin="0,100,0,0" VerticalAlignment="Top" Height="100" Width="299" FontSize="48"/>
-        <Label Content="0,00 kr" x:Name="totalPrice" HorizontalAlignment="Center" Margin="0,230,0,0" VerticalAlignment="Top" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center"/>
+        <!-- Panel for Displaying Dynamically Added Items -->
+        <StackPanel HorizontalAlignment="Left" Margin="20,73,0,73">
+            <ItemsControl x:Name="itemButtonsControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Height="70" Width="100" FontSize="10" Margin="3" Click="OnItemButtonClick">
+                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <!-- Panel for Total Price and Reset Button -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="138" Margin="20,0,0,0">
+            <Label Content="{Binding TotalPrice, StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+            <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="299" FontSize="48" Margin="10,0,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>
