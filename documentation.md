@@ -12,7 +12,7 @@ Download Dotnet SDK 6.0 from [Microsoft's official website](https://dotnet.micro
 
 ### Step 1 - Visual Studio 2022
 
-Download Visual Studio 2022 Community from [Microsoft's official website](https://visualstudio.microsoft.com/vs/)
+Download Visual Studio 2022 Community from [Microsoft's official website](https://visualstudio.microsoft.com/vs/).
 
 ### Step 2 - Opening the project.
 
@@ -24,14 +24,16 @@ Open Visual Studio 2022 and press "Open a project or solution". Navigate to the 
 
 ### Install the extension
 
-* In Visual Studio go to the extensions tab at the top of the window
-* Click `Manage Extensions` and search for `Microsoft Visual Studio Installer Project`, then download and follow its steps after closing Visual Studio
-* You may have to reload the POSS-Installer project to make changes to it
+* In Visual Studio go to the extensions tab at the top of the window.
+* Click `Manage Extensions` and search for `Microsoft Visual Studio Installer Project`, then download and follow its steps after closing Visual Studio.
+* You may have to reload the POSS-Installer project to make changes to it.
 
 ### Setup the installer
 
 * Build the PointOfSaleSystem project
 * Build the POSS-Installer project
+
+**Note: if it says (incompatible) reload the project with dependencies by right clicking the solution and press "Reload with dependencies"**
 
 To find the installer you go to POSS-Installer folder then Debug or release depending on your Visual Studio settings, then run the POSS-Installer.msi
 
