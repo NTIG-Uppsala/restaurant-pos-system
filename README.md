@@ -13,3 +13,7 @@
 * WPF 3.0.6920.4902
 * FlaUI version 4.0.0
 * FlaUInspect
+
+## Further documentation
+
+[documentation](documentation.md)
