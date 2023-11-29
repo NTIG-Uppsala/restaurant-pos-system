@@ -3,6 +3,7 @@
 ## Table of Content
 
 - [Getting Started for Development](#getting-started-for-development)
+- [Manage the installer](#manage-the-installer)
 
 ## Getting Started for Development
 
