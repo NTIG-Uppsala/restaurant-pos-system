@@ -1,5 +1,9 @@
 # Restaurang Kassasystem
 
+## Download the system
+
+[Click here for download](installer/POSS-Installer.msi)
+
 ## Programming languages
 * C# version 12
 * .NET version 8.0.100
