@@ -24,14 +24,14 @@ namespace PointOfSaleSystem
         {
             InitializeComponent();
         }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
         private void OnButtonClick(object sender, RoutedEventArgs e)
         {
             total += 20.00;
+            totalPrice.Content = total.ToString("0.00") + " kr";
+        }
+        private void ResetOrder(object sender, RoutedEventArgs e)
+        {
+            total = 0;
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
     }
