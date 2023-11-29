@@ -60,5 +60,41 @@ namespace TestSystem
 
             Trace.Assert(totalPrice.Text == "0,00 kr");
         }
+
+        [TestMethod]
+        public void TestProductsFromJSON()
+        {
+            Button coffeeButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+            Button bunButton = window.FindFirstDescendant(cf.ByName("Bulle")).AsButton();
+            Button cookieButton = window.FindFirstDescendant(cf.ByName("Kaka")).AsButton();
+
+            coffeeButton.Click();
+            bunButton.Click();
+            cookieButton.Click();
+
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+            Trace.Assert(totalPrice.Text == "55,00 kr");
+
+        }
+
+        [TestMethod]
+        public void TestAddProducts()
+        {
+            // Gets the elements for adding a new product button
+            TextBox nameTextBox = window.FindFirstDescendant(cf.ByAutomationId("itemNameTextBox")).AsTextBox();
+            TextBox priceTextBox = window.FindFirstDescendant(cf.ByAutomationId("itemPriceTextBox")).AsTextBox();
+            Button addProductButton = window.FindFirstDescendant(cf.ByName("Add Item")).AsButton();
+
+            // Adds a new product button
+            nameTextBox.Text = "TestProduct";
+            priceTextBox.Text = "1234";
+            addProductButton.Click();
+
+            // Checks that the new button exists and works
+            Button addedButton = window.FindFirstDescendant(cf.ByName("TestProduct")).AsButton();
+            addedButton.Click();
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+            Trace.Assert(totalPrice.Text == "1234,00 kr");
+        }
     }
 }
