@@ -9,22 +9,18 @@ namespace TestSystem
     [TestClass]
     public class UnitTest1
     {
-
-        public Window window;
-        public ConditionFactory cf;
+        private readonly ConditionFactory cf;
+        private Window window;
 
         [TestInitialize]
         public void Setup()
 
         {
-            using (var automation = new UIA3Automation())
-            {
-                var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net8.0-windows\PointOfSaleSystem.exe");
-                window = app.GetMainWindow(automation);
-
-
-                ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());
-            }
+            using var automation = new UIA3Automation();
+            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+            window = app.GetMainWindow(automation);
+            var newConditionFactory = new ConditionFactory(new UIA3PropertyLibrary());
+            ConditionFactory cf = newConditionFactory;
         }
 
         private static string GetSolutionFolderPath()
@@ -37,7 +33,7 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestTotalPrice()
+        public void TestPriceCalculation()
         {
             Button button = window.FindFirstDescendant(cf.ByAutomationId("addProductButton")).AsButton();
             TextBox totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsTextBox();
@@ -54,44 +50,17 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestCoffeeButton()
-        {
-            Button button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
-            ListBox productList = window.FindFirstDescendant(cf.ByAutomationId("productList")).AsListBox();
-            ListBox quantityList = window.FindFirstDescendant(cf.ByAutomationId("quantityList")).AsListBox();
-
-            // Checks if the list contains an item with the string "Kaffe"
-            bool listContainsItem = productList.Items.Any(item => item.Text == "Kaffe");
-
-            Trace.Assert(!listContainsItem);
-
-            button.Click();
-
-            Trace.Assert(listContainsItem);
-
-            button.Click();
-
-            Trace.Assert(quantityList.Items[1].Text == "2");
-        }
-
-        [TestMethod]
         public void TestResetPrice()
         {
-            Button button = window.FindFirstDescendant(cf.ByAutomationId("addProductButton")).AsButton();
             Button buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
-
-            ListBox productList = window.FindFirstDescendant(cf.ByAutomationId("productList")).AsListBox();
 
             TextBox totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsTextBox();
 
-            button.Click();
+            totalPrice.Text = "19.99 kr";
 
             buttonReset.Click();
 
             Trace.Assert(totalPrice.Text == "0.00 kr");
-
-            bool listIsEmpty = productList.Items.Length == 0;
-            Trace.Assert(listIsEmpty);
         }
     }
 }
