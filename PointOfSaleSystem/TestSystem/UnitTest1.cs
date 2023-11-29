@@ -14,15 +14,11 @@ namespace TestSystem
 
         [TestInitialize]
         public void Setup()
-
         {
-            using (var automation = new UIA3Automation())
-            {
-                var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
-                window = app.GetMainWindow(automation);
-                var newConditionFactory = new ConditionFactory(new UIA3PropertyLibrary());
-                ConditionFactory cf = newConditionFactory;
-            }
+            using var automation = new UIA3Automation();
+            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+            window = app.GetMainWindow(automation);
+            cf = new ConditionFactory(new UIA3PropertyLibrary());
         }
 
         private static string GetSolutionFolderPath()
@@ -38,31 +34,31 @@ namespace TestSystem
         public void TestPriceCalculation()
         {
             Button button = window.FindFirstDescendant(cf.ByAutomationId("addProductButton")).AsButton();
-            TextBox totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsTextBox();
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
-            Trace.Assert(totalPrice.Text == "0.00 kr");
-
-            button.Click();
-
-            Trace.Assert(totalPrice.Text == "20.00 kr");
+            Trace.Assert(totalPrice.Text == "0,00 kr");
 
             button.Click();
 
-            Trace.Assert(totalPrice.Text == "40.00 kr");
+            Trace.Assert(totalPrice.Text == "20,00 kr");
+
+            button.Click();
+
+            Trace.Assert(totalPrice.Text == "40,00 kr");
         }
 
         [TestMethod]
         public void TestResetPrice()
         {
+            Button button = window.FindFirstDescendant(cf.ByAutomationId("addProductButton")).AsButton();
             Button buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
-            TextBox totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsTextBox();
-
-            totalPrice.Text = "19.99 kr";
+            button.Click();
 
             buttonReset.Click();
 
-            Trace.Assert(totalPrice.Text == "0.00 kr");
+            Trace.Assert(totalPrice.Text == "0,00 kr");
         }
     }
 }

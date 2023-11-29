@@ -34,7 +34,6 @@ namespace PointOfSaleSystem
             Trace.WriteLine(total);
             total += 20.00;
             totalPrice.Content = total.ToString("0.00") + " kr";
-            
         }
     }
 }
