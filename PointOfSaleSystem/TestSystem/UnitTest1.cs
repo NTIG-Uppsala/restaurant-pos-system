@@ -9,18 +9,20 @@ namespace TestSystem
     [TestClass]
     public class UnitTest1
     {
-        private readonly ConditionFactory cf;
-        private Window window;
+        public ConditionFactory cf;
+        public Window window;
 
         [TestInitialize]
         public void Setup()
 
         {
-            using var automation = new UIA3Automation();
-            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
-            window = app.GetMainWindow(automation);
-            var newConditionFactory = new ConditionFactory(new UIA3PropertyLibrary());
-            ConditionFactory cf = newConditionFactory;
+            using (var automation = new UIA3Automation())
+            {
+                var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+                window = app.GetMainWindow(automation);
+                var newConditionFactory = new ConditionFactory(new UIA3PropertyLibrary());
+                ConditionFactory cf = newConditionFactory;
+            }
         }
 
         private static string GetSolutionFolderPath()

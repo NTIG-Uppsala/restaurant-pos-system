@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Reflection.Emit;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,10 +19,22 @@ namespace PointOfSaleSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        private double total = 0;
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+        private void OnButtonClick(object sender, RoutedEventArgs e)
+        {
+            Trace.WriteLine(total);
+            total += 20.00;
+            totalPrice.Content = total.ToString("0.00") + " kr";
+            
+        }
     }
 }
