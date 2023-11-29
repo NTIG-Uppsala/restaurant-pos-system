@@ -8,7 +8,7 @@
 * Press the download button as shown in the image below
 ![Image of the download](documentation/images/installerDownload.png)
 
-<a href="installer/POSS-Installer.msi" download>Alternate download</a>
+<a id="raw-url" href="https://raw.githubusercontent.com/NTIG-Uppsala/restaurang-kassasystem/tree/Calculate-price/installer/POSS-Installer.msi">Download FILE</a>
 
 ## Programming languages
 * C# version 12
