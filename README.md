@@ -10,6 +10,8 @@
 
 * When the installer has been run find the location of the installed .exe
 * Right click the .exe and click "Run as administrator"
+* If the application is run without an existing items.json file a default will be generated
+* To add/delete products edit the items.json file
 
 ## Programming languages
 * C# version 12

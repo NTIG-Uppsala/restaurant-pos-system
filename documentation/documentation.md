@@ -4,6 +4,7 @@
 
 - [Getting Started for Development](#getting-started-for-development)
 - [Manage the installer](#manage-the-installer)
+- [Add product buttons during development](#add-product-buttons-during-development)
 
 ## Getting Started for Development
 
@@ -47,3 +48,10 @@ When the project has been updated you need to update the version of the installe
 * Scroll down to the version tab and update the version
 
 In the installer folder, place the new POSS-Installer.msi and setup.exe file
+
+## Add product buttons during development
+
+* Navigate to the folder where the .exe is located
+    * Should be `PointOfSaleSystem/PointOfSaleSystem/bin/Debug/net6.0-windows`
+* Open the items.json file which is created when the project is run and there is no previous items.json
+* There new products can be added and old ones edited/deleted
