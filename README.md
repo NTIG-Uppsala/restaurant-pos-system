@@ -32,3 +32,4 @@
 - [Manage the installer](documentation/manageInstaller.md)
 - [Add product buttons during development](documentation/addProducts.md)
 - [How to run tests](documentation/tests.md)
+- [Setup Database Locally](documentation/setup_database_locally.md)
