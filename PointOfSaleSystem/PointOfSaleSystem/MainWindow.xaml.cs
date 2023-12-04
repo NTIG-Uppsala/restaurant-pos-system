@@ -17,7 +17,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 
 namespace PointOfSaleSystem
@@ -35,6 +36,8 @@ namespace PointOfSaleSystem
         {
             InitializeComponent();
 
+            LoadDefault();
+
             // Load items from JSON file
             LoadItemsFromJson();
 
@@ -44,6 +47,38 @@ namespace PointOfSaleSystem
             // Set up file system watcher
             InitializeFileSystemWatcher();
 
+        }
+
+        public class data
+        {
+            public string Name { get; set; }
+            public double Price { get; set; }
+        }
+
+        private void LoadDefault()
+        {
+            List<data> _data = new List<data>();
+
+            _data.Add(new data()
+            {
+                Name = "Kaffe",
+                Price = 20.00
+            });
+
+            _data.Add(new data()
+            {
+                Name = "Bulle",
+                Price = 25.00
+            });
+
+            _data.Add(new data()
+            {
+                Name = "Kaka",
+                Price = 10.00
+            });
+
+            string json = System.Text.Json.JsonSerializer.Serialize(_data);
+            File.WriteAllText(@"items.json", json);
         }
 
         private void InitializeFileSystemWatcher()
