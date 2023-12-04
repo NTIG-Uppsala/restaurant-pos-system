@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using MySql.Data.MySqlClient;
 
 
 namespace PointOfSaleSystem
@@ -31,6 +32,7 @@ namespace PointOfSaleSystem
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
         private FileSystemWatcher fileSystemWatcher;
+        private const string ConnectionString = "Server=localhost;Database=restaurant-poss;Uid=root;Pwd=;";
 
         public MainWindow()
         {
@@ -39,7 +41,7 @@ namespace PointOfSaleSystem
             LoadDefault();
 
             // Load items from JSON file
-            LoadItemsFromJson();
+            LoadItemsFromDatabase();
 
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
@@ -102,48 +104,58 @@ namespace PointOfSaleSystem
         {
             Thread.Sleep(1500);
             // Handle file change event (reload items)
-            Dispatcher.Invoke(() => LoadItemsFromJson());
+            Dispatcher.Invoke(() => LoadItemsFromDatabase());
         }
 
-        private void LoadItemsFromJson()
+        private void LoadItemsFromDatabase()
         {
             try
             {
-                // Read the JSON file
-                string jsonContent = File.ReadAllText("items.json");
-
-                // Deserialize the JSON content into a list of items
-                List<Item> loadedItems = JsonConvert.DeserializeObject<List<Item>>(jsonContent);
-
-                // Clear existing items and add the loaded items
-                items.Clear();
-                if (loadedItems == null)
+                using (MySqlConnection connection = new MySqlConnection(ConnectionString))
                 {
-                    return;
-                }
+                    connection.Open();
 
+                    string query = "SELECT * FROM products";
+                    MySqlCommand command = new MySqlCommand(query, connection);
 
-                foreach (var item in loadedItems)
-                {
-                    items.Add(item);
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        // Clear existing items
+                        items.Clear();
+
+                        while (reader.Read())
+                        {
+                            int itemId = Convert.ToInt32(reader["ID"]);
+                            string itemName = reader["Product"].ToString();
+                            double itemPrice = Convert.ToDouble(reader["Price"]);
+                            int categoryId = Convert.ToInt32(reader["Category_ID"]);
+
+                            // Create an Item object and add it to the ObservableCollection
+                            items.Add(new Item(itemId, itemName, itemPrice, categoryId));
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions (e.g., file not found, invalid JSON format)
-                MessageBox.Show($"Error loading items from JSON file: {ex.Message}");
+                // Handle any exceptions (e.g., database connection issues)
+                MessageBox.Show($"Error loading items from database: {ex.Message}");
             }
         }
 
         public class Item
         {
+            public int ID { get; set; }
             public string Name { get; set; }
             public double Price { get; set; }
+            public int CategoryID { get; set; }
 
-            public Item(string name, double price)
+            public Item(int id, string name, double price, int categoryID)
             {
+                ID = id;
                 Name = name;
                 Price = price;
+                CategoryID = categoryID;
             }
         }
 
