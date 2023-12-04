@@ -30,6 +30,16 @@ namespace TestSystem
             return solutionFolderPath;
         }
 
+        [TestCleanup]
+
+        public void Cleanup()
+        {
+            if (window != null)
+            {
+                window.AsWindow().Close();
+            }
+        }
+
         [TestMethod]
         public void TestDefaultValue()
         {
