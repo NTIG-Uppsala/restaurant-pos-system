@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 
 
@@ -28,6 +29,8 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
+        private FileSystemWatcher fileSystemWatcher;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,24 +40,54 @@ namespace PointOfSaleSystem
 
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
+
+            // Set up file system watcher
+            InitializeFileSystemWatcher();
+
+        }
+
+        private void InitializeFileSystemWatcher()
+        {
+            fileSystemWatcher = new FileSystemWatcher
+            {
+                Path = Environment.CurrentDirectory, // Change this path if needed
+                Filter = "items.json",
+                NotifyFilter = NotifyFilters.LastWrite
+            };
+
+            fileSystemWatcher.Changed += FileSystemWatcher_Changed;
+
+            // Enable the watcher
+            fileSystemWatcher.EnableRaisingEvents = true;
+        }
+
+
+
+        private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            Thread.Sleep(1500);
+            // Handle file change event (reload items)
+            Dispatcher.Invoke(() => LoadItemsFromJson());
         }
 
         private void LoadItemsFromJson()
         {
-
-            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string solutionFolderPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(executablePath, @"..\..\..\..\.."));
-
             try
             {
                 // Read the JSON file
-                string jsonContent = File.ReadAllText(solutionFolderPath + @"\PointOfSaleSystem\items.json");
+                string jsonContent = File.ReadAllText("items.json");
 
                 // Deserialize the JSON content into a list of items
                 List<Item> loadedItems = JsonConvert.DeserializeObject<List<Item>>(jsonContent);
 
                 // Clear existing items and add the loaded items
                 items.Clear();
+                if (loadedItems == null)
+                {
+                    return;
+                }
+
+
                 foreach (var item in loadedItems)
                 {
                     items.Add(item);
@@ -67,7 +100,6 @@ namespace PointOfSaleSystem
             }
         }
 
-
         public class Item
         {
             public string Name { get; set; }
@@ -79,6 +111,7 @@ namespace PointOfSaleSystem
                 Price = price;
             }
         }
+
         private void OnItemButtonClick(object sender, RoutedEventArgs e)
         {
             // Retrieve the item price from the button's tag
@@ -88,6 +121,7 @@ namespace PointOfSaleSystem
             total += itemPrice;
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
+
         private void ResetOrder(object sender, RoutedEventArgs e)
         {
             total = 0;
