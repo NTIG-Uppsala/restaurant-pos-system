@@ -8,6 +8,9 @@
 * Press the download button as shown in the image below
 ![Image of the download](documentation/images/installerDownload.png)
 
+* When the installer has been run find the location of the installed .exe
+* Right click the .exe and click "Run as administrator"
+
 ## Programming languages
 * C# version 12
 * .NET version 6.0.202
