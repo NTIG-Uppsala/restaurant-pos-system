@@ -28,5 +28,7 @@
 * FlaUInspect
 
 ## Further documentation
-
-[documentation](documentation/documentation.md)
+- [Getting Started for Development](documentation/startDevelopment.md)
+- [Manage the installer](documentation/manageInstaller.md)
+- [Add product buttons during development](documentation/addProducts.md)
+- [How to run tests](documentation/tests.md)
