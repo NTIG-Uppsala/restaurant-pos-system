@@ -31,17 +31,31 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestPriceCalculation()
+        public void TestDefaultValue()
+        {
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            Trace.Assert(totalPrice.Text == "0,00 kr");
+        }
+
+        [TestMethod]
+        public void TestAddProduct()
         {
             Button button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
-            Trace.Assert(totalPrice.Text == "0,00 kr");
-
             button.Click();
 
             Trace.Assert(totalPrice.Text == "20,00 kr");
+        }
 
+        [TestMethod]
+        public void TestAddMultipleProducts()
+        {
+            Button button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            button.Click();
             button.Click();
 
             Trace.Assert(totalPrice.Text == "40,00 kr");
@@ -55,14 +69,27 @@ namespace TestSystem
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
             button.Click();
-
             buttonReset.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr");
         }
 
         [TestMethod]
-        public void TestProductsFromJSON()
+        public void TestAddProductAfterReset()
+        {
+            Button button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+            Button buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            button.Click();
+            buttonReset.Click();
+            button.Click();
+
+            Trace.Assert(totalPrice.Text == "20,00 kr");
+        }
+
+        [TestMethod]
+        public void TestMultipleProductsWithDifferentPrice()
         {
             Button coffeeButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
             Button bunButton = window.FindFirstDescendant(cf.ByName("Bulle")).AsButton();
@@ -75,5 +102,6 @@ namespace TestSystem
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
             Trace.Assert(totalPrice.Text == "55,00 kr");
         }
+
     }
 }
