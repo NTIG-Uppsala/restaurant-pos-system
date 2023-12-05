@@ -9,14 +9,14 @@
 * Go to the SQL tab in the new database and input the following command
  
     ``` SQL
-    CREATE TABLE Products (
+    CREATE TABLE products (
         ID INT AUTO_INCREMENT PRIMARY KEY,
-        Product VARCHAR(255),
-        Price DECIMAL(10, 2),
-        Category_ID INT
+        product VARCHAR(255),
+        price DECIMAL(10, 2),
+        categoryId INT
     );
     ```
 * To add products you can go into the SQL tab and write the following line (change the sent values)
     ``` SQL
-    INSERT INTO Products (Product, Price, Category_ID) VALUES ('ProductName', 20, 1);
+    INSERT INTO products (product, price, categoryId) VALUES ('ProductName', 20, 1);
     ```

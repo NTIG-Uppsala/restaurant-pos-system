@@ -55,9 +55,9 @@ namespace PointOfSaleSystem
                 while (reader.Read())
                 {
                     int itemId = Convert.ToInt32(reader["ID"]);
-                    string? itemName = Convert.ToString(reader["Product"]);
-                    double itemPrice = Convert.ToDouble(reader["Price"]);
-                    int categoryId = Convert.ToInt32(reader["Category_ID"]);
+                    string? itemName = Convert.ToString(reader["product"]);
+                    double itemPrice = Convert.ToDouble(reader["price"]);
+                    int categoryId = Convert.ToInt32(reader["categoryId"]);
 
                     var productHasNoName = itemName == null || itemName == "";
 
