@@ -79,6 +79,15 @@ namespace PointOfSaleSystem
                     double itemPrice = Convert.ToDouble(reader["Price"]);
                     int categoryId = Convert.ToInt32(reader["Category_ID"]);
 
+                    var productHasNoName = itemName == null || itemName == "";
+
+                    if (productHasNoName)
+                    {
+                        itemName = "NO GIVEN NAME";
+                        itemPrice = 0;
+                        categoryId = 0;
+                    }
+
                     // Create an Item object and add it to the ObservableCollection
                     items.Add(new Item(itemId, itemName, itemPrice, categoryId));
                 }
