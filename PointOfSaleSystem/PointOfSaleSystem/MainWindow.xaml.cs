@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using MySql.Data.MySqlClient;
 
 namespace PointOfSaleSystem
@@ -10,20 +11,36 @@ namespace PointOfSaleSystem
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
         private const string ConnectionString = "Server=localhost;Database=restaurant-poss;Uid=root;Pwd=;";
+        private DispatcherTimer timer;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Load items from JSON file
+            // Load items from the Database
             LoadItemsFromDatabase();
 
             // Set the loaded items as the ItemsSource for the ItemsControl
+            itemButtonsControl.ItemsSource = items;
+
+            // Set up the timer to reload items every 10 minutes (adjust the interval as needed)
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMinutes(10);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Reload items from the database
+            LoadItemsFromDatabase();
+
             itemButtonsControl.ItemsSource = items;
         }
 
         private void LoadItemsFromDatabase()
         {
+            ObservableCollection<Item> newItems = new ObservableCollection<Item>();
             try
             {
                 MySqlConnection connection = new MySqlConnection(ConnectionString);
@@ -34,8 +51,6 @@ namespace PointOfSaleSystem
 
                 MySqlDataReader reader = command.ExecuteReader();
 
-                // Clear existing items
-                items.Clear();
 
                 while (reader.Read())
                 {
@@ -54,11 +69,16 @@ namespace PointOfSaleSystem
                     }
 
                     // Create an Item object and add it to the ObservableCollection
-                    items.Add(new Item(itemId, itemName, itemPrice, categoryId));
+                    newItems.Add(new Item(itemId, itemName, itemPrice, categoryId));
                 }
 
                 reader.Dispose();
                 connection.Dispose();
+
+                if (!items.SequenceEqual(newItems))
+                {
+                    items = newItems;
+                }
             }
             catch (Exception ex)
             {
