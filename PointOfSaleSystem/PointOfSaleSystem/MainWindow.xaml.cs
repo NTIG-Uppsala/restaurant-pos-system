@@ -1,10 +1,7 @@
-﻿using MySql.Data.MySqlClient;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
-
+using MySql.Data.MySqlClient;
 
 namespace PointOfSaleSystem
 {
@@ -15,7 +12,6 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
-        private FileSystemWatcher fileSystemWatcher;
         private const string ConnectionString = "Server=localhost;Database=restaurant-poss;Uid=root;Pwd=;";
 
         public MainWindow()
@@ -27,34 +23,6 @@ namespace PointOfSaleSystem
 
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
-
-            // Set up file system watcher
-            InitializeFileSystemWatcher();
-
-        }
-
-        private void InitializeFileSystemWatcher()
-        {
-            fileSystemWatcher = new FileSystemWatcher
-            {
-                Path = Environment.CurrentDirectory,
-                Filter = "items.json",
-                NotifyFilter = NotifyFilters.LastWrite
-            };
-
-            fileSystemWatcher.Changed += FileSystemWatcher_Changed;
-
-            // Enable the watcher
-            fileSystemWatcher.EnableRaisingEvents = true;
-        }
-
-
-
-        private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            Thread.Sleep(1500);
-            // Handle file change event (reload items)
-            Dispatcher.Invoke(() => LoadItemsFromDatabase());
         }
 
         private void LoadItemsFromDatabase()
