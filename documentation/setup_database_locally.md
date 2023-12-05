@@ -1,10 +1,9 @@
 # Setup database
 * Download [XAMPP](https://www.cs.virginia.edu/~up3f/cs4750/supplement/XAMPP-setup.html) with MySQL and apache
-* Start MySQL and Apache from the XAMPP Control Panel
-
 * Press config in the Apache module's column and press "Apache (httpd.conf)".
 * Press Ctrl + F and search for "80" and replace it with "81"
-
+* Save and exit
+* Start MySQL and Apache from the XAMPP Control Panel
 * Go to [localhost:81](http://localhost:81/) and go to `phpMyAdmin`
 * Create a new database with the name `restaurant-POSS`
 * Go to the SQL tab in the new database and input the following command
