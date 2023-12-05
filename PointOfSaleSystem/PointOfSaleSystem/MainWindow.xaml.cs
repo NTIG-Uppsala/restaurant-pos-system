@@ -5,9 +5,6 @@ using MySql.Data.MySqlClient;
 
 namespace PointOfSaleSystem
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private double total = 0;
