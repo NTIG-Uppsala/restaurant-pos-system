@@ -20,8 +20,10 @@ To find the installer you go to POSS-Installer folder then Debug or release depe
 When the project has been updated you need to update the version of the installer, for the installer to be able to update the program.
 
 * Set the mode in Visual Studio from debug to release
+
 ![Image of how to change mode](images/changeMode.png)
 * Build PointOfSaleSystem project
+* Right click the POSS-Installer project, click add then file and select `PointOfSaleSystem.deps.json` from the PointOfSaleSystem project
 * Build the POSS-Installer project
 * Click the POSS-Installer in Visual Studio and press F4
 * The properties window will open
