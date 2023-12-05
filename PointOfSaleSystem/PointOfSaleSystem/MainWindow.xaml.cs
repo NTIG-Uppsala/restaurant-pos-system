@@ -23,19 +23,7 @@ namespace PointOfSaleSystem
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
 
-            // Set up the timer to reload items every 10 minutes (adjust the interval as needed)
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMinutes(10);
-            timer.Tick += Timer_Tick;
-            timer.Start();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            // Reload items from the database
-            LoadItemsFromDatabase();
-
-            itemButtonsControl.ItemsSource = items;
+            SetTimer();
         }
 
         private void LoadItemsFromDatabase()
@@ -85,6 +73,23 @@ namespace PointOfSaleSystem
                 // Handle any exceptions (e.g., database connection issues)
                 MessageBox.Show($"Error loading items from database: {ex.Message}");
             }
+        }
+
+        private void SetTimer()
+        {
+            // Set up the timer to reload items every 10 minutes (adjust the interval as needed)
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromMinutes(10);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Reload items from the database
+            LoadItemsFromDatabase();
+
+            itemButtonsControl.ItemsSource = items;
         }
 
         public class Item
