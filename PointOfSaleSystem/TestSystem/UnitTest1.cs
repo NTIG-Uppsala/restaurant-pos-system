@@ -34,10 +34,7 @@ namespace TestSystem
 
         public void Cleanup()
         {
-            if (window != null)
-            {
-                window.AsWindow().Close();
-            }
+            window?.AsWindow().Close();
         }
 
         [TestMethod]
@@ -112,6 +109,5 @@ namespace TestSystem
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
             Trace.Assert(totalPrice.Text == "55,00 kr");
         }
-
     }
 }
