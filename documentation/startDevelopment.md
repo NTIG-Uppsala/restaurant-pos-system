@@ -13,3 +13,8 @@ Download Visual Studio 2022 Community from [Microsoft's official website](https:
 Open Visual Studio 2022 and press "Open a project or solution". Navigate to the project's folder and open the "PointOfSaleSystem.sln"
 
 **Note: Build the solution before running the tests.**
+
+## Step 3 - Setup the installer
+
+[How to manage the installer](manageInstaller.md)
+
