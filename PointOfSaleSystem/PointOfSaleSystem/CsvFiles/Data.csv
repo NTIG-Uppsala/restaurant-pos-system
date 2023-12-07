@@ -1,0 +1,48 @@
+Name,Price,CategoryId
+Bearnaise,10,6
+Citronmajonnäs,10,6
+Chimichurri,10,6
+Räkor 200 g,120,5
+Rökta räkor 200 g,120,5
+Havskräfta,38,5
+Halv krabba,140,5
+Halv hummer,235,5
+Svamptartar,135,1
+Laxsashimi,145,1
+Kammusslor,170,1
+Crème brûlée,90,3
+Hallonpavlova,110,3
+Passionfruktssorbet,50,3
+Glas Maison Sans Pareil Sauvignon Blanc,135,7
+Flaska Maison Sans Pareil Sauvignon Blanc,495,7
+Paolo Leo Calaluna Fiano,405,7
+Glas Friedrich-Wilhelm-Gymnasium Riesling Trocken,125,7
+Flaska Friedrich-Wilhelm-Gymnasium Riesling Trocken,455,7
+Glas Jean-Claude Boisset Pinot Noir,135,7
+Flaska Jean-Claude Boisset Pinot Noir,495,7
+I Castei Ripasso,520,7
+Capricciosa,90,4
+Calzone,90,4
+Margarita,90,4
+Hawaii,90,4
+Vesuvio,90,4
+Dagens Lunch,85,2
+Räksallad,120,2
+Husmanstallrik,125,2
+Fish 'n' Chips,125,2
+Grillad Tonfisksallad,190,2
+Steam Tartar,185,2
+Cider,74,8
+Grängesberg,30,8
+Cruzcampo,65,8
+Janne Shuffle,59,8
+Bistro Lager,65,8
+Wisby Pils,69,8
+Sleepy Bulldog Pale Ale,75,8
+Kaffe,32,9
+Espresso,32,9
+Dubbel Espresso,36,9
+Macchiato,34,9
+Dubbel Macchiato,42,9
+Cappuccino,44,9
+Te,34,9

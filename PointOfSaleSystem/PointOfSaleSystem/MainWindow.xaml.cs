@@ -12,6 +12,7 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
+        private string csvFilePath = @"CsvFiles\Data.csv";
 
         public MainWindow()
         {
@@ -26,9 +27,9 @@ namespace PointOfSaleSystem
             itemButtonsControl.ItemsSource = items;
         }
 
-        public void GenerateDatabase()
+        public async Task GenerateDatabase()
         {
-            List<DatabaseItem> ListOfProducts = GetDefaultProducts();
+            List<DatabaseItem> ListOfProducts = await LoadProductsFromCSVAsync();
             try
             {
                 using var db = new POSSContext();
@@ -53,68 +54,38 @@ namespace PointOfSaleSystem
             }
         }
 
-        public List<DatabaseItem> GetDefaultProducts()
+        public async Task<List<DatabaseItem>> LoadProductsFromCSVAsync()
         {
-            List<DatabaseItem> Products = new List<DatabaseItem>();
+            var products = new List<DatabaseItem>();
 
-            Products.Add(new DatabaseItem { Name = "Bearnaise", Price = 10, CategoryId = 6 });
-            Products.Add(new DatabaseItem { Name = "Citronmajonnäs", Price = 10, CategoryId = 6 });
-            Products.Add(new DatabaseItem { Name = "Chimichurri", Price = 10, CategoryId = 6 });
+            try 
+            { 
+                var lines = await Task.Run(() => File.ReadAllLines(csvFilePath));
 
-            Products.Add(new DatabaseItem { Name = "Räkor 200 g", Price = 120, CategoryId = 5 });
-            Products.Add(new DatabaseItem { Name = "Rökta räkor 200 g", Price = 120, CategoryId = 5 });
-            Products.Add(new DatabaseItem { Name = "Havskräfta", Price = 38, CategoryId = 5 });
-            Products.Add(new DatabaseItem { Name = "Halv krabba", Price = 140, CategoryId = 5 });
-            Products.Add(new DatabaseItem { Name = "Halv hummer", Price = 235, CategoryId = 5 });
+                // Skip header line
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    var line = lines[i];
+                    var data = line.Split(',');
 
-            Products.Add(new DatabaseItem { Name = "Svamptartar", Price = 135, CategoryId = 1 });
-            Products.Add(new DatabaseItem { Name = "Laxsashimi", Price = 145, CategoryId = 1 });
-            Products.Add(new DatabaseItem { Name = "Kammusslor", Price = 170, CategoryId = 1 });
+                    if (data.Length >= 3)
+                    {
+                        var product = new DatabaseItem
+                        {
+                            Name = Convert.ToString(data[0]),
+                            Price = Convert.ToDouble(data[1]),
+                            CategoryId = Convert.ToInt32(data[2])
+                        };
+                        products.Add(product);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
-            Products.Add(new DatabaseItem { Name = "Crème brûlée", Price = 90, CategoryId = 3 });
-            Products.Add(new DatabaseItem { Name = "Hallonpavlova", Price = 110, CategoryId = 3 });
-            Products.Add(new DatabaseItem { Name = "Passionfruktssorbet", Price = 50, CategoryId = 3 });
-
-            Products.Add(new DatabaseItem { Name = "Glas Maison Sans Pareil Sauvignon Blanc", Price = 135, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Flaska Maison Sans Pareil Sauvignon Blanc", Price = 495, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Paolo Leo Calaluna Fiano", Price = 405, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Glas Friedrich-Wilhelm-Gymnasium Riesling Trocken", Price = 125, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Flaska Friedrich-Wilhelm-Gymnasium Riesling Trocken", Price = 455, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Glas Jean-Claude Boisset, Pinot Noir", Price = 135, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "Flaska Jean-Claude Boisset, Pinot Noir", Price = 495, CategoryId = 7 });
-            Products.Add(new DatabaseItem { Name = "I Castei Ripasso", Price = 520, CategoryId = 7 });
-
-            Products.Add(new DatabaseItem { Name = "Capricciosa", Price = 90, CategoryId = 4 });
-            Products.Add(new DatabaseItem { Name = "Calzone", Price = 90, CategoryId = 4 });
-            Products.Add(new DatabaseItem { Name = "Margarita", Price = 90, CategoryId = 4 });
-            Products.Add(new DatabaseItem { Name = "Hawaii", Price = 90, CategoryId = 4 });
-            Products.Add(new DatabaseItem { Name = "Vesuvio", Price = 90, CategoryId = 4 });
-
-
-            Products.Add(new DatabaseItem { Name = "Dagens Lunch", Price = 85, CategoryId = 2 });
-            Products.Add(new DatabaseItem { Name = "Räksallad", Price = 120, CategoryId = 2 });
-            Products.Add(new DatabaseItem { Name = "Husmanstallrik", Price = 125, CategoryId = 2 });
-            Products.Add(new DatabaseItem { Name = "Fish 'n' Chips", Price = 125, CategoryId = 2 });
-            Products.Add(new DatabaseItem { Name = "Grillad Tonfisksallad", Price = 190, CategoryId = 2 });
-            Products.Add(new DatabaseItem { Name = "Steam Tartar", Price = 185, CategoryId = 2 });
-
-            Products.Add(new DatabaseItem { Name = "Cider", Price = 74, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Grängesberg", Price = 30, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Cruzcampo", Price = 65, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Janne Shuffle", Price = 59, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Bistro Lager", Price = 65, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Wisby Pils", Price = 69, CategoryId = 8 });
-            Products.Add(new DatabaseItem { Name = "Sleepy Bulldog Pale Ale", Price = 75, CategoryId = 8 });
-
-            Products.Add(new DatabaseItem { Name = "Kaffe", Price = 32, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Espresso", Price = 32, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Dubbel Espresso", Price = 36, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Macchiato", Price = 34, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Dubbel Macchiato", Price = 42, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Cappuccino", Price = 44, CategoryId = 9 });
-            Products.Add(new DatabaseItem { Name = "Te", Price = 34, CategoryId = 9 });
-
-            return Products;
+            return products;
         }
 
         private void LoadItemsFromDatabase()
