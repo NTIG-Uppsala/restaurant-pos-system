@@ -1,5 +1,9 @@
 # Restaurang Kassasystem
 
+## Introduction
+
+This project is a Point of sale system made with WPF and C#. When the project is run a database is created at `C:\Users\%UserName%\AppData\Local\Restaurant-POSS\`
+
 ## Download the system
 
 [Click here for download](installer/POSS-Installer.msi)
@@ -8,10 +12,7 @@
 * Press the download button as shown in the image below
 ![Image of the download](documentation/images/installerDownload.png)
 
-* When the installer has been run find the location of the installed .exe
-* Right click the .exe and click "Run as administrator"
-* If the application is run without an existing items.json file a default will be generated
-* To add/delete products edit the items.json file
+* Run the installer and approve the admin privileges to run the point of sale system app 
 
 ## Programming languages
 * C# version 12
@@ -30,5 +31,5 @@
 ## Further documentation
 - [Getting Started for Development](documentation/startDevelopment.md)
 - [Manage the installer](documentation/manageInstaller.md)
-- [Add product buttons during development](documentation/addProducts.md)
 - [How to run tests](documentation/tests.md)
+- [Setup Database Locally](documentation/setupDatabaseLocally.md)

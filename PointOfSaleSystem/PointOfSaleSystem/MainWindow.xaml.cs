@@ -1,149 +1,162 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Data.SqlClient;
 using System.IO;
-using System.Reflection.Emit;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
 
 namespace PointOfSaleSystem
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
-        private FileSystemWatcher fileSystemWatcher;
+        private string csvFilePath = @"CsvFiles\Data.csv";
 
         public MainWindow()
         {
             InitializeComponent();
 
-            LoadDefault();
+            GenerateDatabase();
 
-            // Load items from JSON file
-            LoadItemsFromJson();
+            // Load items from the Database
+            LoadItemsFromDatabase();
 
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
-
-            // Set up file system watcher
-            InitializeFileSystemWatcher();
-
         }
 
-        public class data
+        public async Task GenerateDatabase()
         {
-            public string Name { get; set; }
-            public double Price { get; set; }
-        }
-
-        private void LoadDefault()
-        {
-            List<data> _data = new List<data>();
-
-            _data.Add(new data()
-            {
-                Name = "Kaffe",
-                Price = 20.00
-            });
-
-            _data.Add(new data()
-            {
-                Name = "Bulle",
-                Price = 25.00
-            });
-
-            _data.Add(new data()
-            {
-                Name = "Kaka",
-                Price = 10.00
-            });
-
-            string json = System.Text.Json.JsonSerializer.Serialize(_data);
-            File.WriteAllText(@"items.json", json);
-        }
-
-        private void InitializeFileSystemWatcher()
-        {
-            fileSystemWatcher = new FileSystemWatcher
-            {
-                Path = Environment.CurrentDirectory, // Change this path if needed
-                Filter = "items.json",
-                NotifyFilter = NotifyFilters.LastWrite
-            };
-
-            fileSystemWatcher.Changed += FileSystemWatcher_Changed;
-
-            // Enable the watcher
-            fileSystemWatcher.EnableRaisingEvents = true;
-        }
-
-
-
-        private void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
-        {
-            Thread.Sleep(1500);
-            // Handle file change event (reload items)
-            Dispatcher.Invoke(() => LoadItemsFromJson());
-        }
-
-        private void LoadItemsFromJson()
-        {
+            List<DatabaseItem> ListOfProducts = await LoadProductsFromCSVAsync();
             try
             {
-                // Read the JSON file
-                string jsonContent = File.ReadAllText("items.json");
+                using var db = new POSSContext();
+                db.Database.EnsureCreated();
 
-                // Deserialize the JSON content into a list of items
-                List<Item> loadedItems = JsonConvert.DeserializeObject<List<Item>>(jsonContent);
+                var existingProductNames = db.Products.Select(p => p.Name).ToList();
 
-                // Clear existing items and add the loaded items
-                items.Clear();
-                if (loadedItems == null)
+                foreach (DatabaseItem newProduct in ListOfProducts)
                 {
-                    return;
+                    if (!existingProductNames.Contains(newProduct.Name))
+                    {
+                        db.Add(newProduct);
+                    }
                 }
 
+                db.SaveChanges();
 
-                foreach (var item in loadedItems)
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show($"An error occured during database setup: {error.Message}");
+            }
+        }
+
+        public async Task<List<DatabaseItem>> LoadProductsFromCSVAsync()
+        {
+            var products = new List<DatabaseItem>();
+
+            try 
+            { 
+                var lines = await Task.Run(() => File.ReadAllLines(csvFilePath));
+
+                // Skip header line
+                for (int i = 1; i < lines.Length; i++)
                 {
-                    items.Add(item);
+                    var line = lines[i];
+                    var data = line.Split(',');
+
+                    if (data.Length >= 3)
+                    {
+                        var product = new DatabaseItem
+                        {
+                            Name = Convert.ToString(data[0]),
+                            Price = Convert.ToDouble(data[1]),
+                            CategoryId = Convert.ToInt32(data[2])
+                        };
+                        products.Add(product);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return products;
+        }
+
+        private void LoadItemsFromDatabase()
+        {
+            ObservableCollection<Item> newItems = new ObservableCollection<Item>();
+            try
+            {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POSS");
+                Directory.CreateDirectory(path);
+                var DbPath = System.IO.Path.Join(path, "POSS.db");
+
+                string connectionString = $"Data Source={DbPath}";
+
+                using (var connection = new SqliteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM products";
+                    using (var command = new SqliteCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int itemId = Convert.ToInt32(reader["ID"]);
+                                string itemName = Convert.ToString(reader["Name"]);
+                                double itemPrice = Convert.ToDouble(reader["price"]);
+                                int categoryId = Convert.ToInt32(reader["CategoryId"]);
+
+                                var productHasNoName = string.IsNullOrEmpty(itemName);
+
+                                if (productHasNoName)
+                                {
+                                    itemName = "NO GIVEN NAME";
+                                    itemPrice = 0;
+                                    categoryId = 0;
+                                }
+
+                                // Create an Item object and add it to the ObservableCollection
+                                newItems.Add(new Item(itemId, itemName, itemPrice, categoryId));
+                            }
+                        }
+                    }
+                }
+
+                if (!items.SequenceEqual(newItems))
+                {
+                    items = newItems;
                 }
             }
             catch (Exception ex)
             {
-                // Handle any exceptions (e.g., file not found, invalid JSON format)
-                MessageBox.Show($"Error loading items from JSON file: {ex.Message}");
+                // Handle any exceptions (e.g., database connection issues)
+                MessageBox.Show($"Error loading items from database: {ex.Message}");
             }
         }
 
         public class Item
         {
+            public int ID { get; set; }
             public string Name { get; set; }
             public double Price { get; set; }
+            public int CategoryID { get; set; }
 
-            public Item(string name, double price)
+            public Item(int id, string name, double price, int categoryID)
             {
+                ID = id;
                 Name = name;
                 Price = price;
+                CategoryID = categoryID;
             }
         }
 
@@ -161,6 +174,34 @@ namespace PointOfSaleSystem
         {
             total = 0;
             totalPrice.Content = total.ToString("0.00") + " kr";
+        }
+
+        public class POSSContext : DbContext
+        {
+            public DbSet<DatabaseItem> Products { get; set; }
+
+            public string DbPath { get; }
+
+            public POSSContext()
+            {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POSS");
+                Directory.CreateDirectory(path);
+                DbPath = System.IO.Path.Join(path, "POSS.db");
+            }
+
+            // The following configures EF to create a Sqlite database file in the
+            // special "local" folder for your platform.
+            protected override void OnConfiguring(DbContextOptionsBuilder options)
+                => options.UseSqlite($"Data Source={DbPath}");
+        }
+
+        public class DatabaseItem
+        {
+            public int Id { get; set; }
+            public string? Name { get; set; }
+            public double Price { get; set; }
+            public int CategoryId { get; set; }
         }
     }
 }
