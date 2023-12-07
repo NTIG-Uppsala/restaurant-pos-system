@@ -1,12 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using System.Data.SqlClient;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
-using MySql.Data.MySqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
-using System.Data.SqlClient;
-using Microsoft.Data.Sqlite;
 
 namespace PointOfSaleSystem
 {
@@ -14,7 +12,6 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
-        private DispatcherTimer timer;
 
         public MainWindow()
         {
@@ -27,8 +24,6 @@ namespace PointOfSaleSystem
 
             // Set the loaded items as the ItemsSource for the ItemsControl
             itemButtonsControl.ItemsSource = items;
-
-            SetTimer();
         }
 
         public void GenerateDatabase()
@@ -178,24 +173,6 @@ namespace PointOfSaleSystem
             }
         }
 
-
-        private void SetTimer()
-        {
-            // Set up the timer to reload items every 10 minutes (adjust the interval as needed)
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(10);
-            timer.Tick += Timer_Tick;
-            timer.Start();
-        }
-
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            // Reload items from the database
-            LoadItemsFromDatabase();
-
-            itemButtonsControl.ItemsSource = items;
-        }
-
         public class Item
         {
             public int ID { get; set; }
@@ -227,6 +204,7 @@ namespace PointOfSaleSystem
             total = 0;
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
+
         public class POSSContext : DbContext
         {
             public DbSet<DatabaseItem> Products { get; set; }
