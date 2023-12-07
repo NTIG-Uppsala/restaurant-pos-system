@@ -198,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:POSS-Installer"
-        "ProductCode" = "8:{A66D204A-8B74-4646-B25C-2E3161F99887}"
-        "PackageCode" = "8:{3D68897C-CD5E-4E9E-BC26-B555D7147E5A}"
+        "ProductCode" = "8:{6ACD908E-CBCC-4CB7-8214-45A031A8A9D0}"
+        "PackageCode" = "8:{9F3A4426-B913-446D-A9E8-77097AA3612E}"
         "UpgradeCode" = "8:{78B4CE94-FB43-4654-8095-D6E006A6455A}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.7"
+        "ProductVersion" = "8:1.0.8"
         "Manufacturer" = "8:NTI Gymnasiet"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -734,7 +734,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_83E5238332F441C49E3CFDED5279DF79"
             {
-            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_15DFAD8BD38F4347B5FCF674AB214710"
