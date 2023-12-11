@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestSystem", "TestSystem\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PointOfSaleSystem", "PointOfSaleSystem\PointOfSaleSystem.csproj", "{C226158C-07D8-4C30-ADE4-FF3617AE9580}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "POSS-Installer", "POSS-Installer\POSS-Installer.vdproj", "{74B5C20F-1D39-453F-A367-016B9683C292}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "POS-Installer", "POS-Installer\POS-Installer.vdproj", "{74B5C20F-1D39-453F-A367-016B9683C292}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
