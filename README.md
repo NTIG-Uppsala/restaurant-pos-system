@@ -31,6 +31,8 @@ When the project is run a database is created at `C:\Users\%UserName%\AppData\Lo
 * WPF 3.0.6920.4902
 * FlaUI version 4.0.0
 * FlaUInspect
+* SonarLint 7.4.0
+* StyleCop 1.2.0-beta 
 
 ## Further documentation
 - [Getting Started for Development](documentation/startDevelopment.md)
