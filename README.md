@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project is a Point of sale system made with WPF and C#. When the project is run a database is created at `C:\Users\%UserName%\AppData\Local\Restaurant-POSS\`
+This project is a Point of sale system made with WPF and C#. 
 
 ## Download the system
 
@@ -13,6 +13,10 @@ This project is a Point of sale system made with WPF and C#. When the project is
 ![Image of the download](documentation/images/installerDownload.png)
 
 * Run the installer and approve the admin privileges to run the point of sale system app 
+
+## Database location
+
+When the project is run a database is created at `C:\Users\%UserName%\AppData\Local\Restaurant-POS\`
 
 ## Programming languages
 * C# version 12
