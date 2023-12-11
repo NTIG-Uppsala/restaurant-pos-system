@@ -11,7 +11,7 @@ It should look like this ![](images/dbbrowser.JPG)
 2. Click "Open Database" and select its location
 
 3. Navigate to the existing database
-    * If program has been run the database will be created at `C:\Users\%UserName%\AppData\Local\Restaurant-POSS\`
+    * If program has been run the database will be created at `C:\Users\%UserName%\AppData\Local\Restaurant-POS\`
 
 4. To add products you can go into the SQL tab and write the following line (change the sent values)
     ``` SQL

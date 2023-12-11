@@ -31,5 +31,5 @@ When the project has been updated you need to update the version of the installe
 
 ### Make the installer accessible
 * Navigate to the installer and copy the POSS-Installer.msi and setup.exe files.
-    * Should be located at `/PointOfSaleSystem/POSS-Installer/Release/`
-* In the installer folder, place the new POSS-Installer.msi and setup.exe files.
+    * Should be located at `/PointOfSaleSystem/POS-Installer/Release/`
+* In the installer folder, place the new POS-Installer.msi and setup.exe files.

@@ -6,7 +6,7 @@ This project is a Point of sale system made with WPF and C#.
 
 ## Download the system
 
-[Click here for download](installer/POSS-Installer.msi)
+[Click here for download](installer/POS-Installer.msi)
 
 * Go to the link above
 * Press the download button as shown in the image below
