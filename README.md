@@ -22,6 +22,10 @@ When the project is run a database is created at `C:\Users\%UserName%\AppData\Lo
 * C# version 12
 * .NET version 6.0.202
 
+## Linting
+
+We use SonarLint for Linting
+
 ## Coding standard
 * [Naming conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/identifier-names)
 * [Coding conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
@@ -32,7 +36,6 @@ When the project is run a database is created at `C:\Users\%UserName%\AppData\Lo
 * FlaUI version 4.0.0
 * FlaUInspect
 * SonarLint 7.4.0
-* StyleCop 1.2.0-beta 
 
 ## Further documentation
 - [Getting Started for Development](documentation/startDevelopment.md)
