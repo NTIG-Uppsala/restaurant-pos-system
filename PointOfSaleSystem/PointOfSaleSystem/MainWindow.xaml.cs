@@ -72,13 +72,13 @@ namespace PointOfSaleSystem
 
             try 
             {
-                var lines = File.ReadAllLines($"{usedData}.csv");
+                var lines = File.ReadAllLines($"{usedData}.txt");
 
                 // Skip header line
                 for (int i = 1; i < lines.Length; i++)
                 {
                     var line = lines[i];
-                    var data = line.Split(',');
+                    var data = line.Split("_SPLIT_HERE_");
 
                     if (data.Length >= 3)
                     {
