@@ -6,7 +6,7 @@ You will need to set up a SQLite database with DB Browser
 
 1. Download DB Browser [Here](https://sqlitebrowser.org/dl/) and install it
 
-It should look like this ![](images/dbbrowser.JPG)
+    It should look like this ![](images/dbbrowser.JPG)
 
 2. Click "Open Database" and select its location
 

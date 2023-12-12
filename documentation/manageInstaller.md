@@ -30,6 +30,11 @@ When the project has been updated you need to update the version of the installe
 * Scroll down to the version tab and update the version
 
 ### Make the installer accessible
-* Navigate to the installer and copy the POS-Installer.msi and setup.exe files.
+* Go to [releases](https://github.com/NTIG-Uppsala/restaurant-pos-system/releases) in the GitHub repository
+* Click "Draft a new release" at the top of the window
+* Set tag to "v" + the current release number
+    * For example "v1.1.5"
+* Set the release name to "Restaurant POS"
+* Press "Attach binaries by dropping them here or selecting them."
+* Navigate to the installer and choose the `Restaurant-POS.msi`
     * Should be located at `/PointOfSaleSystem/POS-Installer/Release/`
-* In the installer folder, place the new POS-Installer.msi and setup.exe files.

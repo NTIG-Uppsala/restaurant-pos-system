@@ -6,13 +6,12 @@ This project is a Point of sale system made with WPF and C#.
 
 ## Download the system
 
-[Click here for download](installer/POS-Installer.msi)
+[Click here for download](https://github.com/NTIG-Uppsala/restaurant-pos-system/releases)
 
-* Go to the link above
-* Press the download button as shown in the image below
-![Image of the download](documentation/images/installerDownload.png)
-
-* Run the installer and approve the admin privileges to run the point of sale system app 
+* Click the `Restaurant-POS.msi` in the latest release
+* Run the installer located in your Downloads folder
+* Follow steps in the installer
+* Run the point of sale system app and approve admin privileges
 
 ## Database location
 
@@ -38,7 +37,7 @@ We use SonarLint for Linting
 * SonarLint 7.4.0
 
 ## Further documentation
-- [Getting Started for Development](documentation/startDevelopment.md)
-- [Manage the installer](documentation/manageInstaller.md)
-- [How to run tests](documentation/tests.md)
-- [Setup Database Locally](documentation/setupDatabaseLocally.md)
+* [Getting Started for Development](documentation/startDevelopment.md)
+* [Manage the installer](documentation/manageInstaller.md)
+* [How to run tests](documentation/tests.md)
+* [Setup Database Locally](documentation/setupDatabaseLocally.md)
