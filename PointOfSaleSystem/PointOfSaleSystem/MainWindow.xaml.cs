@@ -12,11 +12,14 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
-        private string csvFilePath = @"CsvFiles\Data.csv";
+        private string usedData;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            DotNetEnv.Env.Load();
+            usedData = Environment.GetEnvironmentVariable("USEDDATA");
 
             GenerateDatabase().Wait();
 
@@ -60,7 +63,7 @@ namespace PointOfSaleSystem
 
             try 
             {
-                var lines = File.ReadAllLines(csvFilePath);
+                var lines = File.ReadAllLines($"{usedData}.csv");
 
                 // Skip header line
                 for (int i = 1; i < lines.Length; i++)
@@ -96,7 +99,7 @@ namespace PointOfSaleSystem
                 var folder = Environment.SpecialFolder.LocalApplicationData;
                 var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
                 Directory.CreateDirectory(path);
-                var DbPath = System.IO.Path.Join(path, "POS.db");
+                var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
 
                 string connectionString = $"Data Source={DbPath}";
 
@@ -184,10 +187,13 @@ namespace PointOfSaleSystem
 
             public POSContext()
             {
+                DotNetEnv.Env.Load();
+                string usedData = Environment.GetEnvironmentVariable("USEDDATA");
+
                 var folder = Environment.SpecialFolder.LocalApplicationData;
                 var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
                 Directory.CreateDirectory(path);
-                DbPath = System.IO.Path.Join(path, "POS.db");
+                DbPath = System.IO.Path.Join(path, $"{usedData}.db");
             }
 
             // The following configures EF to create a Sqlite database file in the
