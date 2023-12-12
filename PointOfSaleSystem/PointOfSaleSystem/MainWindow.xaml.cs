@@ -32,6 +32,15 @@ namespace PointOfSaleSystem
 
         public async Task GenerateDatabase()
         {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
+            var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
+
+            if (File.Exists(DbPath))
+            {
+                return;
+            }
+
             List<DatabaseItem> ListOfProducts = await LoadProductsFromCSVAsync();
             try
             {
