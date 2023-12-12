@@ -32,7 +32,7 @@ namespace PointOfSaleSystem
             List<DatabaseItem> ListOfProducts = await LoadProductsFromCSVAsync();
             try
             {
-                using var db = new POSSContext();
+                using var db = new POSContext();
                 db.Database.EnsureCreated();
 
                 var existingProductNames = db.Products.Select(p => p.Name).ToList();
@@ -94,9 +94,9 @@ namespace PointOfSaleSystem
             try
             {
                 var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POSS");
+                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
                 Directory.CreateDirectory(path);
-                var DbPath = System.IO.Path.Join(path, "POSS.db");
+                var DbPath = System.IO.Path.Join(path, "POS.db");
 
                 string connectionString = $"Data Source={DbPath}";
 
@@ -176,18 +176,18 @@ namespace PointOfSaleSystem
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
 
-        public class POSSContext : DbContext
+        public class POSContext : DbContext
         {
             public DbSet<DatabaseItem> Products { get; set; }
 
             public string DbPath { get; }
 
-            public POSSContext()
+            public POSContext()
             {
                 var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POSS");
+                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
                 Directory.CreateDirectory(path);
-                DbPath = System.IO.Path.Join(path, "POSS.db");
+                DbPath = System.IO.Path.Join(path, "POS.db");
             }
 
             // The following configures EF to create a Sqlite database file in the
