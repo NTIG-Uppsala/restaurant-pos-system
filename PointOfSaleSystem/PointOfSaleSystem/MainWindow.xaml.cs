@@ -18,7 +18,7 @@ namespace PointOfSaleSystem
         {
             InitializeComponent();
 
-            GenerateDatabase();
+            GenerateDatabase().Wait();
 
             // Load items from the Database
             LoadItemsFromDatabase();
@@ -59,8 +59,8 @@ namespace PointOfSaleSystem
             var products = new List<DatabaseItem>();
 
             try 
-            { 
-                var lines = await Task.Run(() => File.ReadAllLines(csvFilePath));
+            {
+                var lines = File.ReadAllLines(csvFilePath);
 
                 // Skip header line
                 for (int i = 1; i < lines.Length; i++)
