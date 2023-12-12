@@ -50,6 +50,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
         "Release"
@@ -190,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Restaurant-POS"
-        "ProductCode" = "8:{40BC4AC2-2621-4CA3-9B7A-F6CDCFD69B5E}"
-        "PackageCode" = "8:{4F418DD1-AC04-4774-981A-A063D670D62A}"
+        "ProductCode" = "8:{260AFF64-20E3-487B-ADE0-3185940D1180}"
+        "PackageCode" = "8:{7730DAC7-122F-4B8F-96E6-AAF964773A7A}"
         "UpgradeCode" = "8:{B3986877-268D-40F6-B867-1760DABD477B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.4"
+        "ProductVersion" = "8:1.1.5"
         "Manufacturer" = "8:TE4-23"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -726,7 +734,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_12842510D29D452CB995E213A8E26A7A"
             {
-            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Release\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Debug\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8B7C2F7F06D841908B546F4C57B62B54"
