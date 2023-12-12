@@ -1,6 +1,14 @@
 # Setup database
 
-You will need to set up a SQLite database with DB Browser
+## Database from default
+
+* When the program is run without an existing database a database is created from a `.txt` file
+
+* The `.txt` files separates values by the keyword "_SPLIT_HERE_"
+
+* One is located in the `PointOfSaleSystem` project and the other in the `TestSystem` project
+
+* The `.txt` file is chosen by the `.env` file located in the same folder
 
 ## DB Browser
 

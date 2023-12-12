@@ -10,15 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="CsvFiles\Data.csv" />
-    <None Remove="CsvFiles\TestData.csv" />
+    <None Remove=".env" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="CsvFiles\Data.csv">
+    <Content Include=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="CsvFiles\TestData.csv">
+    <Content Include="TestData.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
