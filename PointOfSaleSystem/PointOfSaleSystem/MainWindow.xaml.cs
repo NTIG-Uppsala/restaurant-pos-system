@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using System.Data.SqlClient;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -49,24 +48,14 @@ namespace PointOfSaleSystem
                 using var db = new POSContext();
                 db.Database.EnsureCreated();
 
-                var existingProductNames = db.Products.Select(p => p.Name).ToList();
-
                 foreach (DatabaseItem newProduct in ListOfProducts)
                 {
-                    if (!existingProductNames.Contains(newProduct.Name))
-                    {
-                        db.Add(newProduct);
-                    }
+                    db.Add(newProduct);
                 }
-
-                var existingCategoryNames = db.Categories.Select(c => c.Name).ToList();
 
                 foreach (CategoryItem newCategory in ListOfCategories)
                 {
-                    if (!existingCategoryNames.Contains(newCategory.Name))
-                    {
-                        db.Add(newCategory);
-                    }
+                    db.Add(newCategory);
                 }
 
                 db.SaveChanges();
@@ -82,7 +71,7 @@ namespace PointOfSaleSystem
         {
             var products = new List<DatabaseItem>();
 
-            try 
+            try
             {
                 var lines = File.ReadAllLines($"Product{usedData}.txt");
 
