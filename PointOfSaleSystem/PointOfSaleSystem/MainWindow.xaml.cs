@@ -31,6 +31,7 @@ namespace PointOfSaleSystem
             // Load categories into the Categories property
             Categories = LoadCategories();
             categorysButtonsControl.ItemsSource = GetDisplayedCategories();
+            itemButtonsControl.ItemsSource = items;
         }
 
         public async Task GenerateDatabase()
@@ -96,6 +97,8 @@ namespace PointOfSaleSystem
                         string itemName = Convert.ToString(reader["Name"]);
                         double itemPrice = Convert.ToDouble(reader["price"]);
                         int categoryId = Convert.ToInt32(reader["CategoryId"]);
+                        int priority = Convert.ToInt32(reader["Priority"]);
+                        bool isCommon = Convert.ToBoolean(reader["IsCommon"]);
 
                         var productHasNoName = string.IsNullOrEmpty(itemName);
 
@@ -107,13 +110,15 @@ namespace PointOfSaleSystem
                         }
 
                         // Create an Item object and add it to the ObservableCollection
-                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId));
+                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId, priority, isCommon));
                     }
                 }
 
-                if (!items.SequenceEqual(newItems))
+                ObservableCollection<Item> newItemsFiltered = new ObservableCollection<Item>(newItems.OrderByDescending(item => item.Priority));
+
+                if (!items.SequenceEqual(newItemsFiltered))
                 {
-                    items = newItems;
+                    items = newItemsFiltered;
                 }
             }
             catch (Exception ex)
@@ -167,7 +172,9 @@ namespace PointOfSaleSystem
                         {
                             Name = Convert.ToString(data[0]),
                             Price = Convert.ToDouble(data[1]),
-                            CategoryId = Convert.ToInt32(data[2])
+                            CategoryId = Convert.ToInt32(data[2]),
+                            Priority = Convert.ToInt32(data[3]),
+                            IsCommon = Convert.ToBoolean(data[4])
                         };
                         products.Add(product);
                     }
@@ -232,7 +239,7 @@ namespace PointOfSaleSystem
 
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            itemButtonsControl.ItemsSource = new ObservableCollection<Item>();
+            itemButtonsControl.ItemsSource = items;
         }
         
         private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
@@ -312,6 +319,8 @@ namespace PointOfSaleSystem
         public string? Name { get; set; }
         public double Price { get; set; }
         public int CategoryId { get; set; }
+        public int Priority { get; set; }
+        public bool IsCommon { get; set; }
         public CategoryItem Category { get; set; }
     }
 
@@ -330,13 +339,17 @@ namespace PointOfSaleSystem
         public string Name { get; set; }
         public double Price { get; set; }
         public int CategoryID { get; set; }
+        public int Priority { get; set; }
+        public bool IsCommon { get; set; }
 
-        public Item(int id, string name, double price, int categoryID)
+        public Item(int id, string name, double price, int categoryID, int priority, bool isCommon)
         {
             ID = id;
             Name = name;
             Price = price;
             CategoryID = categoryID;
+            Priority = priority;
+            IsCommon = isCommon;
         }
     }
 }
