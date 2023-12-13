@@ -148,10 +148,6 @@ namespace TestSystem
             Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             categoryButton.Click();
-
-            Button shouldNotExistButton = window.FindFirstDescendant(cf.ByName("Varm dryck")).AsButton();
-
-            Trace.Assert(shouldNotExistButton == null);
         }
 
         [TestMethod]
@@ -170,19 +166,23 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestCategoryReturn()
+        public void TestReturn()
         {
             Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             firstCategoryButton.Click();
 
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+
+            Trace.Assert(desiredItemButton != null);
+
             Button returnButton = window.FindFirstDescendant(cf.ByAutomationId("Return")).AsButton();
 
             returnButton.Click();
 
-            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmrätter")).AsButton();
+            Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            secondCategoryButton.Click();
+            Trace.Assert(popularButton != null);
         }
 
         [TestMethod]
@@ -209,7 +209,7 @@ namespace TestSystem
         {
             Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            Trace.Assert(popularButton.Name == "Kaffe");
+            Trace.Assert(popularButton != null);
         }
 
         [TestMethod]
@@ -227,17 +227,42 @@ namespace TestSystem
         [TestMethod]
         public void TestSlidePages()
         {
-            Button firstPageItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            Button firstPageItemButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            firstPageItemButton.Click();
+            Trace.Assert(firstPageItemButton != null);
 
-            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("Next")).AsButton();
+            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextButton")).AsButton();
 
             nextSlideButton.Click();
 
-            Button secondPageItemButton = window.FindFirstDescendant(cf.ByName("Te")).AsButton();
+            firstPageItemButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            secondPageItemButton.Click();
+            Trace.Assert(firstPageItemButton == null);
+        }
+
+        [TestMethod]
+        public void TestCategoryPages()
+        {
+            Button newCategoryButton = window.FindFirstDescendant(cf.ByName("Öl/Cider")).AsButton();
+
+            Trace.Assert(newCategoryButton == null);
+
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+
+            Trace.Assert(categoryButton != null);
+
+            Button nextCategoryButton = window.FindFirstDescendant(cf.ByAutomationId("NextButton")).AsButton();
+
+            nextCategoryButton.Click();
+
+            categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+
+            Trace.Assert(categoryButton == null);
+
+            newCategoryButton = window.FindFirstDescendant(cf.ByName("Öl/Cider")).AsButton();
+
+            Trace.Assert(newCategoryButton != null);
+
         }
     }
 }
