@@ -34,7 +34,7 @@ namespace TestSystem
 
         public void Cleanup()
         {
-            //window?.AsWindow().Close();
+            window?.AsWindow().Close();
         }
 
         [TestMethod]
@@ -98,13 +98,13 @@ namespace TestSystem
         [TestMethod]
         public void TestMultipleProductsWithDifferentPrice()
         {
-            Button coffeeButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
-            Button bunButton = window.FindFirstDescendant(cf.ByName("Cider")).AsButton();
-            Button cookieButton = window.FindFirstDescendant(cf.ByName("Macchiato")).AsButton();
+            Button earlyItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            Button middleItemButton = window.FindFirstDescendant(cf.ByName("Cider")).AsButton();
+            Button lateItemButton = window.FindFirstDescendant(cf.ByName("Macchiato")).AsButton();
 
-            coffeeButton.Click();
-            bunButton.Click();
-            cookieButton.Click();
+            earlyItemButton.Click();
+            middleItemButton.Click();
+            lateItemButton.Click();
 
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
             Trace.Assert(totalPrice.Text == "118,00 kr");
