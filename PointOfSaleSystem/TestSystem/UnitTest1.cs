@@ -34,7 +34,7 @@ namespace TestSystem
 
         public void Cleanup()
         {
-            window?.AsWindow().Close();
+            //window?.AsWindow().Close();
         }
 
         [TestMethod]
@@ -108,6 +108,150 @@ namespace TestSystem
 
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
             Trace.Assert(totalPrice.Text == "118,00 kr");
+        }
+    }
+    [TestClass]
+    public class CategoryTests
+    {
+        public ConditionFactory cf;
+        public Window window;
+
+        [TestInitialize]
+        public void Setup()
+        {
+            using var automation = new UIA3Automation();
+            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+            window = app.GetMainWindow(automation);
+            cf = new ConditionFactory(new UIA3PropertyLibrary());
+        }
+
+        private static string GetSolutionFolderPath()
+        {
+            // Assuming the solution folder is two levels above the executable
+            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string solutionFolderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\..\.."));
+
+            return solutionFolderPath;
+        }
+
+        [TestCleanup]
+
+        public void Cleanup()
+        {
+            window?.AsWindow().Close();
+        }
+
+        // Categories tests
+        [TestMethod]
+        public void TestCategories()
+        {
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+
+            categoryButton.Click();
+
+            try
+            {
+                window.FindFirstDescendant(cf.ByName("Varm dryck")).AsButton();
+                throw new ApplicationException("Categories are still shown");
+
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
+        }
+
+        [TestMethod]
+        public void TestCategoryClick()
+        {
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+
+            categoryButton.Click();
+
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+
+            desiredItemButton.Click();
+
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+            Trace.Assert(totalPrice.Text == "10,00 kr");
+        }
+
+        [TestMethod]
+        public void TestCategoryReturn()
+        {
+            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+
+            firstCategoryButton.Click();
+
+            Button returnButton = window.FindFirstDescendant(cf.ByAutomationId("Return")).AsButton();
+
+            returnButton.Click();
+
+            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmrätter")).AsButton();
+
+            secondCategoryButton.Click();
+        }
+
+        [TestMethod]
+        public void TestSavePrice()
+        {
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+
+            categoryButton.Click();
+
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+
+            desiredItemButton.Click();
+
+            Button returnButton = window.FindFirstDescendant(cf.ByAutomationId("Return")).AsButton();
+
+            returnButton.Click();
+
+            Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+            Trace.Assert(totalPrice.Text == "10,00 kr");
+        }
+
+        [TestMethod]
+        public void TestMostPopularItem()
+        {
+            Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+
+            Trace.Assert(popularButton.Name == "Kaffe");
+        }
+
+        [TestMethod]
+        public void TestMostPopularItemPriority()
+        {
+            Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+
+            Trace.Assert(popularButton.Name == "Kaffe");
+
+            try
+            {
+                window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
+                throw new ApplicationException("Items supposed to be hidden are shown");
+            }
+            catch (ApplicationException)
+            {
+                throw;
+            }
+
+        }
+
+        [TestMethod]
+        public void TestSlidePages()
+        {
+            Button firstPageItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+
+            firstPageItemButton.Click();
+
+            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("Next")).AsButton();
+
+            nextSlideButton.Click();
+
+            Button secondPageItemButton = window.FindFirstDescendant(cf.ByName("Te")).AsButton();
+
+            secondPageItemButton.Click();
         }
     }
 }
