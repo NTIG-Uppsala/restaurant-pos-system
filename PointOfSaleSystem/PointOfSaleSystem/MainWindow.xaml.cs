@@ -10,9 +10,11 @@ namespace PointOfSaleSystem
     public partial class MainWindow : Window
     {
         private double total = 0;
-        private ObservableCollection<Item> items = new ObservableCollection<Item>();
+        private ObservableCollection<Item> items = new();
         public ObservableCollection<CategoryItem> Categories { get; set; }
         private string usedData;
+        private int categoryPanelPosition = 0;
+        private readonly int CategoryLimit = 7;
 
         public MainWindow()
         {
@@ -26,51 +28,10 @@ namespace PointOfSaleSystem
             // Load items from the Database
             LoadItemsFromDatabase();
 
-
             // Load categories into the Categories property
             Categories = LoadCategories();
-            categorysButtonsControl.ItemsSource = Categories;
+            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
         }
-
-        private ObservableCollection<CategoryItem> LoadCategories()
-        {
-            ObservableCollection<CategoryItem> categories = new ObservableCollection<CategoryItem>();
-
-            try
-            {
-                using (var db = new POSContext())
-                {
-                    categories = new ObservableCollection<CategoryItem>(db.Categories.ToList());
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading categories: {ex.Message}");
-            }
-
-            return categories;
-        }
-
-        private void OnReturnButtonClick(object sender, RoutedEventArgs e)
-        {
-            itemButtonsControl.ItemsSource = new ObservableCollection<Item>();
-            categorysButtonsControl.ItemsSource = LoadCategories();
-        }
-
-        private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button categoryButton && categoryButton.DataContext is CategoryItem selectedCategory)
-            {
-                // Filter items based on the selected category
-                var filteredItems = items.Where(item => item.CategoryID == selectedCategory.Id).ToList();
-
-                // Update the ItemsControl's ItemsSource with filtered items
-                itemButtonsControl.ItemsSource = filteredItems;
-
-                categorysButtonsControl.ItemsSource = new ObservableCollection<Item>();
-            }
-        }
-
 
         public async Task GenerateDatabase()
         {
@@ -108,6 +69,82 @@ namespace PointOfSaleSystem
             {
                 MessageBox.Show($"An error occured during database setup: {error.Message}");
             }
+        }
+
+        private void LoadItemsFromDatabase()
+        {
+            ObservableCollection<Item> newItems = new ObservableCollection<Item>();
+            try
+            {
+                var folder = Environment.SpecialFolder.LocalApplicationData;
+                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
+                Directory.CreateDirectory(path);
+                var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
+
+                string connectionString = $"Data Source={DbPath}";
+
+                using (var connection = new SqliteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM products";
+                    using var command = new SqliteCommand(query, connection);
+                    using var reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int itemId = Convert.ToInt32(reader["ID"]);
+                        string itemName = Convert.ToString(reader["Name"]);
+                        double itemPrice = Convert.ToDouble(reader["price"]);
+                        int categoryId = Convert.ToInt32(reader["CategoryId"]);
+
+                        var productHasNoName = string.IsNullOrEmpty(itemName);
+
+                        if (productHasNoName)
+                        {
+                            itemName = "NO GIVEN NAME";
+                            itemPrice = 0;
+                            categoryId = 0;
+                        }
+
+                        // Create an Item object and add it to the ObservableCollection
+                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId));
+                    }
+                }
+
+                if (!items.SequenceEqual(newItems))
+                {
+                    items = newItems;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions (e.g., database connection issues)
+                MessageBox.Show($"Error loading items from database: {ex.Message}");
+            }
+        }
+
+        private static ObservableCollection<CategoryItem> LoadCategories()
+        {
+            ObservableCollection<CategoryItem> categories = new ObservableCollection<CategoryItem>();
+
+            try
+            {
+                using var db = new POSContext();
+                categories = new ObservableCollection<CategoryItem>(db.Categories.ToList());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading categories: {ex.Message}");
+            }
+
+            return categories;
+        }
+
+        private dynamic GetDisplayedCategories()
+        {
+            var newCategory = Categories.Skip(categoryPanelPosition).Take(CategoryLimit);
+
+            return newCategory;
         }
 
         public async Task<List<DatabaseItem>> LoadProductsFromTxtAsync()
@@ -177,78 +214,6 @@ namespace PointOfSaleSystem
             return categories;
         }
 
-        private void LoadItemsFromDatabase()
-        {
-            ObservableCollection<Item> newItems = new ObservableCollection<Item>();
-            try
-            {
-                var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
-                Directory.CreateDirectory(path);
-                var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
-
-                string connectionString = $"Data Source={DbPath}";
-
-                using (var connection = new SqliteConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string query = "SELECT * FROM products";
-                    using (var command = new SqliteCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                int itemId = Convert.ToInt32(reader["ID"]);
-                                string itemName = Convert.ToString(reader["Name"]);
-                                double itemPrice = Convert.ToDouble(reader["price"]);
-                                int categoryId = Convert.ToInt32(reader["CategoryId"]);
-
-                                var productHasNoName = string.IsNullOrEmpty(itemName);
-
-                                if (productHasNoName)
-                                {
-                                    itemName = "NO GIVEN NAME";
-                                    itemPrice = 0;
-                                    categoryId = 0;
-                                }
-
-                                // Create an Item object and add it to the ObservableCollection
-                                newItems.Add(new Item(itemId, itemName, itemPrice, categoryId));
-                            }
-                        }
-                    }
-                }
-
-                if (!items.SequenceEqual(newItems))
-                {
-                    items = newItems;
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions (e.g., database connection issues)
-                MessageBox.Show($"Error loading items from database: {ex.Message}");
-            }
-        }
-
-        public class Item
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public double Price { get; set; }
-            public int CategoryID { get; set; }
-
-            public Item(int id, string name, double price, int categoryID)
-            {
-                ID = id;
-                Name = name;
-                Price = price;
-                CategoryID = categoryID;
-            }
-        }
-
         private void OnItemButtonClick(object sender, RoutedEventArgs e)
         {
             // Retrieve the item price from the button's tag
@@ -265,47 +230,113 @@ namespace PointOfSaleSystem
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
 
-        public class POSContext : DbContext
+        private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            public DbSet<DatabaseItem> Products { get; set; }
-            public DbSet<CategoryItem> Categories { get; set; }
-
-            public string DbPath { get; }
-
-            public POSContext()
+            itemButtonsControl.ItemsSource = new ObservableCollection<Item>();
+        }
+        
+        private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button categoryButton && categoryButton.DataContext is CategoryItem selectedCategory)
             {
-                DotNetEnv.Env.Load();
-                string usedData = Environment.GetEnvironmentVariable("USEDDATA");
+                // Filter items based on the selected category
+                var filteredItems = items.Where(item => item.CategoryID == selectedCategory.Id).ToList();
 
-                var folder = Environment.SpecialFolder.LocalApplicationData;
-                var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
-                Directory.CreateDirectory(path);
-                DbPath = System.IO.Path.Join(path, $"{usedData}.db");
+                // Update the ItemsControl's ItemsSource with filtered items
+                itemButtonsControl.ItemsSource = filteredItems;
+            }
+        }
+
+        private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
+        {
+            if ((categoryPanelPosition + CategoryLimit) <= ClosestMultipleOf7(Categories.Count))
+            {
+                categoryPanelPosition += CategoryLimit;
+            }
+            else
+            {
+                categoryPanelPosition = 0;
             }
 
-            // The following configures EF to create a Sqlite database file in the
-            // special "local" folder for your platform.
-            protected override void OnConfiguring(DbContextOptionsBuilder options)
-                => options.UseSqlite($"Data Source={DbPath}");
+            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
         }
 
-        public class DatabaseItem
+        private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
-            public int Id { get; set; }
-            public string? Name { get; set; }
-            public double Price { get; set; }
-            public int CategoryId { get; set; }
-            public CategoryItem Category { get; set; }
+            if ((categoryPanelPosition - CategoryLimit) >= 0)
+            {
+                categoryPanelPosition -= CategoryLimit;
+            }
+            else
+            {
+                categoryPanelPosition = ClosestMultipleOf7(Categories.Count);
+            }
+            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
         }
 
-        public class CategoryItem
+        static int ClosestMultipleOf7(int number)
         {
-            public int Id { get; set; }
-            public string? Name { get; set; }
-            public string? Color { get; set; }
+            int quotient = number / 7;
+            int lowerMultiple = 7 * quotient;
 
-            // Navigation property to link categories to items
-            public List<DatabaseItem> Items { get; set; }
+            return lowerMultiple;
+        }
+    }
+    public class POSContext : DbContext
+    {
+        public DbSet<DatabaseItem> Products { get; set; }
+        public DbSet<CategoryItem> Categories { get; set; }
+
+        public string DbPath { get; }
+
+        public POSContext()
+        {
+            DotNetEnv.Env.Load();
+            string usedData = Environment.GetEnvironmentVariable("USEDDATA");
+
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
+            Directory.CreateDirectory(path);
+            DbPath = System.IO.Path.Join(path, $"{usedData}.db");
+        }
+
+        // The following configures EF to create a Sqlite database file in the
+        // special "local" folder for your platform.
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseSqlite($"Data Source={DbPath}");
+    }
+
+    public class DatabaseItem
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public double Price { get; set; }
+        public int CategoryId { get; set; }
+        public CategoryItem Category { get; set; }
+    }
+
+    public class CategoryItem
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Color { get; set; }
+
+        // Navigation property to link categories to items
+        public List<DatabaseItem> Items { get; set; }
+    }
+    public class Item
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int CategoryID { get; set; }
+
+        public Item(int id, string name, double price, int categoryID)
+        {
+            ID = id;
+            Name = name;
+            Price = price;
+            CategoryID = categoryID;
         }
     }
 }
