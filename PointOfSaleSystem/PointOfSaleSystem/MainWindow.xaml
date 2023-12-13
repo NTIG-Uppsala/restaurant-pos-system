@@ -25,10 +25,30 @@
             </ItemsControl>
         </StackPanel>
 
+        <StackPanel HorizontalAlignment="Left" Margin="20,73,0,73">
+            <ItemsControl ItemsSource="{Binding Categories}" x:Name="categorysButtonsControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Name}" Click="OnCategoryButtonClick" Height="70" Width="100" FontSize="10" Margin="3"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+
         <!-- Panel for Total Price and Reset Button -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="138" Margin="20,0,0,0">
+        <StackPanel Orientation="Horizontal"  VerticalAlignment="Bottom" Height="138" Margin="0,0,0,0">
             <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
             <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="299" FontSize="48" Margin="10,0,0,0"/>
+            <Button Content="&lt;--"  HorizontalAlignment="Left"  Width="100" Height="100" Margin="25,0,0,0"/>
+            <Button Content="Return" x:Name="Return" Click="OnReturnButtonClick" HorizontalAlignment="Left"  Width="100" Height="100" Margin="25,0,0,0"/>
+            <Button Content="-->" HorizontalAlignment="Left"  Width="100" Height="100" Margin="25,0,0,0"/>
         </StackPanel>
+        
     </Grid>
 </Window>

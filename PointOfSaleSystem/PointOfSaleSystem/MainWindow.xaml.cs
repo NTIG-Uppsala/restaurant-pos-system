@@ -11,6 +11,7 @@ namespace PointOfSaleSystem
     {
         private double total = 0;
         private ObservableCollection<Item> items = new ObservableCollection<Item>();
+        public ObservableCollection<CategoryItem> Categories { get; set; }
         private string usedData;
 
         public MainWindow()
@@ -25,9 +26,51 @@ namespace PointOfSaleSystem
             // Load items from the Database
             LoadItemsFromDatabase();
 
-            // Set the loaded items as the ItemsSource for the ItemsControl
-            itemButtonsControl.ItemsSource = items;
+
+            // Load categories into the Categories property
+            Categories = LoadCategories();
+            categorysButtonsControl.ItemsSource = Categories;
         }
+
+        private ObservableCollection<CategoryItem> LoadCategories()
+        {
+            ObservableCollection<CategoryItem> categories = new ObservableCollection<CategoryItem>();
+
+            try
+            {
+                using (var db = new POSContext())
+                {
+                    categories = new ObservableCollection<CategoryItem>(db.Categories.ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading categories: {ex.Message}");
+            }
+
+            return categories;
+        }
+
+        private void OnReturnButtonClick(object sender, RoutedEventArgs e)
+        {
+            itemButtonsControl.ItemsSource = new ObservableCollection<Item>();
+            categorysButtonsControl.ItemsSource = LoadCategories();
+        }
+
+        private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button categoryButton && categoryButton.DataContext is CategoryItem selectedCategory)
+            {
+                // Filter items based on the selected category
+                var filteredItems = items.Where(item => item.CategoryID == selectedCategory.Id).ToList();
+
+                // Update the ItemsControl's ItemsSource with filtered items
+                itemButtonsControl.ItemsSource = filteredItems;
+
+                categorysButtonsControl.ItemsSource = new ObservableCollection<Item>();
+            }
+        }
+
 
         public async Task GenerateDatabase()
         {
@@ -252,6 +295,7 @@ namespace PointOfSaleSystem
             public string? Name { get; set; }
             public double Price { get; set; }
             public int CategoryId { get; set; }
+            public CategoryItem Category { get; set; }
         }
 
         public class CategoryItem
@@ -259,6 +303,9 @@ namespace PointOfSaleSystem
             public int Id { get; set; }
             public string? Name { get; set; }
             public string? Color { get; set; }
+
+            // Navigation property to link categories to items
+            public List<DatabaseItem> Items { get; set; }
         }
     }
 }
