@@ -41,7 +41,9 @@ namespace PointOfSaleSystem
                 return;
             }
 
-            List<DatabaseItem> ListOfProducts = await LoadProductsFromCSVAsync();
+            List<DatabaseItem> ListOfProducts = await LoadProductsFromTxtAsync();
+            List<CategoryItem> ListOfCategories = await LoadCategoriesFromTxtAsync();
+
             try
             {
                 using var db = new POSContext();
@@ -57,6 +59,16 @@ namespace PointOfSaleSystem
                     }
                 }
 
+                var existingCategoryNames = db.Categories.Select(c => c.Name).ToList();
+
+                foreach (CategoryItem newCategory in ListOfCategories)
+                {
+                    if (!existingCategoryNames.Contains(newCategory.Name))
+                    {
+                        db.Add(newCategory);
+                    }
+                }
+
                 db.SaveChanges();
 
             }
@@ -66,13 +78,13 @@ namespace PointOfSaleSystem
             }
         }
 
-        public async Task<List<DatabaseItem>> LoadProductsFromCSVAsync()
+        public async Task<List<DatabaseItem>> LoadProductsFromTxtAsync()
         {
             var products = new List<DatabaseItem>();
 
             try 
             {
-                var lines = File.ReadAllLines($"{usedData}.txt");
+                var lines = File.ReadAllLines($"Product{usedData}.txt");
 
                 // Skip header line
                 for (int i = 1; i < lines.Length; i++)
@@ -98,6 +110,39 @@ namespace PointOfSaleSystem
             }
 
             return products;
+        }
+
+        public async Task<List<CategoryItem>> LoadCategoriesFromTxtAsync()
+        {
+            var categories = new List<CategoryItem>();
+
+            try
+            {
+                var lines = File.ReadAllLines($"Category{usedData}.txt");
+
+                // Skip header line
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    var line = lines[i];
+                    var data = line.Split("_SPLIT_HERE_");
+
+                    if (data.Length >= 2)
+                    {
+                        var category = new CategoryItem
+                        {
+                            Name = Convert.ToString(data[0]),
+                            Color = Convert.ToString(data[1]),
+                        };
+                        categories.Add(category);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+
+            return categories;
         }
 
         private void LoadItemsFromDatabase()
@@ -191,6 +236,7 @@ namespace PointOfSaleSystem
         public class POSContext : DbContext
         {
             public DbSet<DatabaseItem> Products { get; set; }
+            public DbSet<CategoryItem> Categories { get; set; }
 
             public string DbPath { get; }
 
@@ -217,6 +263,13 @@ namespace PointOfSaleSystem
             public string? Name { get; set; }
             public double Price { get; set; }
             public int CategoryId { get; set; }
+        }
+
+        public class CategoryItem
+        {
+            public int Id { get; set; }
+            public string? Name { get; set; }
+            public string? Color { get; set; }
         }
     }
 }

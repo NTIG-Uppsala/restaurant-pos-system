@@ -145,7 +145,7 @@ namespace TestSystem
         [TestMethod]
         public void TestCategories()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sï¿½s")).AsButton();
 
             categoryButton.Click();
 
@@ -164,7 +164,7 @@ namespace TestSystem
         [TestMethod]
         public void TestCategoryClick()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sï¿½s")).AsButton();
 
             categoryButton.Click();
 
@@ -179,7 +179,7 @@ namespace TestSystem
         [TestMethod]
         public void TestCategoryReturn()
         {
-            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Sï¿½s")).AsButton();
 
             firstCategoryButton.Click();
 
@@ -187,7 +187,7 @@ namespace TestSystem
 
             returnButton.Click();
 
-            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmrätter")).AsButton();
+            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmrï¿½tter")).AsButton();
 
             secondCategoryButton.Click();
         }
@@ -195,7 +195,7 @@ namespace TestSystem
         [TestMethod]
         public void TestSavePrice()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sås")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Sï¿½s")).AsButton();
 
             categoryButton.Click();
 

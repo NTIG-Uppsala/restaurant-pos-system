@@ -1,0 +1,10 @@
+Name_SPLIT_HERE_Color
+Förrätter_SPLIT_HERE_Gray
+Varmrätter_SPLIT_HERE_Red
+Efterrätter_SPLIT_HERE_Blue
+Pizza_SPLIT_HERE_Orange
+Skaldjur_SPLIT_HERE_Pink
+Såser_SPLIT_HERE_Green
+Viner_SPLIT_HERE_Purple
+Öl/Cider_SPLIT_HERE_Yellow
+Varm dryck_SPLIT_HERE_Brown
