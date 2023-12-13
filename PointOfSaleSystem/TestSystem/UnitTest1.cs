@@ -145,26 +145,19 @@ namespace TestSystem
         [TestMethod]
         public void TestCategories()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("S�s")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             categoryButton.Click();
 
-            try
-            {
-                window.FindFirstDescendant(cf.ByName("Varm dryck")).AsButton();
-                throw new ApplicationException("Categories are still shown");
+            Button shouldNotExistButton = window.FindFirstDescendant(cf.ByName("Varm dryck")).AsButton();
 
-            }
-            catch (ApplicationException)
-            {
-                throw;
-            }
+            Trace.Assert(shouldNotExistButton == null);
         }
 
         [TestMethod]
         public void TestCategoryClick()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("S�s")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             categoryButton.Click();
 
@@ -179,7 +172,7 @@ namespace TestSystem
         [TestMethod]
         public void TestCategoryReturn()
         {
-            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("S�s")).AsButton();
+            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             firstCategoryButton.Click();
 
@@ -187,7 +180,7 @@ namespace TestSystem
 
             returnButton.Click();
 
-            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmr�tter")).AsButton();
+            Button secondCategoryButton = window.FindFirstDescendant(cf.ByName("Varmrätter")).AsButton();
 
             secondCategoryButton.Click();
         }
@@ -195,7 +188,7 @@ namespace TestSystem
         [TestMethod]
         public void TestSavePrice()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("S�s")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
 
             categoryButton.Click();
 
@@ -224,18 +217,9 @@ namespace TestSystem
         {
             Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            Trace.Assert(popularButton.Name == "Kaffe");
+            Button shouldNotExistButton = window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
 
-            try
-            {
-                window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
-                throw new ApplicationException("Items supposed to be hidden are shown");
-            }
-            catch (ApplicationException)
-            {
-                throw;
-            }
-
+            Trace.Assert(shouldNotExistButton == null);
         }
 
         [TestMethod]
