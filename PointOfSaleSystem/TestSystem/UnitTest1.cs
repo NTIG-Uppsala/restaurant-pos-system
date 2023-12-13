@@ -217,6 +217,8 @@ namespace TestSystem
         {
             Button popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
+            Trace.Assert(popularButton != null);
+
             Button shouldNotExistButton = window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
 
             Trace.Assert(shouldNotExistButton == null);
