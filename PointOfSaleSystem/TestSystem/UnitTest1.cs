@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace TestSystem
 {
     [TestClass]
-    public class UnitTest1
+    public class BaseFunctionTests
     {
         public ConditionFactory cf;
         public Window window;
