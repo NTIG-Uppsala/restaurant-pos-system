@@ -145,7 +145,7 @@ namespace TestSystem
         [TestMethod]
         public void TestCategories()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             categoryButton.Click();
         }
@@ -153,26 +153,26 @@ namespace TestSystem
         [TestMethod]
         public void TestCategoryClick()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             categoryButton.Click();
 
-            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Calzone")).AsButton();
 
             desiredItemButton.Click();
 
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
-            Trace.Assert(totalPrice.Text == "10,00 kr");
+            Trace.Assert(totalPrice.Text == "90,00 kr");
         }
 
         [TestMethod]
         public void TestReturn()
         {
-            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            Button firstCategoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             firstCategoryButton.Click();
 
-            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Calzone")).AsButton();
 
             Trace.Assert(desiredItemButton != null);
 
@@ -188,11 +188,11 @@ namespace TestSystem
         [TestMethod]
         public void TestSavePrice()
         {
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             categoryButton.Click();
 
-            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            Button desiredItemButton = window.FindFirstDescendant(cf.ByName("Calzone")).AsButton();
 
             desiredItemButton.Click();
 
@@ -201,7 +201,7 @@ namespace TestSystem
             returnButton.Click();
 
             Label totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
-            Trace.Assert(totalPrice.Text == "10,00 kr");
+            Trace.Assert(totalPrice.Text == "90,00 kr");
         }
 
         [TestMethod]
@@ -247,7 +247,7 @@ namespace TestSystem
 
             Trace.Assert(newCategoryButton == null);
 
-            Button categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            Button categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             Trace.Assert(categoryButton != null);
 
@@ -255,7 +255,7 @@ namespace TestSystem
 
             nextCategoryButton.Click();
 
-            categoryButton = window.FindFirstDescendant(cf.ByName("Såser")).AsButton();
+            categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             Trace.Assert(categoryButton == null);
 
@@ -271,6 +271,34 @@ namespace TestSystem
             Button hiddenProduct = window.FindFirstDescendant(cf.ByName("Sleepy Bulldog Pale Ale")).AsButton();
 
             Trace.Assert(hiddenProduct == null);
+        }
+
+        [TestMethod]
+        public void TestProductPageNumberItem()
+        {
+            TextBox pageNumber = window.FindFirstDescendant(cf.ByAutomationId("ProductPageNumber")).AsTextBox();
+
+            Trace.Assert(pageNumber.Name == "1/2");
+
+            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextProductButton")).AsButton();
+
+            nextSlideButton.Click();
+
+            Trace.Assert(pageNumber.Name == "2/2");
+        }
+
+        [TestMethod]
+        public void TestCategoryPageNumberItem()
+        {
+            TextBox pageNumber = window.FindFirstDescendant(cf.ByAutomationId("CategoryPageNumber")).AsTextBox();
+
+            Trace.Assert(pageNumber.Name == "1/2");
+
+            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextCategoryButton")).AsButton();
+
+            nextSlideButton.Click();
+
+            Trace.Assert(pageNumber.Name == "2/2");
         }
     }
 }
