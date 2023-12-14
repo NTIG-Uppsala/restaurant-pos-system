@@ -276,6 +276,11 @@ namespace PointOfSaleSystem
 
         private void OnNextProductButtonClick(object sender, RoutedEventArgs e)
         {
+            if (currentProducts.Count <= ProductLimit)
+            {
+                return;
+            }
+
             if ((productPanelPosition + ProductLimit) <= GetClosestMultiple(currentProducts.Count, ProductLimit))
             {
                 productPanelPosition += ProductLimit;
@@ -290,6 +295,11 @@ namespace PointOfSaleSystem
 
         private void OnPreviousProductButtonClick(object sender, RoutedEventArgs e)
         {
+            if (currentProducts.Count <= ProductLimit)
+            {
+                return;
+            }
+
             if ((productPanelPosition - ProductLimit) >= 0)
             {
                 productPanelPosition -= ProductLimit;
@@ -303,6 +313,11 @@ namespace PointOfSaleSystem
 
         private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
+            if (categories.Count <= CategoryLimit)
+            {
+                return;
+            }
+
             if ((categoryPanelPosition + CategoryLimit) <= GetClosestMultiple(categories.Count, CategoryLimit))
             {
                 categoryPanelPosition += CategoryLimit;
@@ -317,6 +332,11 @@ namespace PointOfSaleSystem
 
         private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
+            if (categories.Count <= CategoryLimit)
+            {
+                return;
+            }
+
             if ((categoryPanelPosition - CategoryLimit) >= 0)
             {
                 categoryPanelPosition -= CategoryLimit;
