@@ -121,7 +121,8 @@ namespace PointOfSaleSystem
                     }
                 }
 
-                ObservableCollection<Item> newItemsFiltered = new ObservableCollection<Item>(newItems.OrderByDescending(item => item.Priority));
+                ObservableCollection<Item> newItemsFiltered = new ObservableCollection<Item>(newItems.OrderBy(item => item.Name));
+                newItemsFiltered = new ObservableCollection<Item>(newItemsFiltered.OrderByDescending(item => item.Priority));
 
                 if (!products.SequenceEqual(newItemsFiltered))
                 {
