@@ -25,7 +25,7 @@
             </ItemsControl>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Right" Margin="20,10,10,0">
+        <StackPanel HorizontalAlignment="Right" Margin="20,91,10,0">
             <ItemsControl ItemsSource="{Binding Categories}" x:Name="categoryButtonsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -41,12 +41,17 @@
         </StackPanel>
 
         <Canvas>
-            <Button Content="&#x1F845;" x:Name="PreviousCategoryButton" Click="OnPreviousCatagoryButtonClick" FontSize="35" HorizontalAlignment="Right"  Width="150" Height="65" Canvas.Right="13" Canvas.Top="580"/>
-            <Button Content="&#x1F847;" x:Name="NextCategoryButton" Click="OnNextCatagoryButtonClick" FontSize="35" HorizontalAlignment="Right"  Width="150" Height="65"  Canvas.Right="13" Canvas.Top="651"/>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Canvas.Right="13" Canvas.Top="498">
+                <Button Content="&#x1F845;" x:Name="PreviousCategoryButton" Click="OnPreviousCatagoryButtonClick" FontSize="35"  Width="150" Height="75" Margin="0, 1, 0, 3"/>
+                <TextBlock x:Name="CategoryPageNumber" TextWrapping="Wrap" TextAlignment="Center" FontSize="25" FontWeight="Bold" Text="" Width="150" Height="38" Margin="0, 12.5, 0, 10.5"/>
+                <Button Content="&#x1F847;" x:Name="NextCategoryButton" Click="OnNextCatagoryButtonClick" FontSize="35"  Width="150" Height="75" Margin="0,3, 0, 0"/>
+            </StackPanel>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Canvas.Top="600" Canvas.Left="403.5">
+            <Button Content="Return" x:Name="Return" Click="OnReturnButtonClick" HorizontalAlignment="Center" FontSize="25"  Margin="3" Width="150" Height="75" Canvas.Top="10" Canvas.Right="10"/>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Canvas.Top="589.5" Canvas.Left="326.5" Margin="3.5">
                 <Button Content="&#x1F844;" x:Name="PreviousProductButton" Click="OnPreviousProductButtonClick" FontSize="35" Margin="3"  Width="130" Height="110"/>
-                <Button Content="Return" x:Name="Return" Click="OnReturnButtonClick" HorizontalAlignment="Center" FontSize="25"  Margin="3" Width="110" Height="110"/>
+                <TextBlock x:Name="ProductPageNumber" TextWrapping="Wrap" TextAlignment="Center" FontSize="25" FontWeight="Bold" Text="" Width="130" Margin="51.5"/>
                 <Button Content="&#x1F846;" x:Name="NextProductButton" Click="OnNextProductButtonClick" FontSize="35" Margin="3"   Width="130" Height="110"/>
             </StackPanel>
         </Canvas>

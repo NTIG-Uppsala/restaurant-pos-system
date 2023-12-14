@@ -16,7 +16,7 @@ namespace PointOfSaleSystem
         public ObservableCollection<CategoryItem> categories { get; set; }
         private string usedData;
         private int categoryPanelPosition = 0;
-        private readonly int CategoryLimit = 7;
+        private readonly int CategoryLimit = 5;
         private int productPanelPosition = 0;
         private readonly int ProductLimit = 35;
 
@@ -158,12 +158,16 @@ namespace PointOfSaleSystem
         {
             var newCategory = categories.Skip(categoryPanelPosition).Take(CategoryLimit);
 
+            CategoryPageNumber.Text = Convert.ToString($"{(categoryPanelPosition / CategoryLimit) + 1}/{(GetClosestMultiple(categories.Count, CategoryLimit) / CategoryLimit) + 1}");
+
             return newCategory;
         }
 
         private dynamic GetDisplayedProducts()
         {
             var newDisplayedProducts = currentProducts.Skip(productPanelPosition).Take(ProductLimit);
+
+            ProductPageNumber.Text = Convert.ToString($"{(productPanelPosition / ProductLimit) + 1}/{(GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1}");
 
             return newDisplayedProducts;
         }
@@ -271,6 +275,9 @@ namespace PointOfSaleSystem
 
                 // Update the ItemsControl's ItemsSource with filtered items
                 itemButtonsControl.ItemsSource = currentProducts;
+
+                productPanelPosition = 0;
+                ProductPageNumber.Text = Convert.ToString($"{(productPanelPosition / ProductLimit) + 1}/{(GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1}");
             }
         }
 
