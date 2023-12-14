@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,10 +10,10 @@ namespace PointOfSaleSystem
     public partial class MainWindow : Window
     {
         private double total = 0;
-        private ObservableCollection<Item> products = new();
-        private ObservableCollection<Item> currentProducts = new();
-        public ObservableCollection<CategoryItem> categories { get; set; }
-        private string usedData;
+        private ObservableCollection<Product> products = new();
+        private ObservableCollection<Product> currentProducts = new();
+        private readonly ObservableCollection<DatabaseCategory> categories;
+        private readonly string usedData;
         private int categoryPanelPosition = 0;
         private readonly int CategoryLimit = 5;
         private int productPanelPosition = 0;
@@ -30,44 +29,50 @@ namespace PointOfSaleSystem
             GenerateDatabase().Wait();
 
             // Load categories into the Categories property
-            categories = LoadCategories();
+            categories = LoadCategoriesFromDatabase();
 
-            // Load items from the Database
-            LoadItemsFromDatabase();
+            // Load products from the Database
+            LoadProductsFromDatabase();
 
             categoryButtonsControl.ItemsSource = GetDisplayedCategories();
-            itemButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = GetDisplayedProducts();
         }
 
         public async Task GenerateDatabase()
         {
+            // Set up paths
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
             var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
 
+            // If the database file exists, do nothing
             if (File.Exists(DbPath))
             {
                 return;
             }
 
-            List<DatabaseItem> ListOfProducts = await LoadProductsFromTxtAsync();
-            List<CategoryItem> ListOfCategories = await LoadCategoriesFromTxtAsync();
+            var ListOfProducts = await LoadProductsFromTxtAsync();
+            var ListOfCategories = await LoadCategoriesFromTxtAsync();
 
             try
             {
+                // Create a new POSContext to connect to the database
                 using var db = new POSContext();
                 db.Database.EnsureCreated();
 
-                foreach (DatabaseItem newProduct in ListOfProducts)
+                // Add products to the database
+                foreach (var newProduct in ListOfProducts)
                 {
                     db.Add(newProduct);
                 }
 
-                foreach (CategoryItem newCategory in ListOfCategories)
+                // Add categories to the database
+                foreach (var newCategory in ListOfCategories)
                 {
                     db.Add(newCategory);
                 }
 
+                // Save changes to the database
                 db.SaveChanges();
 
             }
@@ -77,57 +82,64 @@ namespace PointOfSaleSystem
             }
         }
 
-        private void LoadItemsFromDatabase()
+        private void LoadProductsFromDatabase()
         {
-            ObservableCollection<Item> newItems = new ObservableCollection<Item>();
+            var newproducts = new ObservableCollection<Product>();
             try
             {
+                // Set up paths
                 var folder = Environment.SpecialFolder.LocalApplicationData;
                 var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
                 Directory.CreateDirectory(path);
                 var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
 
-                string connectionString = $"Data Source={DbPath}";
+                var connectionString = $"Data Source={DbPath}";
 
+                // Connect to the SQLite database
                 using (var connection = new SqliteConnection(connectionString))
                 {
                     connection.Open();
 
-                    string query = "SELECT * FROM products";
+                    // Select all products from the "products" table
+                    var query = "SELECT * FROM products";
                     using var command = new SqliteCommand(query, connection);
                     using var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        int itemId = Convert.ToInt32(reader["ID"]);
-                        string itemName = Convert.ToString(reader["Name"]);
-                        double itemPrice = Convert.ToDouble(reader["price"]);
-                        int categoryId = Convert.ToInt32(reader["CategoryId"]);
-                        int priority = Convert.ToInt32(reader["Priority"]);
-                        bool isCommon = Convert.ToBoolean(reader["IsCommon"]);
+                        // Read product details from the database
+                        var productId = Convert.ToInt32(reader["ID"]);
+                        var productName = Convert.ToString(reader["Name"]);
+                        var productPrice = Convert.ToDouble(reader["price"]);
+                        var categoryId = Convert.ToInt32(reader["CategoryId"]);
+                        var priority = Convert.ToInt32(reader["Priority"]);
+                        var isCommon = Convert.ToBoolean(reader["IsCommon"]);
 
-                        var productHasNoName = string.IsNullOrEmpty(itemName);
+                        var productHasNoName = string.IsNullOrEmpty(productName);
 
                         if (productHasNoName)
                         {
-                            itemName = "NO GIVEN NAME";
-                            itemPrice = 0;
+                            productName = "NO GIVEN NAME";
+                            productPrice = 0;
                             categoryId = 0;
                         }
 
-                        string? Color = categories[categoryId-1].Color;
+                        // Get the color of the product's category
+                        var Color = categories[categoryId - 1].Color;
 
-                        // Create an Item object and add it to the ObservableCollection
-                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId, priority, isCommon, Color));
+                        // Create a product object and add it to the ObservableCollection
+                        newproducts.Add(new Product(productId, productName, productPrice, categoryId, priority, isCommon, Color));
                     }
                 }
 
-                ObservableCollection<Item> newItemsFiltered = new ObservableCollection<Item>(newItems.OrderBy(item => item.Name));
-                newItemsFiltered = new ObservableCollection<Item>(newItemsFiltered.OrderByDescending(item => item.Priority));
+                // Sort and filter the products
+                var newProductsFiltered = new ObservableCollection<Product>(newproducts.OrderBy(item => item.Name));
+                newProductsFiltered = new ObservableCollection<Product>(newProductsFiltered.OrderByDescending(item => item.Priority));
 
-                if (!products.SequenceEqual(newItemsFiltered))
+                // Update the products and currentProducts lists
+                if (!products.SequenceEqual(newProductsFiltered))
                 {
-                    products = newItemsFiltered;
-                    currentProducts = new ObservableCollection<Item>(newItemsFiltered.Where(item => item.IsCommon));
+                    products = newProductsFiltered;
+                    currentProducts = new ObservableCollection<Product>(newProductsFiltered.Where(item => item.IsCommon));
                 }
             }
             catch (Exception ex)
@@ -137,58 +149,71 @@ namespace PointOfSaleSystem
             }
         }
 
-        private static ObservableCollection<CategoryItem> LoadCategories()
+        private static ObservableCollection<DatabaseCategory> LoadCategoriesFromDatabase()
         {
-            ObservableCollection<CategoryItem> categories = new ObservableCollection<CategoryItem>();
+            var newCategories = new ObservableCollection<DatabaseCategory>();
 
             try
             {
+                // Create a new POSContext to connect to the database
                 using var db = new POSContext();
-                categories = new ObservableCollection<CategoryItem>(db.Categories.ToList());
+                // Load categories from the database
+                newCategories = new ObservableCollection<DatabaseCategory>(db.Categories.ToList());
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error loading categories: {ex.Message}");
             }
 
-            return categories;
+            return newCategories;
         }
 
+        // Get a dynamic list of displayed categories
         private dynamic GetDisplayedCategories()
         {
+            // Get a subset of categories based on the current panel position
             var newCategory = categories.Skip(categoryPanelPosition).Take(CategoryLimit);
 
-            CategoryPageNumber.Text = Convert.ToString($"{(categoryPanelPosition / CategoryLimit) + 1}/{(GetClosestMultiple(categories.Count, CategoryLimit) / CategoryLimit) + 1}");
+            var currentCategoryPage = (categoryPanelPosition / CategoryLimit) + 1;
+            var totalCategoryPages = (GetClosestMultiple(categories.Count, CategoryLimit) / CategoryLimit) + 1;
+
+            CategoryPageNumber.Text = Convert.ToString($"{currentCategoryPage}/{totalCategoryPages}");
 
             return newCategory;
         }
 
+        // Get a dynamic list of displayed products
         private dynamic GetDisplayedProducts()
         {
+            // Get a subset of currentProducts based on the current panel position
             var newDisplayedProducts = currentProducts.Skip(productPanelPosition).Take(ProductLimit);
 
-            ProductPageNumber.Text = Convert.ToString($"{(productPanelPosition / ProductLimit) + 1}/{(GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1}");
+            var currentProductPage = (productPanelPosition / ProductLimit) + 1;
+            var totalProductPages = (GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1;
+
+            ProductPageNumber.Text = Convert.ToString($"{currentProductPage}/{totalProductPages}");
 
             return newDisplayedProducts;
         }
 
-        public async Task<List<DatabaseItem>> LoadProductsFromTxtAsync()
+        public async Task<List<DatabaseProduct>> LoadProductsFromTxtAsync()
         {
-            var products = new List<DatabaseItem>();
+            var products = new List<DatabaseProduct>();
 
             try
             {
                 var lines = File.ReadAllLines($"Product{usedData}.txt");
 
                 // Skip header line
-                for (int i = 1; i < lines.Length; i++)
+                for (var i = 1; i < lines.Length; i++)
                 {
                     var line = lines[i];
                     var data = line.Split("_SPLIT_HERE_");
 
                     if (data.Length >= 3)
                     {
-                        var product = new DatabaseItem
+                        // Create a DatabaseProduct object and add it to the list
+                        var product = new DatabaseProduct
                         {
                             Name = Convert.ToString(data[0]),
                             Price = Convert.ToDouble(data[1]),
@@ -208,30 +233,31 @@ namespace PointOfSaleSystem
             return products;
         }
 
-        
 
-        public async Task<List<CategoryItem>> LoadCategoriesFromTxtAsync()
+
+        public async Task<List<DatabaseCategory>> LoadCategoriesFromTxtAsync()
         {
-            var categories = new List<CategoryItem>();
+            var newCategories = new List<DatabaseCategory>();
 
             try
             {
                 var lines = File.ReadAllLines($"Category{usedData}.txt");
 
                 // Skip header line
-                for (int i = 1; i < lines.Length; i++)
+                for (var i = 1; i < lines.Length; i++)
                 {
                     var line = lines[i];
                     var data = line.Split("_SPLIT_HERE_");
 
                     if (data.Length >= 2)
                     {
-                        var category = new CategoryItem
+                        // Create a DatabaseCategory object and add it to the list
+                        var category = new DatabaseCategory
                         {
                             Name = Convert.ToString(data[0]),
                             Color = Convert.ToString(data[1]),
                         };
-                        categories.Add(category);
+                        newCategories.Add(category);
                     }
                 }
             }
@@ -240,16 +266,16 @@ namespace PointOfSaleSystem
                 MessageBox.Show(e.Message);
             }
 
-            return categories;
+            return newCategories;
         }
 
-        private void OnItemButtonClick(object sender, RoutedEventArgs e)
+        private void OnProductButtonClick(object sender, RoutedEventArgs e)
         {
-            // Retrieve the item price from the button's tag
-            double itemPrice = ((Item)((Button)sender).DataContext).Price;
+            // Retrieve the product price from the button's tag
+            var productPrice = ((Product)((Button)sender).DataContext).Price;
 
             // Update the total
-            total += itemPrice;
+            total += productPrice;
             totalPrice.Content = total.ToString("0.00") + " kr";
         }
 
@@ -262,19 +288,19 @@ namespace PointOfSaleSystem
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
             productPanelPosition = 0;
-            currentProducts = new ObservableCollection<Item>(products.Where(item => item.IsCommon));
-            itemButtonsControl.ItemsSource = GetDisplayedProducts();
+            currentProducts = new ObservableCollection<Product>(products.Where(item => item.IsCommon));
+            productButtonsControl.ItemsSource = GetDisplayedProducts();
         }
-        
+
         private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Button categoryButton && categoryButton.DataContext is CategoryItem selectedCategory)
+            if (sender is Button categoryButton && categoryButton.DataContext is DatabaseCategory selectedCategory)
             {
-                // Filter items based on the selected category
-                currentProducts = new ObservableCollection<Item>(products.Where(item => item.CategoryID == selectedCategory.Id));
+                // Filter products based on the selected category
+                currentProducts = new ObservableCollection<Product>(products.Where(item => item.CategoryID == selectedCategory.Id));
 
-                // Update the ItemsControl's ItemsSource with filtered items
-                itemButtonsControl.ItemsSource = currentProducts;
+                // Update the ItemsControl's ItemsSource with filtered products
+                productButtonsControl.ItemsSource = currentProducts;
 
                 productPanelPosition = 0;
                 ProductPageNumber.Text = Convert.ToString($"{(productPanelPosition / ProductLimit) + 1}/{(GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1}");
@@ -297,7 +323,7 @@ namespace PointOfSaleSystem
                 productPanelPosition = 0;
             }
 
-            itemButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = GetDisplayedProducts();
         }
 
         private void OnPreviousProductButtonClick(object sender, RoutedEventArgs e)
@@ -315,7 +341,7 @@ namespace PointOfSaleSystem
             {
                 productPanelPosition = GetClosestMultiple(currentProducts.Count, ProductLimit);
             }
-            itemButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = GetDisplayedProducts();
         }
 
         private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
@@ -355,26 +381,30 @@ namespace PointOfSaleSystem
             categoryButtonsControl.ItemsSource = GetDisplayedCategories();
         }
 
-        static int GetClosestMultiple(int dividend, int divisor)
+        // Helper method to get the closest multiple of a divisor for a dividend
+        private static int GetClosestMultiple(int dividend, int divisor)
         {
-            int quotient = dividend / divisor;
-            int lowerMultiple = divisor * quotient;
+            var quotient = dividend / divisor;
+            var lowerMultiple = divisor * quotient;
 
             return lowerMultiple;
         }
     }
+
+    // DbContext class for interacting with the database
     public class POSContext : DbContext
     {
-        public DbSet<DatabaseItem> Products { get; set; }
-        public DbSet<CategoryItem> Categories { get; set; }
+        public DbSet<DatabaseProduct> Products { get; set; }
+        public DbSet<DatabaseCategory> Categories { get; set; }
 
         public string DbPath { get; }
 
         public POSContext()
         {
             DotNetEnv.Env.Load();
-            string usedData = Environment.GetEnvironmentVariable("USEDDATA");
+            var usedData = Environment.GetEnvironmentVariable("USEDDATA");
 
+            // Set up paths
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
             Directory.CreateDirectory(path);
@@ -384,10 +414,13 @@ namespace PointOfSaleSystem
         // The following configures EF to create a Sqlite database file in the
         // special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseSqlite($"Data Source={DbPath}");
+        {
+            optionsBuilder.UseSqlite($"Data Source={DbPath}");
+        }
     }
 
-    public class DatabaseItem
+    // DatabaseProduct class represents a product in the database
+    public class DatabaseProduct
     {
         public int Id { get; set; }
         public string? Name { get; set; }
@@ -395,19 +428,22 @@ namespace PointOfSaleSystem
         public int CategoryId { get; set; }
         public int Priority { get; set; }
         public bool IsCommon { get; set; }
-        public CategoryItem Category { get; set; }
+        public DatabaseCategory Category { get; set; }
     }
 
-    public class CategoryItem
+    // DatabaseCategory class represents a category in the database
+    public class DatabaseCategory
     {
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Color { get; set; }
 
-        // Navigation property to link categories to items
-        public List<DatabaseItem> Items { get; set; }
+        // Navigation property to link categories to products
+        public List<DatabaseProduct> Products { get; set; }
     }
-    public class Item
+
+    // Product class represents a product in the user interface
+    public class Product
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -417,7 +453,7 @@ namespace PointOfSaleSystem
         public bool IsCommon { get; set; }
         public string? Color { get; set; }
 
-        public Item(int id, string name, double price, int categoryID, int priority, bool isCommon, string? color)
+        public Product(int id, string name, double price, int categoryID, int priority, bool isCommon, string? color)
         {
             ID = id;
             Name = name;

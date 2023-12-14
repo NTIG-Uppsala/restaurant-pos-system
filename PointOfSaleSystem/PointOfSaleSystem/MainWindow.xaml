@@ -9,7 +9,7 @@
     <Grid>
         <!-- Panel for Displaying Dynamically Added Items -->
         <StackPanel HorizontalAlignment="Left" Margin="330,10,173,73">
-            <ItemsControl x:Name="itemButtonsControl">
+            <ItemsControl x:Name="productButtonsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" />
@@ -17,7 +17,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Height="75" Width="95" FontSize="11" Margin="3" FontWeight="Bold" Click="OnItemButtonClick" Background="{Binding Color}">
+                        <Button Height="75" Width="95" FontSize="11" Margin="3" FontWeight="Bold" Click="OnProductButtonClick" Background="{Binding Color}">
                             <TextBlock Text="{Binding Name}" TextAlignment="Center" TextWrapping="Wrap" />
                         </Button>
                     </DataTemplate>
