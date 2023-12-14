@@ -17,8 +17,8 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Height="75" Width="95" FontSize="10" Margin="3" Click="OnItemButtonClick">
-                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                        <Button Height="75" Width="95" FontSize="11" Margin="3" FontWeight="Bold" Click="OnItemButtonClick" Background="{Binding Color}">
+                            <TextBlock Text="{Binding Name}" TextAlignment="Center" TextWrapping="Wrap" />
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -34,7 +34,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding Name}" Click="OnCategoryButtonClick" Height="75" Width="150" FontSize="10" Margin="3"/>
+                        <Button Content="{Binding Name}" Click="OnCategoryButtonClick" Height="75" Width="150" FontSize="15" FontWeight="Bold" Margin="3" Background="{Binding Color}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

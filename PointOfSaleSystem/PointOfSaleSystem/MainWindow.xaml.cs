@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -28,11 +29,12 @@ namespace PointOfSaleSystem
 
             GenerateDatabase().Wait();
 
+            // Load categories into the Categories property
+            categories = LoadCategories();
+
             // Load items from the Database
             LoadItemsFromDatabase();
 
-            // Load categories into the Categories property
-            categories = LoadCategories();
             categoryButtonsControl.ItemsSource = GetDisplayedCategories();
             itemButtonsControl.ItemsSource = GetDisplayedProducts();
         }
@@ -112,8 +114,10 @@ namespace PointOfSaleSystem
                             categoryId = 0;
                         }
 
+                        string? Color = categories[categoryId-1].Color;
+
                         // Create an Item object and add it to the ObservableCollection
-                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId, priority, isCommon));
+                        newItems.Add(new Item(itemId, itemName, itemPrice, categoryId, priority, isCommon, Color));
                     }
                 }
 
@@ -198,6 +202,8 @@ namespace PointOfSaleSystem
 
             return products;
         }
+
+        
 
         public async Task<List<CategoryItem>> LoadCategoriesFromTxtAsync()
         {
@@ -381,8 +387,9 @@ namespace PointOfSaleSystem
         public int CategoryID { get; set; }
         public int Priority { get; set; }
         public bool IsCommon { get; set; }
+        public string? Color { get; set; }
 
-        public Item(int id, string name, double price, int categoryID, int priority, bool isCommon)
+        public Item(int id, string name, double price, int categoryID, int priority, bool isCommon, string? color)
         {
             ID = id;
             Name = name;
@@ -390,6 +397,7 @@ namespace PointOfSaleSystem
             CategoryID = categoryID;
             Priority = priority;
             IsCommon = isCommon;
+            Color = color;
         }
     }
 }
