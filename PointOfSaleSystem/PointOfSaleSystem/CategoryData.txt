@@ -1,0 +1,10 @@
+Name_SPLIT_HERE_Color
+Förrätter_SPLIT_HERE_Beige
+Varmrätter_SPLIT_HERE_Orange
+Efterrätter_SPLIT_HERE_SkyBlue
+Pizza_SPLIT_HERE_Tomato
+Skaldjur_SPLIT_HERE_Pink
+Såser_SPLIT_HERE_DarkSalmon
+Viner_SPLIT_HERE_IndianRed
+Öl/Cider_SPLIT_HERE_Khaki
+Varm dryck_SPLIT_HERE_Peru

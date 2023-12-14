@@ -8,8 +8,8 @@
         Title="PointOfSaleSystem" Height="768" Width="1024">
     <Grid>
         <!-- Panel for Displaying Dynamically Added Items -->
-        <StackPanel HorizontalAlignment="Left" Margin="20,73,0,73">
-            <ItemsControl x:Name="itemButtonsControl">
+        <StackPanel HorizontalAlignment="Left" Margin="330,10,173,73">
+            <ItemsControl x:Name="productButtonsControl">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" />
@@ -17,18 +17,50 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Height="70" Width="100" FontSize="10" Margin="3" Click="OnItemButtonClick">
-                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                        <Button Height="75" Width="95" FontSize="11" Margin="3" FontWeight="Bold" Click="OnProductButtonClick" Background="{Binding Color}">
+                            <TextBlock Text="{Binding Name}" TextAlignment="Center" TextWrapping="Wrap" />
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
 
-        <!-- Panel for Total Price and Reset Button -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="138" Margin="20,0,0,0">
-            <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-            <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="299" FontSize="48" Margin="10,0,0,0"/>
+        <StackPanel HorizontalAlignment="Right" Margin="20,91,10,0">
+            <ItemsControl ItemsSource="{Binding Categories}" x:Name="categoryButtonsControl">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding Name}" Click="OnCategoryButtonClick" Height="75" Width="150" FontSize="15" FontWeight="Bold" Margin="3" Background="{Binding Color}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
+
+        <Canvas>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Canvas.Right="13" Canvas.Top="498">
+                <Button Content="&#x1F845;" x:Name="PreviousCategoryButton" Click="OnPreviousCatagoryButtonClick" FontSize="35"  Width="150" Height="75" Margin="0, 1, 0, 3"/>
+                <TextBlock x:Name="CategoryPageNumber" TextWrapping="Wrap" TextAlignment="Center" FontSize="25" FontWeight="Bold" Text="" Width="150" Height="38" Margin="0, 12.5, 0, 10.5"/>
+                <Button Content="&#x1F847;" x:Name="NextCategoryButton" Click="OnNextCatagoryButtonClick" FontSize="35"  Width="150" Height="75" Margin="0,3, 0, 0"/>
+            </StackPanel>
+
+            <Button Content="Return" x:Name="Return" Click="OnReturnButtonClick" HorizontalAlignment="Center" FontSize="25"  Margin="3" Width="150" Height="75" Canvas.Top="10" Canvas.Right="10"/>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Canvas.Top="589.5" Canvas.Left="326.5" Margin="3.5">
+                <Button Content="&#x1F844;" x:Name="PreviousProductButton" Click="OnPreviousProductButtonClick" FontSize="35" Margin="3"  Width="130" Height="110"/>
+                <TextBlock x:Name="ProductPageNumber" TextWrapping="Wrap" TextAlignment="Center" FontSize="25" FontWeight="Bold" Text="" Width="130" Margin="51.5"/>
+                <Button Content="&#x1F846;" x:Name="NextProductButton" Click="OnNextProductButtonClick" FontSize="35" Margin="3"   Width="130" Height="110"/>
+            </StackPanel>
+        </Canvas>
+        
+        <!-- Panel for Total Price and Reset Button -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,538,0,0" Width="341">
+            <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+            <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="299" FontSize="48"/>
+        </StackPanel>
+
     </Grid>
 </Window>

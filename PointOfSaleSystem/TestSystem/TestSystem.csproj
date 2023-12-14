@@ -11,13 +11,17 @@
 
   <ItemGroup>
     <None Remove=".env" />
+    <None Remove="CategoryTestData.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include=".env">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="TestData.txt">
+    <Content Include="CategoryTestData.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ProductTestData.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
