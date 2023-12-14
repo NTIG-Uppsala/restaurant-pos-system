@@ -21,7 +21,12 @@
 3. Navigate to the existing database
     * If program has been run the database will be created at `C:\Users\%UserName%\AppData\Local\Restaurant-POS\`
 
-4. To add products you can go into the SQL tab and write the following line (change the sent values)
+4. To add products you can go into the SQL tab and write the following line (change the sent values. priority is 0 to 10 where 10 is the highest priority, isCommon is 1 for true or 0 for false) 
     ``` SQL
-    INSERT INTO products (product, price, categoryId) VALUES ('ProductName', 20, 1);
+    INSERT INTO products (product, price, categoryId, priority, isCommon) VALUES ('ProductName', 20, 1, 5, 1);
+    ```
+
+5. To add categories you can go into the SQL tab and write the following line (change the sent values. Colors are taken from [Here](https://learn.microsoft.com/en-us/dotnet/api/system.windows.media.colors?view=windowsdesktop-8.0#remarks)) 
+    ``` SQL
+    INSERT INTO categories (name, color) VALUES ('CategoryName', 'Red');
     ```
