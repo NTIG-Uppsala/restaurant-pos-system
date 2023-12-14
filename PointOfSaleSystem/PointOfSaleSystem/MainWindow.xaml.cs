@@ -10,11 +10,14 @@ namespace PointOfSaleSystem
     public partial class MainWindow : Window
     {
         private double total = 0;
-        private ObservableCollection<Item> items = new();
-        public ObservableCollection<CategoryItem> Categories { get; set; }
+        private ObservableCollection<Item> products = new();
+        private ObservableCollection<Item> currentProducts = new();
+        public ObservableCollection<CategoryItem> categories { get; set; }
         private string usedData;
         private int categoryPanelPosition = 0;
         private readonly int CategoryLimit = 7;
+        private int productPanelPosition = 0;
+        private readonly int ProductLimit = 35;
 
         public MainWindow()
         {
@@ -29,9 +32,9 @@ namespace PointOfSaleSystem
             LoadItemsFromDatabase();
 
             // Load categories into the Categories property
-            Categories = LoadCategories();
-            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
-            itemButtonsControl.ItemsSource = items;
+            categories = LoadCategories();
+            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
+            itemButtonsControl.ItemsSource = GetDisplayedProducts();
         }
 
         public async Task GenerateDatabase()
@@ -116,9 +119,10 @@ namespace PointOfSaleSystem
 
                 ObservableCollection<Item> newItemsFiltered = new ObservableCollection<Item>(newItems.OrderByDescending(item => item.Priority));
 
-                if (!items.SequenceEqual(newItemsFiltered))
+                if (!products.SequenceEqual(newItemsFiltered))
                 {
-                    items = newItemsFiltered;
+                    products = newItemsFiltered;
+                    currentProducts = new ObservableCollection<Item>(newItemsFiltered.Where(item => item.IsCommon));
                 }
             }
             catch (Exception ex)
@@ -147,9 +151,16 @@ namespace PointOfSaleSystem
 
         private dynamic GetDisplayedCategories()
         {
-            var newCategory = Categories.Skip(categoryPanelPosition).Take(CategoryLimit);
+            var newCategory = categories.Skip(categoryPanelPosition).Take(CategoryLimit);
 
             return newCategory;
+        }
+
+        private dynamic GetDisplayedProducts()
+        {
+            var newDisplayedProducts = currentProducts.Skip(productPanelPosition).Take(ProductLimit);
+
+            return newDisplayedProducts;
         }
 
         public async Task<List<DatabaseItem>> LoadProductsFromTxtAsync()
@@ -239,7 +250,9 @@ namespace PointOfSaleSystem
 
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            itemButtonsControl.ItemsSource = items;
+            productPanelPosition = 0;
+            currentProducts = new ObservableCollection<Item>(products.Where(item => item.IsCommon));
+            itemButtonsControl.ItemsSource = GetDisplayedProducts();
         }
         
         private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
@@ -247,16 +260,43 @@ namespace PointOfSaleSystem
             if (sender is Button categoryButton && categoryButton.DataContext is CategoryItem selectedCategory)
             {
                 // Filter items based on the selected category
-                var filteredItems = items.Where(item => item.CategoryID == selectedCategory.Id).ToList();
+                currentProducts = new ObservableCollection<Item>(products.Where(item => item.CategoryID == selectedCategory.Id));
 
                 // Update the ItemsControl's ItemsSource with filtered items
-                itemButtonsControl.ItemsSource = filteredItems;
+                itemButtonsControl.ItemsSource = currentProducts;
             }
+        }
+
+        private void OnNextProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            if ((productPanelPosition + ProductLimit) <= GetClosestMultiple(currentProducts.Count, ProductLimit))
+            {
+                productPanelPosition += ProductLimit;
+            }
+            else
+            {
+                productPanelPosition = 0;
+            }
+
+            itemButtonsControl.ItemsSource = GetDisplayedProducts();
+        }
+
+        private void OnPreviousProductButtonClick(object sender, RoutedEventArgs e)
+        {
+            if ((productPanelPosition - ProductLimit) >= 0)
+            {
+                productPanelPosition -= ProductLimit;
+            }
+            else
+            {
+                productPanelPosition = GetClosestMultiple(currentProducts.Count, ProductLimit);
+            }
+            itemButtonsControl.ItemsSource = GetDisplayedProducts();
         }
 
         private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if ((categoryPanelPosition + CategoryLimit) <= ClosestMultipleOf7(Categories.Count))
+            if ((categoryPanelPosition + CategoryLimit) <= GetClosestMultiple(categories.Count, CategoryLimit))
             {
                 categoryPanelPosition += CategoryLimit;
             }
@@ -265,7 +305,7 @@ namespace PointOfSaleSystem
                 categoryPanelPosition = 0;
             }
 
-            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
+            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
         }
 
         private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
@@ -276,15 +316,15 @@ namespace PointOfSaleSystem
             }
             else
             {
-                categoryPanelPosition = ClosestMultipleOf7(Categories.Count);
+                categoryPanelPosition = GetClosestMultiple(categories.Count, CategoryLimit);
             }
-            categorysButtonsControl.ItemsSource = GetDisplayedCategories();
+            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
         }
 
-        static int ClosestMultipleOf7(int number)
+        static int GetClosestMultiple(int dividend, int divisor)
         {
-            int quotient = number / 7;
-            int lowerMultiple = 7 * quotient;
+            int quotient = dividend / divisor;
+            int lowerMultiple = divisor * quotient;
 
             return lowerMultiple;
         }

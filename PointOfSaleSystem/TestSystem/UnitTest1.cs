@@ -231,7 +231,7 @@ namespace TestSystem
 
             Trace.Assert(firstPageItemButton != null);
 
-            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextButton")).AsButton();
+            Button nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextProductButton")).AsButton();
 
             nextSlideButton.Click();
 
@@ -251,7 +251,7 @@ namespace TestSystem
 
             Trace.Assert(categoryButton != null);
 
-            Button nextCategoryButton = window.FindFirstDescendant(cf.ByAutomationId("NextButton")).AsButton();
+            Button nextCategoryButton = window.FindFirstDescendant(cf.ByAutomationId("NextCategoryButton")).AsButton();
 
             nextCategoryButton.Click();
 
