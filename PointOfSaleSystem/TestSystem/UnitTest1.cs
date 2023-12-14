@@ -264,5 +264,13 @@ namespace TestSystem
             Trace.Assert(newCategoryButton != null);
 
         }
+
+        [TestMethod]
+        public void TestHiddenItem()
+        {
+            Button hiddenProduct = window.FindFirstDescendant(cf.ByName("Sleepy Bulldog Pale Ale")).AsButton();
+
+            Trace.Assert(hiddenProduct == null);
+        }
     }
 }
