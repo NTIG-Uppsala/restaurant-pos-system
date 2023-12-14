@@ -9,9 +9,13 @@ This project is a Point of sale system made with WPF and C#.
 [Click here for download](https://github.com/NTIG-Uppsala/restaurant-pos-system/releases)
 
 * Click the `Restaurant-POS.msi` in the latest release
+* If you have a previous version:
+    * First you need to go to `add or remove programs` on your computer and remove the `Restaurant-POS` program
+    * Then you need to go to `C:\Users\%UserName%\AppData\Local\` and remove the `Restaurant-POS` folder
 * Run the installer located in your Downloads folder
 * Follow steps in the installer
 * Run the point of sale system app and approve admin privileges
+
 
 ## Database location
 
