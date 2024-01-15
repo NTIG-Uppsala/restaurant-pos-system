@@ -10,12 +10,8 @@ namespace PointOfSaleSystem
     public partial class MainWindow : Window
     {
         private double total = 0;
-        private int categoryPanelPosition = 0;
-        private readonly int CategoryLimit = 5;
-        private int productPanelPosition = 0;
-        private readonly int ProductLimit = 35;
         private readonly DatabaseService db = new DatabaseService();
-
+        private readonly BusinessLogicService businessLogic = new BusinessLogicService();
 
         public MainWindow()
         {
@@ -33,41 +29,9 @@ namespace PointOfSaleSystem
             // Load products from the Database
             db.LoadProductsFromDatabase();
 
-            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
-            productButtonsControl.ItemsSource = GetDisplayedProducts();
+            categoryButtonsControl.ItemsSource = businessLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
+            productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
         }
-
-        
-
-        // Get a dynamic list of displayed categories
-        private dynamic GetDisplayedCategories()
-        {
-            // Get a subset of categories based on the current panel position
-            var newCategory = db.categories.Skip(categoryPanelPosition).Take(CategoryLimit);
-
-            var currentCategoryPage = (categoryPanelPosition / CategoryLimit) + 1;
-            var totalCategoryPages = (GetClosestMultiple(db.categories.Count, CategoryLimit) / CategoryLimit) + 1;
-
-            CategoryPageNumber.Text = Convert.ToString($"{currentCategoryPage}/{totalCategoryPages}");
-
-            return newCategory;
-        }
-
-        // Get a dynamic list of displayed products
-        private dynamic GetDisplayedProducts()
-        {
-            // Get a subset of currentProducts based on the current panel position
-            var newDisplayedProducts = db.currentProducts.Skip(productPanelPosition).Take(ProductLimit);
-
-            var currentProductPage = (productPanelPosition / ProductLimit) + 1;
-            var totalProductPages = (GetClosestMultiple(db.currentProducts.Count, ProductLimit) / ProductLimit) + 1;
-
-            ProductPageNumber.Text = Convert.ToString($"{currentProductPage}/{totalProductPages}");
-
-            return newDisplayedProducts;
-        }
-
-        
 
         private void OnProductButtonClick(object sender, RoutedEventArgs e)
         {
@@ -87,9 +51,9 @@ namespace PointOfSaleSystem
 
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            productPanelPosition = 0;
+            businessLogic.productPanelPosition = 0;
             db.currentProducts = new ObservableCollection<Product>(db.products.Where(item => item.IsCommon));
-            productButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
         }
 
         private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
@@ -102,87 +66,123 @@ namespace PointOfSaleSystem
                 // Update the ItemsControl's ItemsSource with filtered products
                 productButtonsControl.ItemsSource = db.currentProducts;
 
-                productPanelPosition = 0;
-                ProductPageNumber.Text = Convert.ToString($"{(productPanelPosition / ProductLimit) + 1}/{(GetClosestMultiple(db.currentProducts.Count, ProductLimit) / ProductLimit) + 1}");
+                businessLogic.productPanelPosition = 0;
+                ProductPageNumber.Text = Convert.ToString($"{(businessLogic.productPanelPosition / businessLogic.ProductLimit) + 1}/{(BusinessLogicService.GetClosestMultiple(db.currentProducts.Count, businessLogic.ProductLimit) / businessLogic.ProductLimit) + 1}");
             }
         }
 
         private void OnNextProductButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.currentProducts.Count <= ProductLimit)
+            if (db.currentProducts.Count <= businessLogic.ProductLimit)
             {
                 return;
             }
 
-            if ((productPanelPosition + ProductLimit) <= GetClosestMultiple(db.currentProducts.Count, ProductLimit))
+            if ((businessLogic.productPanelPosition + businessLogic.ProductLimit) <= BusinessLogicService.GetClosestMultiple(db.currentProducts.Count, businessLogic.ProductLimit))
             {
-                productPanelPosition += ProductLimit;
+                businessLogic.productPanelPosition += businessLogic.ProductLimit;
             }
             else
             {
-                productPanelPosition = 0;
+                businessLogic.productPanelPosition = 0;
             }
 
-            productButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
         }
 
         private void OnPreviousProductButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.currentProducts.Count <= ProductLimit)
+            if (db.currentProducts.Count <= businessLogic.ProductLimit)
             {
                 return;
             }
 
-            if ((productPanelPosition - ProductLimit) >= 0)
+            if ((businessLogic.productPanelPosition - businessLogic.ProductLimit) >= 0)
             {
-                productPanelPosition -= ProductLimit;
+                businessLogic.productPanelPosition -= businessLogic.ProductLimit;
             }
             else
             {
-                productPanelPosition = GetClosestMultiple(db.currentProducts.Count, ProductLimit);
+                businessLogic.productPanelPosition = BusinessLogicService.GetClosestMultiple(db.currentProducts.Count, businessLogic.ProductLimit);
             }
-            productButtonsControl.ItemsSource = GetDisplayedProducts();
+            productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
         }
 
         private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.categories.Count <= CategoryLimit)
+            if (db.categories.Count <= businessLogic.CategoryLimit)
             {
                 return;
             }
 
-            if ((categoryPanelPosition + CategoryLimit) <= GetClosestMultiple(db.categories.Count, CategoryLimit))
+            if ((businessLogic.categoryPanelPosition + businessLogic.CategoryLimit) <= BusinessLogicService.GetClosestMultiple(db.categories.Count, businessLogic.CategoryLimit))
             {
-                categoryPanelPosition += CategoryLimit;
+                businessLogic.categoryPanelPosition += businessLogic.CategoryLimit;
             }
             else
             {
-                categoryPanelPosition = 0;
+                businessLogic.categoryPanelPosition = 0;
             }
 
-            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
+            categoryButtonsControl.ItemsSource = businessLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
         }
 
         private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.categories.Count <= CategoryLimit)
+            if (db.categories.Count <= businessLogic.CategoryLimit)
             {
                 return;
             }
 
-            if ((categoryPanelPosition - CategoryLimit) >= 0)
+            if ((businessLogic.categoryPanelPosition - businessLogic.CategoryLimit) >= 0)
             {
-                categoryPanelPosition -= CategoryLimit;
+                businessLogic.categoryPanelPosition -= businessLogic.CategoryLimit;
             }
             else
             {
-                categoryPanelPosition = GetClosestMultiple(db.categories.Count, CategoryLimit);
+                businessLogic.categoryPanelPosition = BusinessLogicService.GetClosestMultiple(db.categories.Count, businessLogic.CategoryLimit);
             }
-            categoryButtonsControl.ItemsSource = GetDisplayedCategories();
+            categoryButtonsControl.ItemsSource = businessLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
+        }
+    }
+
+    public class BusinessLogicService
+    {
+        public int categoryPanelPosition = 0;
+        public readonly int CategoryLimit = 5;
+        public int productPanelPosition = 0;
+        public readonly int ProductLimit = 35;
+
+        // Get a dynamic list of displayed categories
+        public dynamic GetDisplayedCategories(ObservableCollection<DatabaseCategory> categories, TextBlock CategoryPageNumber)
+        {
+            // Get a subset of categories based on the current panel position
+            var newCategory = categories.Skip(categoryPanelPosition).Take(CategoryLimit);
+
+            var currentCategoryPage = (categoryPanelPosition / CategoryLimit) + 1;
+            var totalCategoryPages = (GetClosestMultiple(categories.Count, CategoryLimit) / CategoryLimit) + 1;
+
+            CategoryPageNumber.Text = Convert.ToString($"{currentCategoryPage}/{totalCategoryPages}");
+
+            return newCategory;
+        }
+
+        // Get a dynamic list of displayed products
+        public dynamic GetDisplayedProducts(ObservableCollection<Product> currentProducts, TextBlock ProductPageNumber)
+        {
+            // Get a subset of currentProducts based on the current panel position
+            var newDisplayedProducts = currentProducts.Skip(productPanelPosition).Take(ProductLimit);
+
+            var currentProductPage = (productPanelPosition / ProductLimit) + 1;
+            var totalProductPages = (GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1;
+
+            ProductPageNumber.Text = Convert.ToString($"{currentProductPage}/{totalProductPages}");
+
+            return newDisplayedProducts;
         }
 
         // Helper method to get the closest multiple of a divisor for a dividend
-        private static int GetClosestMultiple(int dividend, int divisor)
+        public static int GetClosestMultiple(int dividend, int divisor)
         {
             var quotient = dividend / divisor;
             var lowerMultiple = divisor * quotient;
