@@ -344,7 +344,7 @@ namespace PointOfSaleSystem
                     var line = lines[i];
                     var data = line.Split("_SPLIT_HERE_");
 
-                    if (data.Length >= 3)
+                    if (data.Length >= 5)
                     {
                         // Create a DatabaseProduct object and add it to the list
                         var product = new DatabaseProduct
