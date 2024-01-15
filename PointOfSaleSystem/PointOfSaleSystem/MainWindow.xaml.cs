@@ -12,6 +12,7 @@ namespace PointOfSaleSystem
         private double total = 0;
         private readonly DatabaseService db = new DatabaseService();
         private readonly BusinessLogicService businessLogic = new BusinessLogicService();
+        private string usedData;
 
         public MainWindow()
         {
@@ -19,15 +20,15 @@ namespace PointOfSaleSystem
             
 
             DotNetEnv.Env.Load();
-            db.usedData = Environment.GetEnvironmentVariable("USEDDATA");
+            usedData = Environment.GetEnvironmentVariable("USEDDATA");
 
-            db.GenerateDatabase().Wait();
+            db.GenerateDatabase(usedData).Wait();
 
             // Load categories into the Categories property
             db.categories = DatabaseService.LoadCategoriesFromDatabase();
 
             // Load products from the Database
-            db.LoadProductsFromDatabase();
+            db.LoadProductsFromDatabase(usedData);
 
             categoryButtonsControl.ItemsSource = businessLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
             productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
@@ -196,11 +197,8 @@ namespace PointOfSaleSystem
         public ObservableCollection<Product> products = new();
         public ObservableCollection<Product> currentProducts = new();
         public ObservableCollection<DatabaseCategory> categories;
-        public string usedData;
 
-
-
-        public async Task GenerateDatabase()
+        public async Task GenerateDatabase(string usedData)
         {
             // Set up paths
             var folder = Environment.SpecialFolder.LocalApplicationData;
@@ -213,8 +211,8 @@ namespace PointOfSaleSystem
                 return;
             }
 
-            var ListOfProducts = await LoadProductsFromTxtAsync();
-            var ListOfCategories = await LoadCategoriesFromTxtAsync();
+            var ListOfProducts = await LoadProductsFromTxtAsync(usedData);
+            var ListOfCategories = await LoadCategoriesFromTxtAsync(usedData);
 
             try
             {
@@ -263,7 +261,7 @@ namespace PointOfSaleSystem
             return newCategories;
         }
 
-        public void LoadProductsFromDatabase()
+        public void LoadProductsFromDatabase(string usedData)
         {
             var newproducts = new ObservableCollection<Product>();
             try
@@ -330,7 +328,7 @@ namespace PointOfSaleSystem
             }
         }
 
-        public async Task<List<DatabaseProduct>> LoadProductsFromTxtAsync()
+        public async Task<List<DatabaseProduct>> LoadProductsFromTxtAsync(string usedData)
         {
             var products = new List<DatabaseProduct>();
 
@@ -367,7 +365,7 @@ namespace PointOfSaleSystem
             return products;
         }
 
-        public async Task<List<DatabaseCategory>> LoadCategoriesFromTxtAsync()
+        public async Task<List<DatabaseCategory>> LoadCategoriesFromTxtAsync(string usedData)
         {
             var newCategories = new List<DatabaseCategory>();
 
