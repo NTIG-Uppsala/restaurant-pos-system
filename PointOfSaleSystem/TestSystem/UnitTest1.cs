@@ -46,7 +46,7 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestAddProduct()
+        public void TestProductButton()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
@@ -57,7 +57,7 @@ namespace TestSystem
         }
 
         [TestMethod]
-        public void TestAddMultipleProducts()
+        public void TestMultipleProductButtons()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
@@ -79,6 +79,11 @@ namespace TestSystem
             buttonReset.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr");
+
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+
+            var productListHasBeenReset = itemTable.Items.Length == 0;
+            Trace.Assert(productListHasBeenReset);
         }
 
         [TestMethod]
@@ -299,6 +304,75 @@ namespace TestSystem
             nextSlideButton.Click();
 
             Trace.Assert(pageNumber.Name == "2/2");
+        }
+        [TestClass]
+        public class ProductWindowTests
+        {
+            public ConditionFactory cf;
+            public Window window;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                using var automation = new UIA3Automation();
+                var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+                window = app.GetMainWindow(automation);
+                cf = new ConditionFactory(new UIA3PropertyLibrary());
+            }
+
+            private static string GetSolutionFolderPath()
+            {
+                // Assuming the solution folder is two levels above the executable
+                var executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
+                var solutionFolderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\..\.."));
+
+                return solutionFolderPath;
+            }
+
+            [TestCleanup]
+
+            public void Cleanup()
+            {
+                window?.AsWindow().Close();
+            }
+
+            [TestMethod]
+            public void TestProductAdded()
+            {
+                var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                button.Click();
+
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+
+                var itemNameHasBeenAdded = itemTable.Items.Any(item => item.Text == "Bearnaise");
+                Trace.Assert(itemNameHasBeenAdded);
+
+                var itemPriceHasBeenAdded = itemTable.Items.Any(item => item.Text == "10");
+                Trace.Assert(itemPriceHasBeenAdded);
+
+                var itemAmountHasBeenAdded = itemTable.Items.Any(item => item.Text == "1");
+                Trace.Assert(itemAmountHasBeenAdded);
+            }
+
+            [TestMethod]
+            public void TestAddAmount()
+            {
+                var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                button.Click();
+                button.Click();
+
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+
+                var itemNameHasBeenAdded = itemTable.Items.Any(item => item.Text == "Bearnaise");
+                Trace.Assert(itemNameHasBeenAdded);
+
+                var itemPriceHasBeenAdded = itemTable.Items.Any(item => item.Text == "20");
+                Trace.Assert(itemPriceHasBeenAdded);
+
+                var itemAmountHasBeenAdded = itemTable.Items.Any(item => item.Text == "2");
+                Trace.Assert(itemAmountHasBeenAdded);
+            }
+
         }
     }
 }
