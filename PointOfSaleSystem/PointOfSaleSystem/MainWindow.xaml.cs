@@ -12,7 +12,7 @@ namespace PointOfSaleSystem
         private double total = 0;
         private readonly DatabaseService db = new DatabaseService();
         private readonly BusinessLogicService businessLogic = new BusinessLogicService();
-        private List<DisplayedItem> ProductWindowItems = new();
+        private ObservableCollection<DisplayedItem> ProductWindowItems = new ObservableCollection<DisplayedItem>();
         private string usedData;
 
         public MainWindow()
@@ -37,18 +37,40 @@ namespace PointOfSaleSystem
 
         private void OnProductButtonClick(object sender, RoutedEventArgs e)
         {
-            // Retrieve the product price from the button's tag
-            var productPrice = ((Product)((Button)sender).DataContext).Price;
+            // Retrieve the product name and price from the button's tag
+            string productName = ((Product)((Button)sender).DataContext).Name;
+            double productPrice = ((Product)((Button)sender).DataContext).Price;
 
-            // Update the total
-            total += productPrice;
-            totalPrice.Content = total.ToString("0.00") + " kr";
+            UpdateProductWindow(productName, productPrice);
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+        }
+
+        private void UpdateProductWindow(string productName, double productPrice)
+        {
+            var addedItem = ProductWindowItems.FirstOrDefault(x => x.ProductName == productName);
+            if (addedItem != null)
+            {
+                addedItem.ProductAmount += 1;
+                addedItem.ProductPrice = (addedItem.ItemPrice * addedItem.ProductAmount).ToString("0.00") + " kr";
+            }
+            else
+            {
+                string totalPrice = productPrice.ToString("0.00") + " kr";
+
+                ProductWindowItems.Add(new DisplayedItem(productName, totalPrice, 1, productPrice));
+            }
+
+            productWindow.ItemsSource = ProductWindowItems;
         }
 
         private void ResetOrder(object sender, RoutedEventArgs e)
         {
-            total = 0;
-            totalPrice.Content = total.ToString("0.00") + " kr";
+            ProductWindowItems.Clear();
+            productWindow.ItemsSource = ProductWindowItems;
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
         }
 
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
@@ -450,22 +472,6 @@ namespace PointOfSaleSystem
 
         // Navigation property to link categories to products
         public List<DatabaseProduct> Products { get; set; }
-    }
-
-    public class DisplayedItem
-    {
-        public string? ProductName { get; set; }
-        public string? ProductPrice { get; set; }
-        public int ProductAmount { get; set; }
-        public double ItemPrice { get; set; }
-
-        public DisplayedItem(string? name, string? totalPrice, int amount, double price)
-        {
-            ProductName = name;
-            ProductPrice = totalPrice;
-            ProductAmount = amount;
-            ItemPrice = price;
-        }
     }
 
     // Product class represents a product in the user interface

@@ -56,7 +56,7 @@
             </StackPanel>
 
             <DataGrid x:Name="productWindow" 
-                      ItemsSource="{Binding Source=ProductWindowItems}" 
+                      ItemsSource="{Binding Source=ProductWindowItems, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       Height="515" Width="325"
@@ -64,11 +64,12 @@
                       VerticalAlignment="Top"
                       Background="White"
                       Margin="0,13,0,0"
+                      HorizontalScrollBarVisibility="Hidden"
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="155"/>
-                    <DataGridTextColumn Header="Price" Binding="{Binding ProductPrice}" Width="81"/>
-                    <DataGridTextColumn Header="Amount" Binding="{Binding ProductAmount}" Width="81"/>
+                    <DataGridTextColumn IsReadOnly="True"  Header="Product" Binding="{Binding ProductName}" Width="151"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Price" Binding="{Binding ProductPrice}" Width="83"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Amount" Binding="{Binding ProductAmount}" Width="83"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Canvas>
