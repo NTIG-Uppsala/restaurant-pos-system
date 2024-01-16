@@ -342,15 +342,18 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+                System.Threading.Thread.Sleep(1000);
 
-                var itemNameHasBeenAdded = itemTable.Items.Any(item => item.Text == "Bearnaise");
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+                // Verify the added product details
+                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Items.Any(item => item.Text == "10");
+                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "10,00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Items.Any(item => item.Text == "1");
+                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "1");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
@@ -361,15 +364,18 @@ namespace TestSystem
                 button.Click();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+                System.Threading.Thread.Sleep(1000);
 
-                var itemNameHasBeenAdded = itemTable.Items.Any(item => item.Text == "Bearnaise");
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+                // Verify the added product details
+                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Items.Any(item => item.Text == "20");
+                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "20,00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Items.Any(item => item.Text == "2");
+                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "2");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
