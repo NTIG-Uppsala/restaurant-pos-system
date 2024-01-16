@@ -54,6 +54,23 @@
                 <TextBlock x:Name="ProductPageNumber" TextWrapping="Wrap" TextAlignment="Center" FontSize="25" FontWeight="Bold" Text="" Width="130" Margin="51.5"/>
                 <Button Content="&#x1F846;" x:Name="NextProductButton" Click="OnNextProductButtonClick" FontSize="35" Margin="3"   Width="130" Height="110"/>
             </StackPanel>
+
+            <DataGrid x:Name="productWindow" 
+                      ItemsSource="{Binding Source=ProductWindowItems}" 
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      Height="515" Width="325"
+                      HorizontalAlignment="Center" 
+                      VerticalAlignment="Top"
+                      Background="White"
+                      Margin="0,13,0,0"
+                      >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="155"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding ProductPrice}" Width="81"/>
+                    <DataGridTextColumn Header="Amount" Binding="{Binding ProductAmount}" Width="81"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Canvas>
         
         <!-- Panel for Total Price and Reset Button -->

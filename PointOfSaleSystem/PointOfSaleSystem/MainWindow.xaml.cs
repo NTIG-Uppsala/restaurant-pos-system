@@ -12,12 +12,12 @@ namespace PointOfSaleSystem
         private double total = 0;
         private readonly DatabaseService db = new DatabaseService();
         private readonly BusinessLogicService businessLogic = new BusinessLogicService();
+        private List<DisplayedItem> ProductWindowItems = new();
         private string usedData;
 
         public MainWindow()
         {
             InitializeComponent();
-            
 
             DotNetEnv.Env.Load();
             usedData = Environment.GetEnvironmentVariable("USEDDATA");
@@ -32,6 +32,7 @@ namespace PointOfSaleSystem
 
             categoryButtonsControl.ItemsSource = businessLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
             productButtonsControl.ItemsSource = businessLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
+            productWindow.ItemsSource = ProductWindowItems;
         }
 
         private void OnProductButtonClick(object sender, RoutedEventArgs e)
@@ -449,6 +450,22 @@ namespace PointOfSaleSystem
 
         // Navigation property to link categories to products
         public List<DatabaseProduct> Products { get; set; }
+    }
+
+    public class DisplayedItem
+    {
+        public string? ProductName { get; set; }
+        public string? ProductPrice { get; set; }
+        public int ProductAmount { get; set; }
+        public double ItemPrice { get; set; }
+
+        public DisplayedItem(string? name, string? totalPrice, int amount, double price)
+        {
+            ProductName = name;
+            ProductPrice = totalPrice;
+            ProductAmount = amount;
+            ItemPrice = price;
+        }
     }
 
     // Product class represents a product in the user interface
