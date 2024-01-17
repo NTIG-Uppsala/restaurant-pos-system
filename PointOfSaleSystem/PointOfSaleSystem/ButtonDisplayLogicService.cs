@@ -3,7 +3,7 @@ using System.Windows.Controls;
 
 namespace PointOfSaleSystem
 {
-    public class BusinessLogicService
+    public class ButtonDisplayLogicService
     {
         public int categoryPanelPosition = 0;
         public readonly int CategoryLimit = 5;
