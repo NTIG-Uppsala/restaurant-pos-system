@@ -65,6 +65,22 @@ namespace PointOfSaleSystem
 
         private void ResetOrder(object sender, RoutedEventArgs e)
         {
+            if (ProductWindowItems.Count == 0)
+            {
+                return;
+            }
+
+            // If the reset order button is pressed makes sure it was intended by the user
+            if (sender is Button)
+            {
+                if (MessageBox.Show("Are you sure you want to the reset the unpaid order?",
+                    "Reset warning", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+
+            }
+
             ProductWindowItems.Clear();
             productWindow.ItemsSource = ProductWindowItems;
             double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
@@ -186,8 +202,6 @@ namespace PointOfSaleSystem
 
             // Clear the current order in the UI
             ResetOrder(sender, e);
-
-            MessageBox.Show($"Payment successful!");
         }
 
     }

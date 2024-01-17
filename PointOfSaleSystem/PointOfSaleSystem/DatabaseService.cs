@@ -258,6 +258,7 @@ namespace PointOfSaleSystem
 
                 db.SaveChanges();
             }
+            MessageBox.Show($"Payment successful!");
         }
     }
 
