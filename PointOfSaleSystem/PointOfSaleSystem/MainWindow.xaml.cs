@@ -45,7 +45,9 @@ namespace PointOfSaleSystem
 
         private void UpdateProductWindow(string productName, double productPrice)
         {
+            // Find the first item in the ProductWindowItems collection where the ProductName matches the specified productName
             var addedItem = ProductWindowItems.FirstOrDefault(x => x.ProductName == productName);
+
             if (addedItem != null)
             {
                 addedItem.ProductAmount += 1;
