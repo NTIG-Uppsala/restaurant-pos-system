@@ -36,14 +36,15 @@ namespace PointOfSaleSystem
             // Retrieve the product name and price from the button's tag
             string productName = ((Product)((Button)sender).DataContext).Name;
             double productPrice = ((Product)((Button)sender).DataContext).Price;
+            int productId = ((Product)((Button)sender).DataContext).ID;
 
-            UpdateProductWindow(productName, productPrice);
+            UpdateProductWindow(productName, productPrice, productId);
 
             double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
             totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
         }
 
-        private void UpdateProductWindow(string productName, double productPrice)
+        private void UpdateProductWindow(string productName, double productPrice, int productId)
         {
             // Find the first item in the ProductWindowItems collection where the ProductName matches the specified productName
             var addedItem = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName);
@@ -56,7 +57,7 @@ namespace PointOfSaleSystem
             else
             {
                 string totalProductPrice = productPrice.ToString("0.00") + " kr";
-                ProductWindowItems.Add(new DisplayedItem(productName, totalProductPrice, 1, productPrice));
+                ProductWindowItems.Add(new DisplayedItem(productName, totalProductPrice, 1, productPrice, productId));
             }
 
             productWindow.ItemsSource = ProductWindowItems;
@@ -178,6 +179,17 @@ namespace PointOfSaleSystem
             }
             categoryButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedCategories(DatabaseLogic.Categories, CategoryPageNumber);
         }
+
+        private void OnPayOrderClick(object sender, RoutedEventArgs e)
+        {
+            DatabaseLogic.AddOrderToDatabase(ProductWindowItems);
+
+            // Clear the current order in the UI
+            ResetOrder(sender, e);
+
+            MessageBox.Show($"Payment successful!");
+        }
+
     }
 
     // Product class represents a product in the user interface

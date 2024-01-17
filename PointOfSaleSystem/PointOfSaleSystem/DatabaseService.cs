@@ -212,6 +212,53 @@ namespace PointOfSaleSystem
 
             return newCategories;
         }
+
+        public void AddOrderToDatabase(ObservableCollection<DisplayedItem> order)
+        {
+            // Check if there are products in the order
+            if (order.Count == 0)
+            {
+                MessageBox.Show("Please add products to the order before paying.");
+                return;
+            }
+
+            // Calculate the total price of the order
+            double totalOrderPrice = order.Sum(item => item.ProductAmount * item.ItemPrice);
+
+            // Create a new order
+            DatabaseOrder newOrder = new DatabaseOrder
+            {
+                TableId = 1,
+                Price = totalOrderPrice,
+                IsPaid = true
+            };
+            int orderId;
+            // Add the new order to the database
+            using (var db = new POSContext())
+            {
+                db.Orders.Add(newOrder);
+                db.SaveChanges();
+
+                orderId = newOrder.Id;
+
+                // Link products to the order in the ProductsInOrder table
+                foreach (var productItem in order)
+                {
+                    // Create a new ProductsInOrder entry for each product in the order
+                    DatabaseProductsInOrder productsInOrder = new DatabaseProductsInOrder
+                    {
+                        OrderId = orderId,
+                        ProductId = productItem.ProductId,
+                        Amount = productItem.ProductAmount
+                    };
+
+                    // Add the entry to the ProductsInOrder table
+                    db.ProductsInOrder.Add(productsInOrder);
+                }
+
+                db.SaveChanges();
+            }
+        }
     }
 
     // DbContext class for interacting with the database
