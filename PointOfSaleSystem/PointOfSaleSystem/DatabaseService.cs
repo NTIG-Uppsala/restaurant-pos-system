@@ -219,7 +219,8 @@ namespace PointOfSaleSystem
     {
         public DbSet<DatabaseProduct> Products { get; set; }
         public DbSet<DatabaseCategory> Categories { get; set; }
-
+        public DbSet<DatabaseOrder> Orders { get; set; }
+        public DbSet<DatabaseProductsInOrder> ProductsInOrder { get; set; }
         public string DbPath { get; }
 
         public POSContext()
@@ -254,6 +255,20 @@ namespace PointOfSaleSystem
         public DatabaseCategory Category { get; set; }
     }
 
+    public class DatabaseOrder
+    {
+        public int Id { get; set; }
+        public int TableId { get; set; }
+        public double Price { get; set; }
+        public bool IsPaid { get; set; } 
+    }
+
+    public class DatabaseProductsInOrder
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+    }
     // DatabaseCategory class represents a category in the database
     public class DatabaseCategory
     {
