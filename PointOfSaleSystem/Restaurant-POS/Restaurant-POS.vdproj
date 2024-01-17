@@ -198,15 +198,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Restaurant-POS"
-        "ProductCode" = "8:{5BFD8F09-BD0D-4ED0-8ECF-BE08491472C9}"
-        "PackageCode" = "8:{2EEAB797-1105-4200-80DE-FD5EA876008B}"
+        "ProductCode" = "8:{597DF192-329A-4D72-867E-0E1F12FB7352}"
+        "PackageCode" = "8:{5BC110F3-7215-4D47-A463-3DBA1D44CFDA}"
         "UpgradeCode" = "8:{B3986877-268D-40F6-B867-1760DABD477B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.1.0"
+        "ProductVersion" = "8:2.1.1"
         "Manufacturer" = "8:TE4-23"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -734,7 +734,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_12842510D29D452CB995E213A8E26A7A"
             {
-            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Debug\\net6.0-windows\\apphost.exe"
+            "SourcePath" = "8:..\\PointOfSaleSystem\\obj\\Release\\net6.0-windows\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_8B7C2F7F06D841908B546F4C57B62B54"
