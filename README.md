@@ -1,4 +1,4 @@
-# Restaurang Kassasystem
+# Restaurant point of sale system
 
 ## Introduction
 
