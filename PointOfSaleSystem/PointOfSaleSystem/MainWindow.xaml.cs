@@ -133,7 +133,7 @@ namespace PointOfSaleSystem
             productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
         }
 
-        private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
+        private void OnNextCategoryButtonClick(object sender, RoutedEventArgs e)
         {
             if (db.categories.Count <= buttonDisplayLogic.CategoryLimit)
             {
@@ -153,7 +153,7 @@ namespace PointOfSaleSystem
             categoryButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
         }
 
-        private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
+        private void OnPreviousCategoryButtonClick(object sender, RoutedEventArgs e)
         {
             if (db.categories.Count <= buttonDisplayLogic.CategoryLimit)
             {
