@@ -8,9 +8,9 @@ namespace PointOfSaleSystem
 {
     public class DatabaseService
     {
-        public ObservableCollection<Product> products = new();
-        public ObservableCollection<Product> currentProducts = new();
-        public ObservableCollection<DatabaseCategory> categories;
+        public ObservableCollection<Product> Products = new();
+        public ObservableCollection<Product> CurrentProducts = new();
+        public ObservableCollection<DatabaseCategory> Categories = new();
 
         public async Task GenerateDatabase(string usedData)
         {
@@ -117,7 +117,7 @@ namespace PointOfSaleSystem
                         }
 
                         // Get the color of the product's category
-                        var Color = categories[categoryId - 1].Color;
+                        var Color = Categories[categoryId - 1].Color;
 
                         // Create a product object and add it to the ObservableCollection
                         newproducts.Add(new Product(productId, productName, productPrice, categoryId, priority, isCommon, Color));
@@ -129,10 +129,10 @@ namespace PointOfSaleSystem
                 newProductsFiltered = new ObservableCollection<Product>(newProductsFiltered.OrderByDescending(item => item.Priority));
 
                 // Update the products and currentProducts lists
-                if (!products.SequenceEqual(newProductsFiltered))
+                if (!Products.SequenceEqual(newProductsFiltered))
                 {
-                    products = newProductsFiltered;
-                    currentProducts = new ObservableCollection<Product>(newProductsFiltered.Where(item => item.IsCommon));
+                    Products = newProductsFiltered;
+                    CurrentProducts = new ObservableCollection<Product>(newProductsFiltered.Where(item => item.IsCommon));
                 }
             }
             catch (Exception ex)

@@ -6,28 +6,28 @@ namespace PointOfSaleSystem
 {
     public partial class MainWindow : Window
     {
-        private readonly DatabaseService db = new DatabaseService();
-        private readonly ButtonDisplayLogicService buttonDisplayLogic = new ButtonDisplayLogicService();
+        private readonly DatabaseService DatabaseLogic = new DatabaseService();
+        private readonly ButtonDisplayLogicService ButtonDisplayLogic = new ButtonDisplayLogicService();
         private ObservableCollection<DisplayedItem> ProductWindowItems = new ObservableCollection<DisplayedItem>();
-        private string usedData;
+        private string UsedData;
 
         public MainWindow()
         {
             InitializeComponent();
 
             DotNetEnv.Env.Load();
-            usedData = Environment.GetEnvironmentVariable("USEDDATA");
+            UsedData = Environment.GetEnvironmentVariable("USEDDATA");
 
-            db.GenerateDatabase(usedData).Wait();
+            DatabaseLogic.GenerateDatabase(UsedData).Wait();
 
             // Load categories into the Categories property
-            db.categories = DatabaseService.LoadCategoriesFromDatabase();
+            DatabaseLogic.Categories = DatabaseService.LoadCategoriesFromDatabase();
 
             // Load products from the Database
-            db.LoadProductsFromDatabase(usedData);
+            DatabaseLogic.LoadProductsFromDatabase(UsedData);
 
-            categoryButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
-            productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
+            categoryButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedCategories(DatabaseLogic.Categories, CategoryPageNumber);
+            productButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedProducts(DatabaseLogic.CurrentProducts, ProductPageNumber);
             productWindow.ItemsSource = ProductWindowItems;
         }
 
@@ -46,7 +46,7 @@ namespace PointOfSaleSystem
         private void UpdateProductWindow(string productName, double productPrice)
         {
             // Find the first item in the ProductWindowItems collection where the ProductName matches the specified productName
-            var addedItem = ProductWindowItems.FirstOrDefault(x => x.ProductName == productName);
+            var addedItem = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName);
 
             if (addedItem != null)
             {
@@ -56,7 +56,6 @@ namespace PointOfSaleSystem
             else
             {
                 string totalProductPrice = productPrice.ToString("0.00") + " kr";
-
                 ProductWindowItems.Add(new DisplayedItem(productName, totalProductPrice, 1, productPrice));
             }
 
@@ -73,9 +72,9 @@ namespace PointOfSaleSystem
 
         private void OnReturnButtonClick(object sender, RoutedEventArgs e)
         {
-            buttonDisplayLogic.productPanelPosition = 0;
-            db.currentProducts = new ObservableCollection<Product>(db.products.Where(item => item.IsCommon));
-            productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
+            ButtonDisplayLogic.ProductPanelPosition = 0;
+            DatabaseLogic.CurrentProducts = new ObservableCollection<Product>(DatabaseLogic.Products.Where(item => item.IsCommon));
+            productButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedProducts(DatabaseLogic.CurrentProducts, ProductPageNumber);
         }
 
         private void OnCategoryButtonClick(object sender, RoutedEventArgs e)
@@ -83,88 +82,101 @@ namespace PointOfSaleSystem
             if (sender is Button categoryButton && categoryButton.DataContext is DatabaseCategory selectedCategory)
             {
                 // Filter products based on the selected category
-                db.currentProducts = new ObservableCollection<Product>(db.products.Where(item => item.CategoryID == selectedCategory.Id));
+                DatabaseLogic.CurrentProducts = new ObservableCollection<Product>(DatabaseLogic.Products.Where(item => item.CategoryID == selectedCategory.Id));
 
                 // Update the ItemsControl's ItemsSource with filtered products
-                productButtonsControl.ItemsSource = db.currentProducts;
+                productButtonsControl.ItemsSource = DatabaseLogic.CurrentProducts;
 
-                buttonDisplayLogic.productPanelPosition = 0;
-                ProductPageNumber.Text = Convert.ToString($"{(buttonDisplayLogic.productPanelPosition / buttonDisplayLogic.ProductLimit) + 1}/{(ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit) / buttonDisplayLogic.ProductLimit) + 1}");
+                // Sets the position in the new view to the first page
+                ButtonDisplayLogic.ProductPanelPosition = 0;
+
+                // Updates the product page number based on the current page and total amount of pages
+                var currentPageNumber = (ButtonDisplayLogic.ProductPanelPosition / ButtonDisplayLogicService.ProductLimit) + 1;
+                var totalCategoryButtons = ButtonDisplayLogicService.GetClosestMultiple(DatabaseLogic.CurrentProducts.Count, ButtonDisplayLogicService.ProductLimit);
+                var totalPageNumber = (totalCategoryButtons / ButtonDisplayLogicService.ProductLimit) + 1;
+
+                ProductPageNumber.Text = Convert.ToString($"{currentPageNumber}/{totalPageNumber}");
             }
         }
 
         private void OnNextProductButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.currentProducts.Count <= buttonDisplayLogic.ProductLimit)
+            if (DatabaseLogic.CurrentProducts.Count <= ButtonDisplayLogicService.ProductLimit)
             {
                 return;
             }
 
-            if ((buttonDisplayLogic.productPanelPosition + buttonDisplayLogic.ProductLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit))
+            var nextPagePosition = ButtonDisplayLogic.ProductPanelPosition + ButtonDisplayLogicService.ProductLimit;
+            var canGoToNextProductPage = nextPagePosition <= ButtonDisplayLogicService.GetClosestMultiple(DatabaseLogic.CurrentProducts.Count, ButtonDisplayLogicService.ProductLimit);
+            if (canGoToNextProductPage)
             {
-                buttonDisplayLogic.productPanelPosition += buttonDisplayLogic.ProductLimit;
+                ButtonDisplayLogic.ProductPanelPosition += ButtonDisplayLogicService.ProductLimit;
             }
             else
             {
-                buttonDisplayLogic.productPanelPosition = 0;
+                ButtonDisplayLogic.ProductPanelPosition = 0;
             }
 
-            productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
+            productButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedProducts(DatabaseLogic.CurrentProducts, ProductPageNumber);
         }
 
         private void OnPreviousProductButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.currentProducts.Count <= buttonDisplayLogic.ProductLimit)
+            if (DatabaseLogic.CurrentProducts.Count <= ButtonDisplayLogicService.ProductLimit)
             {
                 return;
             }
 
-            if ((buttonDisplayLogic.productPanelPosition - buttonDisplayLogic.ProductLimit) >= 0)
+            if ((ButtonDisplayLogic.ProductPanelPosition - ButtonDisplayLogicService.ProductLimit) >= 0)
             {
-                buttonDisplayLogic.productPanelPosition -= buttonDisplayLogic.ProductLimit;
+                ButtonDisplayLogic.ProductPanelPosition -= ButtonDisplayLogicService.ProductLimit;
             }
             else
             {
-                buttonDisplayLogic.productPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit);
+                // Gets the first product posiiton of the last page
+                ButtonDisplayLogic.ProductPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(DatabaseLogic.CurrentProducts.Count, ButtonDisplayLogicService.ProductLimit);
             }
-            productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
+            productButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedProducts(DatabaseLogic.CurrentProducts, ProductPageNumber);
         }
 
-        private void OnNextCatagoryButtonClick(object sender, RoutedEventArgs e)
+        private void OnNextCategoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.categories.Count <= buttonDisplayLogic.CategoryLimit)
+            if (DatabaseLogic.Categories.Count <= ButtonDisplayLogicService.CategoryLimit)
             {
                 return;
             }
 
-            if ((buttonDisplayLogic.categoryPanelPosition + buttonDisplayLogic.CategoryLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.categories.Count, buttonDisplayLogic.CategoryLimit))
+            var nextPagePosition = ButtonDisplayLogic.CategoryPanelPosition + ButtonDisplayLogicService.CategoryLimit;
+            var canGoToNextCategoryPage = nextPagePosition <= ButtonDisplayLogicService.GetClosestMultiple(DatabaseLogic.Categories.Count, ButtonDisplayLogicService.CategoryLimit);
+            if (canGoToNextCategoryPage)
             {
-                buttonDisplayLogic.categoryPanelPosition += buttonDisplayLogic.CategoryLimit;
+                ButtonDisplayLogic.CategoryPanelPosition += ButtonDisplayLogicService.CategoryLimit;
             }
             else
             {
-                buttonDisplayLogic.categoryPanelPosition = 0;
+                ButtonDisplayLogic.CategoryPanelPosition = 0;
             }
 
-            categoryButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
+            categoryButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedCategories(DatabaseLogic.Categories, CategoryPageNumber);
         }
 
-        private void OnPreviousCatagoryButtonClick(object sender, RoutedEventArgs e)
+        private void OnPreviousCategoryButtonClick(object sender, RoutedEventArgs e)
         {
-            if (db.categories.Count <= buttonDisplayLogic.CategoryLimit)
+            if (DatabaseLogic.Categories.Count <= ButtonDisplayLogicService.CategoryLimit)
             {
                 return;
             }
 
-            if ((buttonDisplayLogic.categoryPanelPosition - buttonDisplayLogic.CategoryLimit) >= 0)
+            if ((ButtonDisplayLogic.CategoryPanelPosition - ButtonDisplayLogicService.CategoryLimit) >= 0)
             {
-                buttonDisplayLogic.categoryPanelPosition -= buttonDisplayLogic.CategoryLimit;
+                ButtonDisplayLogic.CategoryPanelPosition -= ButtonDisplayLogicService.CategoryLimit;
             }
             else
             {
-                buttonDisplayLogic.categoryPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(db.categories.Count, buttonDisplayLogic.CategoryLimit);
+                // Gets the first category posiiton of the last page
+                ButtonDisplayLogic.CategoryPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(DatabaseLogic.Categories.Count, ButtonDisplayLogicService.CategoryLimit);
             }
-            categoryButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
+            categoryButtonsControl.ItemsSource = ButtonDisplayLogic.GetDisplayedCategories(DatabaseLogic.Categories, CategoryPageNumber);
         }
     }
 

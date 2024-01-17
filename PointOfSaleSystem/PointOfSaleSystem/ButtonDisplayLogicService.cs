@@ -5,18 +5,18 @@ namespace PointOfSaleSystem
 {
     public class ButtonDisplayLogicService
     {
-        public int categoryPanelPosition = 0;
-        public readonly int CategoryLimit = 5;
-        public int productPanelPosition = 0;
-        public readonly int ProductLimit = 35;
+        public int CategoryPanelPosition = 0;
+        public const int CategoryLimit = 5;
+        public int ProductPanelPosition = 0;
+        public const int ProductLimit = 35;
 
         // Get a dynamic list of displayed categories
         public dynamic GetDisplayedCategories(ObservableCollection<DatabaseCategory> categories, TextBlock CategoryPageNumber)
         {
             // Get a subset of categories based on the current panel position
-            var newCategory = categories.Skip(categoryPanelPosition).Take(CategoryLimit);
+            var newCategory = categories.Skip(CategoryPanelPosition).Take(CategoryLimit);
 
-            var currentCategoryPage = (categoryPanelPosition / CategoryLimit) + 1;
+            var currentCategoryPage = (CategoryPanelPosition / CategoryLimit) + 1;
             var totalCategoryPages = (GetClosestMultiple(categories.Count, CategoryLimit) / CategoryLimit) + 1;
 
             CategoryPageNumber.Text = Convert.ToString($"{currentCategoryPage}/{totalCategoryPages}");
@@ -28,9 +28,9 @@ namespace PointOfSaleSystem
         public dynamic GetDisplayedProducts(ObservableCollection<Product> currentProducts, TextBlock ProductPageNumber)
         {
             // Get a subset of currentProducts based on the current panel position
-            var newDisplayedProducts = currentProducts.Skip(productPanelPosition).Take(ProductLimit);
+            var newDisplayedProducts = currentProducts.Skip(ProductPanelPosition).Take(ProductLimit);
 
-            var currentProductPage = (productPanelPosition / ProductLimit) + 1;
+            var currentProductPage = (ProductPanelPosition / ProductLimit) + 1;
             var totalProductPages = (GetClosestMultiple(currentProducts.Count, ProductLimit) / ProductLimit) + 1;
 
             ProductPageNumber.Text = Convert.ToString($"{currentProductPage}/{totalProductPages}");
