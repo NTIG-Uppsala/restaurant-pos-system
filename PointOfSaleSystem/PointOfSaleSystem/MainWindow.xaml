@@ -77,7 +77,10 @@
         <!-- Panel for Total Price and Reset Button -->
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,538,0,0" Width="341">
             <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-            <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="299" FontSize="48"/>
+             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Content="Pay" x:Name="payButton" Click="PayOrder" Height="100" Width="150" FontSize="48" Margin="0,0,8,0" Background="Lime"/>
+                <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="150" FontSize="48" Margin="0,0,0,0" Background="gold"/>
+             </StackPanel>
         </StackPanel>
 
     </Grid>

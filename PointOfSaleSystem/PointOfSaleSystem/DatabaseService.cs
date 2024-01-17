@@ -268,6 +268,7 @@ namespace PointOfSaleSystem
         public int Id { get; set; }
         public int OrderId { get; set; }
         public int ProductId { get; set; }
+        public int Amount { get; set; }
     }
     // DatabaseCategory class represents a category in the database
     public class DatabaseCategory
