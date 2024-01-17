@@ -89,6 +89,7 @@ namespace PointOfSaleSystem
                 productButtonsControl.ItemsSource = db.currentProducts;
 
                 buttonDisplayLogic.productPanelPosition = 0;
+                // Updates the product page number based on the current page and total amount of pages
                 ProductPageNumber.Text = Convert.ToString($"{(buttonDisplayLogic.productPanelPosition / buttonDisplayLogic.ProductLimit) + 1}/{(ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit) / buttonDisplayLogic.ProductLimit) + 1}");
             }
         }
@@ -100,7 +101,8 @@ namespace PointOfSaleSystem
                 return;
             }
 
-            if ((buttonDisplayLogic.productPanelPosition + buttonDisplayLogic.ProductLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit))
+            var canGoToNextProductPage = (buttonDisplayLogic.productPanelPosition + buttonDisplayLogic.ProductLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit);
+            if (canGoToNextProductPage)
             {
                 buttonDisplayLogic.productPanelPosition += buttonDisplayLogic.ProductLimit;
             }
@@ -125,6 +127,7 @@ namespace PointOfSaleSystem
             }
             else
             {
+                // Gets the first product posiiton of the last page
                 buttonDisplayLogic.productPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(db.currentProducts.Count, buttonDisplayLogic.ProductLimit);
             }
             productButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedProducts(db.currentProducts, ProductPageNumber);
@@ -137,7 +140,8 @@ namespace PointOfSaleSystem
                 return;
             }
 
-            if ((buttonDisplayLogic.categoryPanelPosition + buttonDisplayLogic.CategoryLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.categories.Count, buttonDisplayLogic.CategoryLimit))
+            var canGoToNextCategoryPage = (buttonDisplayLogic.categoryPanelPosition + buttonDisplayLogic.CategoryLimit) <= ButtonDisplayLogicService.GetClosestMultiple(db.categories.Count, buttonDisplayLogic.CategoryLimit);
+            if (canGoToNextCategoryPage)
             {
                 buttonDisplayLogic.categoryPanelPosition += buttonDisplayLogic.CategoryLimit;
             }
@@ -162,6 +166,7 @@ namespace PointOfSaleSystem
             }
             else
             {
+                // Gets the first category posiiton of the last page
                 buttonDisplayLogic.categoryPanelPosition = ButtonDisplayLogicService.GetClosestMultiple(db.categories.Count, buttonDisplayLogic.CategoryLimit);
             }
             categoryButtonsControl.ItemsSource = buttonDisplayLogic.GetDisplayedCategories(db.categories, CategoryPageNumber);
