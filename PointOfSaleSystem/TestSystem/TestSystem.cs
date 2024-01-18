@@ -78,6 +78,10 @@ namespace TestSystem
             button.Click();
             resetButton.Click();
 
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            yesButton.Click();
+
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
             var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
@@ -95,6 +99,11 @@ namespace TestSystem
 
             button.Click();
             resetButton.Click();
+
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            yesButton.Click();
+
             button.Click();
 
             Trace.Assert(totalPrice.Text == "10,00 kr" ^ totalPrice.Text == "10.00 kr");
@@ -123,6 +132,10 @@ namespace TestSystem
 
             button.Click();
             payButton.Click();
+
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("OK"));
+            yesButton.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
