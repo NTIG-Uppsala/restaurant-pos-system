@@ -79,7 +79,7 @@
             <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
              <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Content="Pay" x:Name="payButton" Click="OnPayOrderClick" Height="100" Width="150" FontSize="48" Margin="0,0,8,0" Background="Lime"/>
-                <Button Content="Reset" x:Name="resetButton" Click="ResetOrder" Height="100" Width="150" FontSize="48" Margin="0,0,0,0" Background="gold"/>
+                <Button Content="Reset" x:Name="resetButton" Click="OnResetButtonClick" Height="100" Width="150" FontSize="48" Margin="0,0,0,0" Background="gold"/>
              </StackPanel>
         </StackPanel>
 

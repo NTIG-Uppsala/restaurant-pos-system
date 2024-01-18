@@ -63,24 +63,22 @@ namespace PointOfSaleSystem
             productWindow.ItemsSource = ProductWindowItems;
         }
 
-        private void ResetOrder(object sender, RoutedEventArgs e)
+        private void OnResetButtonClick(object sender, RoutedEventArgs e)
         {
             if (ProductWindowItems.Count == 0)
             {
                 return;
             }
-
-            // If the reset order button is pressed makes sure it was intended by the user
-            if (sender is Button)
-            {
-                if (MessageBox.Show("Are you sure you want to the reset the unpaid order?",
+            if (MessageBox.Show("Are you sure you want to the reset the unpaid order?",
                     "Reset warning", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-                {
-                    return;
-                }
-
+            {
+                return;
             }
+            ResetOrder();
+        }
 
+        private void ResetOrder()
+        {
             ProductWindowItems.Clear();
             productWindow.ItemsSource = ProductWindowItems;
             double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
@@ -201,7 +199,7 @@ namespace PointOfSaleSystem
             DatabaseLogic.AddOrderToDatabase(ProductWindowItems);
 
             // Clear the current order in the UI
-            ResetOrder(sender, e);
+            ResetOrder();
         }
 
     }
