@@ -212,6 +212,54 @@ namespace PointOfSaleSystem
 
             return newCategories;
         }
+
+        public void AddOrderToDatabase(ObservableCollection<DisplayedItem> order)
+        {
+            // Check if there are products in the order
+            if (order.Count == 0)
+            {
+                MessageBox.Show("Please add products to the order before paying.");
+                return;
+            }
+
+            // Calculate the total price of the order
+            double totalOrderPrice = order.Sum(item => item.ProductAmount * item.ItemPrice);
+
+            // Create a new order
+            DatabaseOrder newOrder = new DatabaseOrder
+            {
+                TableId = 1,
+                Price = totalOrderPrice,
+                IsPaid = true
+            };
+            int orderId;
+            // Add the new order to the database
+            using (var db = new POSContext())
+            {
+                db.Orders.Add(newOrder);
+                db.SaveChanges();
+
+                orderId = newOrder.Id;
+
+                // Link products to the order in the ProductsInOrder table
+                foreach (var productItem in order)
+                {
+                    // Create a new ProductsInOrder entry for each product in the order
+                    DatabaseProductsInOrder productsInOrder = new DatabaseProductsInOrder
+                    {
+                        OrderId = orderId,
+                        ProductId = productItem.ProductId,
+                        Amount = productItem.ProductAmount
+                    };
+
+                    // Add the entry to the ProductsInOrder table
+                    db.ProductsInOrder.Add(productsInOrder);
+                }
+
+                db.SaveChanges();
+            }
+            MessageBox.Show($"Payment successful!");
+        }
     }
 
     // DbContext class for interacting with the database
@@ -219,7 +267,8 @@ namespace PointOfSaleSystem
     {
         public DbSet<DatabaseProduct> Products { get; set; }
         public DbSet<DatabaseCategory> Categories { get; set; }
-
+        public DbSet<DatabaseOrder> Orders { get; set; }
+        public DbSet<DatabaseProductsInOrder> ProductsInOrder { get; set; }
         public string DbPath { get; }
 
         public POSContext()
@@ -254,6 +303,21 @@ namespace PointOfSaleSystem
         public DatabaseCategory Category { get; set; }
     }
 
+    public class DatabaseOrder
+    {
+        public int Id { get; set; }
+        public int TableId { get; set; }
+        public double Price { get; set; }
+        public bool IsPaid { get; set; } 
+    }
+
+    public class DatabaseProductsInOrder
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+        public int Amount { get; set; }
+    }
     // DatabaseCategory class represents a category in the database
     public class DatabaseCategory
     {

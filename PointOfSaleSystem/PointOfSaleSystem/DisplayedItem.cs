@@ -60,12 +60,27 @@ namespace PointOfSaleSystem
             }
         }
 
-        public DisplayedItem(string? name, string? totalPrice, int amount, double price)
+        private int productId;
+        public int ProductId
+        {
+            get { return productId; }
+            set
+            {
+                if (value != productId)
+                {
+                    productId = value;
+                    OnPropertyChanged(nameof(ProductId));
+                }
+            }
+        }
+
+        public DisplayedItem(string? name, string? totalPrice, int amount, double price, int productId)
         {
             ProductName = name;
             ProductPrice = totalPrice;
             ProductAmount = amount;
             ItemPrice = price;
+            ProductId = productId;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

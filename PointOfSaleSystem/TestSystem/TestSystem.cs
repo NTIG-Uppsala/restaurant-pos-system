@@ -114,6 +114,23 @@ namespace TestSystem
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
             Trace.Assert(totalPrice.Text == "118,00 kr");
         }
+        [TestMethod]
+        public void TestPayButton()
+        {
+            var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            var payButton = window.FindFirstDescendant(cf.ByAutomationId("payButton")).AsButton();
+            var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            button.Click();
+            payButton.Click();
+
+            Trace.Assert(totalPrice.Text == "0,00 kr");
+
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+            var orderHasBeenPaid = itemTable.Rows.Length == 0;
+            Trace.Assert(orderHasBeenPaid);
+        }
     }
     [TestClass]
     public class CategoryTests
