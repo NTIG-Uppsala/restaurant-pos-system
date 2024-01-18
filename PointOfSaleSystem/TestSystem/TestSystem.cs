@@ -72,17 +72,17 @@ namespace TestSystem
         public void TestResetPrice()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
-            var buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
             button.Click();
-            buttonReset.Click();
+            resetButton.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr");
 
-            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
-            var productListHasBeenReset = itemTable.Items.Length == 0;
+            var productListHasBeenReset = itemTable.Rows.Length == 0;
             Trace.Assert(productListHasBeenReset);
         }
 
@@ -90,11 +90,11 @@ namespace TestSystem
         public void TestAddProductAfterReset()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
-            var buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
             button.Click();
-            buttonReset.Click();
+            resetButton.Click();
             button.Click();
 
             Trace.Assert(totalPrice.Text == "10,00 kr");
