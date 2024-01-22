@@ -91,6 +91,23 @@ namespace TestSystem
         }
 
         [TestMethod]
+        public void TestResetPriceNoButton()
+        {
+            var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            button.Click();
+            resetButton.Click();
+
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("No"));
+            yesButton.Click();
+
+            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "10.00 kr");
+        }
+
+        [TestMethod]
         public void TestAddProductAfterReset()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
