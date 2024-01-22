@@ -68,8 +68,8 @@
                       >
                 <DataGrid.Columns>
                     <DataGridTextColumn IsReadOnly="True"  Header="Product" Binding="{Binding ProductName}" Width="151"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="Price" Binding="{Binding ProductPrice}" Width="83"/>
                     <DataGridTextColumn IsReadOnly="True" Header="Amount" Binding="{Binding ProductAmount}" Width="83"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Price" Binding="{Binding ProductPrice}" Width="83"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Canvas>
