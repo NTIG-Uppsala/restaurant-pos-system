@@ -1,0 +1,42 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0'
+
+    - name: Build and Test
+      run: |
+        echo "dotnet build"
+        dotnet clean
+        dotnet build
+        rc=$?
+
+        if [[ $rc != 0 ]] ; then
+            echo -e "Build failed"
+            exit $rc
+        fi
+
+        echo "Running FlaUI tests"
+        dotnet test ./PointOfSaleSystem/TestSystem/TestSystem.csproj
+        rc=$?
+
+        if [[ $rc != 0 ]] ; then
+            echo -e "FlaUI tests failed"
+            exit $rc
+        fi
+        
+        echo "All tests passed successfully"
