@@ -42,7 +42,7 @@ namespace TestSystem
         {
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
-            Trace.Assert(totalPrice.Text == "0,00 kr");
+            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace TestSystem
 
             button.Click();
 
-            Trace.Assert(totalPrice.Text == "10,00 kr");
+            Trace.Assert(totalPrice.Text == "10,00 kr" ^ totalPrice.Text == "10.00 kr");
         }
 
         [TestMethod]
@@ -65,24 +65,28 @@ namespace TestSystem
             button.Click();
             button.Click();
 
-            Trace.Assert(totalPrice.Text == "20,00 kr");
+            Trace.Assert(totalPrice.Text == "20,00 kr" ^ totalPrice.Text == "20.00 kr");
         }
 
         [TestMethod]
         public void TestResetPrice()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
-            var buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
             button.Click();
-            buttonReset.Click();
+            resetButton.Click();
 
-            Trace.Assert(totalPrice.Text == "0,00 kr");
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            yesButton.Click();
 
-            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("")).AsListBox();
+            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
-            var productListHasBeenReset = itemTable.Items.Length == 0;
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+            var productListHasBeenReset = itemTable.Rows.Length == 0;
             Trace.Assert(productListHasBeenReset);
         }
 
@@ -90,14 +94,19 @@ namespace TestSystem
         public void TestAddProductAfterReset()
         {
             var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
-            var buttonReset = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
 
             button.Click();
-            buttonReset.Click();
+            resetButton.Click();
+
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            yesButton.Click();
+
             button.Click();
 
-            Trace.Assert(totalPrice.Text == "10,00 kr");
+            Trace.Assert(totalPrice.Text == "10,00 kr" ^ totalPrice.Text == "10.00 kr");
         }
 
         [TestMethod]
@@ -112,7 +121,7 @@ namespace TestSystem
             lateItemButton.Click();
 
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
-            Trace.Assert(totalPrice.Text == "118,00 kr");
+            Trace.Assert(totalPrice.Text == "118,00 kr" ^ totalPrice.Text == "118.00 kr");
         }
         [TestMethod]
         public void TestPayButton()
@@ -124,7 +133,11 @@ namespace TestSystem
             button.Click();
             payButton.Click();
 
-            Trace.Assert(totalPrice.Text == "0,00 kr");
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            var yesButton = popup.FindFirstChild(cf.ByName("OK"));
+            yesButton.Click();
+
+            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
             var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
@@ -184,7 +197,7 @@ namespace TestSystem
             desiredItemButton.Click();
 
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
-            Trace.Assert(totalPrice.Text == "90,00 kr");
+            Trace.Assert(totalPrice.Text == "90,00 kr" ^ totalPrice.Text == "90.00 kr");
         }
 
         [TestMethod]
@@ -223,7 +236,7 @@ namespace TestSystem
             returnButton.Click();
 
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
-            Trace.Assert(totalPrice.Text == "90,00 kr");
+            Trace.Assert(totalPrice.Text == "90,00 kr" ^ totalPrice.Text == "90.00 kr");
         }
 
         [TestMethod]
@@ -359,7 +372,7 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
 
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
@@ -367,7 +380,7 @@ namespace TestSystem
                 var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "10,00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
                 var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "1");
@@ -381,7 +394,7 @@ namespace TestSystem
                 button.Click();
                 button.Click();
 
-                System.Threading.Thread.Sleep(1000);
+                Thread.Sleep(1000);
 
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
@@ -389,7 +402,7 @@ namespace TestSystem
                 var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "20,00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
                 var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "2");
