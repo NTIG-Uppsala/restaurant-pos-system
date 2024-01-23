@@ -107,7 +107,7 @@ namespace TestSystem
             var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "10.00 kr");
-            var productListHasNotBeenReset = itemTable.Rows.Length >= 0;
+            var productListHasNotBeenReset = itemTable.Rows.Length > 0;
             Trace.Assert(productListHasNotBeenReset);
         }
 
@@ -204,6 +204,10 @@ namespace TestSystem
             var categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             categoryButton.Click();
+
+            var pizzaButton = window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
+
+            Trace.Assert(pizzaButton != null);
         }
 
         [TestMethod]
@@ -393,8 +397,6 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                Thread.Sleep(1000);
-
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
                 // Verify the added product details
@@ -414,8 +416,6 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
                 button.Click();
-
-                Thread.Sleep(1000);
 
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
