@@ -6,17 +6,26 @@ namespace PointOfSaleSystem
 {
     public partial class MainWindow : Window
     {
-        private readonly DatabaseService DatabaseLogic = new DatabaseService();
-        private readonly ButtonDisplayLogicService ButtonDisplayLogic = new ButtonDisplayLogicService();
-        private ObservableCollection<DisplayedItem> ProductWindowItems = new ObservableCollection<DisplayedItem>();
-        private string UsedData;
+        private readonly DatabaseService DatabaseLogic = new();
+        private readonly ButtonDisplayLogicService ButtonDisplayLogic = new();
+        private readonly ObservableCollection<DisplayedItem> ProductWindowItems = new();
+        private readonly string UsedData;
 
         public MainWindow()
         {
             InitializeComponent();
 
             DotNetEnv.Env.Load();
-            UsedData = Environment.GetEnvironmentVariable("USEDDATA");
+            var envData = Environment.GetEnvironmentVariable("USEDDATA");
+            
+            if (envData != null)
+            {
+                UsedData = envData;
+            }
+            else
+            {
+                MessageBox.Show("There is no USEDDATA in the env file");
+            }
 
             DatabaseLogic.GenerateDatabase(UsedData).Wait();
 
