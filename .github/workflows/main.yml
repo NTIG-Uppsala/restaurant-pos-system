@@ -15,6 +15,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - run: mkdir "$HOME\\AppData"
       - name: Show current directory
         run: pwd
       - run: dotnet build -c Release ./PointOfSaleSystem/PointOfSaleSystem.sln
