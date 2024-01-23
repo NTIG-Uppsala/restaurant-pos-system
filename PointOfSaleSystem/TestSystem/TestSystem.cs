@@ -19,7 +19,6 @@ namespace TestSystem
             string CurrentDirectory = "../../../../";
             string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
-            //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
             var app = Application.Launch(RestaurantPosPath);
             window = app.GetMainWindow(automation).AsWindow();
             cf = new ConditionFactory(new UIA3PropertyLibrary());
@@ -153,7 +152,6 @@ namespace TestSystem
             string CurrentDirectory = "../../../../";
             string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
-            //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
             var app = Application.Launch(RestaurantPosPath);
             window = app.GetMainWindow(automation).AsWindow();
             cf = new ConditionFactory(new UIA3PropertyLibrary());
@@ -339,7 +337,6 @@ namespace TestSystem
                 string CurrentDirectory = "../../../../";
                 string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
                 string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
-                //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
                 var app = Application.Launch(RestaurantPosPath);
                 window = app.GetMainWindow(automation).AsWindow();
                 cf = new ConditionFactory(new UIA3PropertyLibrary());
