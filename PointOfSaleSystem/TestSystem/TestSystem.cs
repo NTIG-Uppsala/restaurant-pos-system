@@ -9,8 +9,8 @@ namespace TestSystem
     [TestClass]
     public class BaseFunctionTests
     {
-        public ConditionFactory cf;
-        public Window window;
+        public ConditionFactory cf = null!;
+        public Window window = null!;
 
         [TestInitialize]
         public void Setup()
@@ -169,8 +169,8 @@ namespace TestSystem
     [TestClass]
     public class CategoryTests
     {
-        public ConditionFactory cf;
-        public Window window;
+        public ConditionFactory cf = null!;
+        public Window window = null!;
 
         [TestInitialize]
         public void Setup()
@@ -363,8 +363,8 @@ namespace TestSystem
         [TestClass]
         public class ProductWindowTests
         {
-            public ConditionFactory cf;
-            public Window window;
+            public ConditionFactory cf = null!;
+            public Window window = null!;
 
             [TestInitialize]
             public void Setup()
@@ -400,13 +400,13 @@ namespace TestSystem
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
+                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "1");
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
@@ -420,13 +420,13 @@ namespace TestSystem
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
+                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "2");
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
