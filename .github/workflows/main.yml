@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - run: dir /s /b /ad
+      - run: dir /s /b
       - run: dotnet build -c Release ./PointOfSaleSystem/PointOfSaleSystem.sln
-      - run: dir /s /b /ad
+      - run: dir /s /b
       - run: dotnet test ./PointOfSaleSystem/PointOfSaleSystem.sln
