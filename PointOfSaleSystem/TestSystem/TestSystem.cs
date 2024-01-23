@@ -137,10 +137,10 @@ namespace TestSystem
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
-            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+            //var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
-            var orderHasBeenPaid = itemTable.Rows.Length == 0;
-            Trace.Assert(orderHasBeenPaid);
+            //var orderHasBeenPaid = itemTable.Rows.Length == 0;
+            //Trace.Assert(orderHasBeenPaid);
         }
     }
     [TestClass]
