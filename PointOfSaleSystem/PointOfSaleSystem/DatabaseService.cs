@@ -8,9 +8,9 @@ namespace PointOfSaleSystem
 {
     public class DatabaseService
     {
-        public ObservableCollection<Product> Products = new();
-        public ObservableCollection<Product> CurrentProducts = new();
-        public ObservableCollection<DatabaseCategory> Categories = new();
+        public ObservableCollection<Product> Products { get; set; } = new();
+        public ObservableCollection<Product> CurrentProducts { get; set; } = new();
+        public ObservableCollection<DatabaseCategory> Categories { get; set; } = new();
 
         public async Task GenerateDatabase(string usedData)
         {
@@ -142,7 +142,7 @@ namespace PointOfSaleSystem
             }
         }
 
-        public async Task<List<DatabaseProduct>> LoadProductsFromTxtAsync(string usedData)
+        public Task<List<DatabaseProduct>> LoadProductsFromTxtAsync(string usedData)
         {
             var products = new List<DatabaseProduct>();
 
@@ -176,10 +176,10 @@ namespace PointOfSaleSystem
                 MessageBox.Show(e.Message);
             }
 
-            return products;
+            return Task.FromResult(products);
         }
 
-        public async Task<List<DatabaseCategory>> LoadCategoriesFromTxtAsync(string usedData)
+        public Task<List<DatabaseCategory>> LoadCategoriesFromTxtAsync(string usedData)
         {
             var newCategories = new List<DatabaseCategory>();
 
@@ -210,7 +210,7 @@ namespace PointOfSaleSystem
                 MessageBox.Show(e.Message);
             }
 
-            return newCategories;
+            return Task.FromResult(newCategories);
         }
 
         public void AddOrderToDatabase(ObservableCollection<DisplayedItem> order)
