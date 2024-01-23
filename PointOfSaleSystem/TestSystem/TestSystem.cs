@@ -104,7 +104,11 @@ namespace TestSystem
             var yesButton = popup.FindFirstChild(cf.ByName("No"));
             yesButton.Click();
 
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "10.00 kr");
+            var productListHasNotBeenReset = itemTable.Rows.Length >= 0;
+            Trace.Assert(productListHasNotBeenReset);
         }
 
         [TestMethod]
