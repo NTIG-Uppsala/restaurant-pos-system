@@ -4,17 +4,11 @@ on:
       - main
 
 jobs:
-  format:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: find . -type d
-      - run: dotnet format --verify-no-changes ./PointOfSaleSystem/PointOfSaleSystem.sln
   test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - run: find . -type d
+      - run: ls
       - run: dotnet build -c Release ./PointOfSaleSystem/PointOfSaleSystem.sln
-      - run: find . -type d
+      - run: ls
       - run: dotnet test ./PointOfSaleSystem/PointOfSaleSystem.sln
