@@ -16,7 +16,16 @@ namespace PointOfSaleSystem
             InitializeComponent();
 
             DotNetEnv.Env.Load();
-            UsedData = Environment.GetEnvironmentVariable("USEDDATA");
+            var envData = Environment.GetEnvironmentVariable("USEDDATA");
+            
+            if (envData != null)
+            {
+                UsedData = envData;
+            }
+            else
+            {
+                MessageBox.Show("There is no USEDDATA in the env file");
+            }
 
             DatabaseLogic.GenerateDatabase(UsedData).Wait();
 
