@@ -16,18 +16,13 @@ namespace TestSystem
         public void Setup()
         {
             using var automation = new UIA3Automation();
-            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
-            window = app.GetMainWindow(automation);
+            string CurrentDirectory = "../../../../";
+            string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
+            string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
+            RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
+            var app = Application.Launch(RestaurantPosPath);
+            window = app.GetMainWindow(automation).AsWindow();
             cf = new ConditionFactory(new UIA3PropertyLibrary());
-        }
-
-        private static string GetSolutionFolderPath()
-        {
-            // Assuming the solution folder is two levels above the executable
-            var executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var solutionFolderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\..\.."));
-
-            return solutionFolderPath;
         }
 
         [TestCleanup]
@@ -179,18 +174,13 @@ namespace TestSystem
         public void Setup()
         {
             using var automation = new UIA3Automation();
-            var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
-            window = app.GetMainWindow(automation);
+            string CurrentDirectory = "../../../../";
+            string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
+            string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
+            RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
+            var app = Application.Launch(RestaurantPosPath);
+            window = app.GetMainWindow(automation).AsWindow();
             cf = new ConditionFactory(new UIA3PropertyLibrary());
-        }
-
-        private static string GetSolutionFolderPath()
-        {
-            // Assuming the solution folder is two levels above the executable
-            var executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            var solutionFolderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\..\.."));
-
-            return solutionFolderPath;
         }
 
         [TestCleanup]
@@ -373,22 +363,16 @@ namespace TestSystem
             public void Setup()
             {
                 using var automation = new UIA3Automation();
-                var app = Application.Launch(GetSolutionFolderPath() + @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
-                window = app.GetMainWindow(automation);
+                string CurrentDirectory = "../../../../";
+                string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
+                string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
+                RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
+                var app = Application.Launch(RestaurantPosPath);
+                window = app.GetMainWindow(automation).AsWindow();
                 cf = new ConditionFactory(new UIA3PropertyLibrary());
             }
 
-            private static string GetSolutionFolderPath()
-            {
-                // Assuming the solution folder is two levels above the executable
-                var executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-                var solutionFolderPath = Path.GetFullPath(Path.Combine(executablePath, @"..\..\..\..\.."));
-
-                return solutionFolderPath;
-            }
-
             [TestCleanup]
-
             public void Cleanup()
             {
                 window?.AsWindow().Close();
