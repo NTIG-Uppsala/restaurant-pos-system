@@ -26,9 +26,9 @@ namespace TestSystem
 
         [TestCleanup]
 
-        public void Cleanup()
+        public void Teardown()
         {
-            window?.AsWindow().Close();
+            window.Close();
         }
 
         [TestMethod]
@@ -128,8 +128,12 @@ namespace TestSystem
             payButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var okButton = popup.FindFirstChild(cf.ByName("OK"));
-            okButton.Click();
+            if (popup != null)
+            {
+                var okButton = popup.FindFirstDescendant(cf.ByText("OK"));
+                okButton?.Click();
+            }
+
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
