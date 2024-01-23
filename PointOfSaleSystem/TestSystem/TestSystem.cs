@@ -17,7 +17,7 @@ namespace TestSystem
         {
             using var automation = new UIA3Automation();
             string CurrentDirectory = Directory.GetCurrentDirectory();
-            string RestaurantPosPath = Path.Combine(CurrentDirectory, @"..\..\..\..\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
+            string RestaurantPosPath = Path.Combine(CurrentDirectory, @"\PointOfSaleSystem\bin\Debug\net6.0-windows\PointOfSaleSystem.exe");
             RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
             var app = Application.Launch(RestaurantPosPath);
             window = app.GetMainWindow(automation);
