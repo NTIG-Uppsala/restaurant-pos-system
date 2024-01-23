@@ -8,10 +8,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Show current directory
+        run: pwd
       - run: dotnet format --verify-no-changes ./PointOfSaleSystem/PointOfSaleSystem.sln
   test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Show current directory
+        run: pwd
       - run: dotnet build -c Release ./PointOfSaleSystem/PointOfSaleSystem.sln
+      - name: Show current directory
+        run: pwd
       - run: dotnet test ./PointOfSaleSystem/PointOfSaleSystem.sln
