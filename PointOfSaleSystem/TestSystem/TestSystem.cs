@@ -20,7 +20,7 @@ namespace TestSystem
             string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
             var app = Application.Launch(RestaurantPosPath);
-            window = app.GetMainWindow(automation).AsWindow();
+            window = app.GetMainWindow(automation);
             cf = new ConditionFactory(new UIA3PropertyLibrary());
         }
 
@@ -28,7 +28,7 @@ namespace TestSystem
 
         public void Cleanup()
         {
-            window?.Close();
+            window?.AsWindow().Close();
         }
 
         [TestMethod]
@@ -128,8 +128,8 @@ namespace TestSystem
             payButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("OK"));
-            yesButton.Click();
+            var okButton = popup.FindFirstChild(cf.ByName("OK"));
+            okButton.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
