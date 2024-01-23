@@ -1,0 +1,12 @@
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: dotnet build -c Release ./PointOfSaleSystem/PointOfSaleSystem.sln
+      - run: dotnet test ./PointOfSaleSystem/PointOfSaleSystem.sln
