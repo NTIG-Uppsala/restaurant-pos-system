@@ -79,7 +79,8 @@ namespace TestSystem
             resetButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            // The automation ID of the yes button is always 6
+            var yesButton = popup.FindFirstChild(cf.ByAutomationId("6"));
             yesButton.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
@@ -101,12 +102,13 @@ namespace TestSystem
             resetButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("No"));
-            yesButton.Click();
+            // The automation ID of the no button is always 7
+            var noButton = popup.FindFirstChild(cf.ByAutomationId("7"));
+            noButton.Click();
 
             var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
-            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "10.00 kr");
+            Trace.Assert(totalPrice.Text == "10,00 kr" ^ totalPrice.Text == "10.00 kr");
             var productListHasNotBeenReset = itemTable.Rows.Length > 0;
             Trace.Assert(productListHasNotBeenReset);
         }
@@ -122,7 +124,8 @@ namespace TestSystem
             resetButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            // The automation ID of the yes button is always 6
+            var yesButton = popup.FindFirstChild(cf.ByAutomationId("6"));
             yesButton.Click();
 
             button.Click();
