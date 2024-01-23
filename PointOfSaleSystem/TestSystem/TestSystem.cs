@@ -9,8 +9,8 @@ namespace TestSystem
     [TestClass]
     public class BaseFunctionTests
     {
-        public ConditionFactory cf;
-        public Window window;
+        public ConditionFactory cf = null!;
+        public Window window = null!;
 
         [TestInitialize]
         public void Setup()
@@ -79,7 +79,8 @@ namespace TestSystem
             resetButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            // The automation ID of the yes button is always 6
+            var yesButton = popup.FindFirstChild(cf.ByAutomationId("6"));
             yesButton.Click();
 
             Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
@@ -88,6 +89,28 @@ namespace TestSystem
 
             var productListHasBeenReset = itemTable.Rows.Length == 0;
             Trace.Assert(productListHasBeenReset);
+        }
+
+        [TestMethod]
+        public void TestResetPriceNoButton()
+        {
+            var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+            var resetButton = window.FindFirstDescendant(cf.ByAutomationId("resetButton")).AsButton();
+            var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
+
+            button.Click();
+            resetButton.Click();
+
+            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            // The automation ID of the no button is always 7
+            var noButton = popup.FindFirstChild(cf.ByAutomationId("7"));
+            noButton.Click();
+
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+            Trace.Assert(totalPrice.Text == "10,00 kr" ^ totalPrice.Text == "10.00 kr");
+            var productListHasNotBeenReset = itemTable.Rows.Length > 0;
+            Trace.Assert(productListHasNotBeenReset);
         }
 
         [TestMethod]
@@ -101,7 +124,8 @@ namespace TestSystem
             resetButton.Click();
 
             var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            var yesButton = popup.FindFirstChild(cf.ByName("Yes"));
+            // The automation ID of the yes button is always 6
+            var yesButton = popup.FindFirstChild(cf.ByAutomationId("6"));
             yesButton.Click();
 
             button.Click();
@@ -148,8 +172,8 @@ namespace TestSystem
     [TestClass]
     public class CategoryTests
     {
-        public ConditionFactory cf;
-        public Window window;
+        public ConditionFactory cf = null!;
+        public Window window = null!;
 
         [TestInitialize]
         public void Setup()
@@ -183,6 +207,10 @@ namespace TestSystem
             var categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
 
             categoryButton.Click();
+
+            var pizzaButton = window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
+
+            Trace.Assert(pizzaButton != null);
         }
 
         [TestMethod]
@@ -338,8 +366,8 @@ namespace TestSystem
         [TestClass]
         public class ProductWindowTests
         {
-            public ConditionFactory cf;
-            public Window window;
+            public ConditionFactory cf = null!;
+            public Window window = null!;
 
             [TestInitialize]
             public void Setup()
@@ -372,18 +400,16 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                Thread.Sleep(1000);
-
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
+                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "1");
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
@@ -394,18 +420,16 @@ namespace TestSystem
                 button.Click();
                 button.Click();
 
-                Thread.Sleep(1000);
-
                 var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
+                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.Any(row => row.Cells[1].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
-                var itemAmountHasBeenAdded = itemTable.Rows.Any(row => row.Cells[2].Value.ToString() == "2");
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 

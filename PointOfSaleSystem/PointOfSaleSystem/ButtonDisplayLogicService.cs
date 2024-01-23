@@ -5,9 +5,9 @@ namespace PointOfSaleSystem
 {
     public class ButtonDisplayLogicService
     {
-        public int CategoryPanelPosition = 0;
+        public int CategoryPanelPosition { get; set; } = 0;
         public const int CategoryLimit = 5;
-        public int ProductPanelPosition = 0;
+        public int ProductPanelPosition { get; set; } = 0;
         public const int ProductLimit = 35;
 
         // Get a dynamic list of displayed categories
