@@ -17,7 +17,7 @@ namespace TestSystem
         {
             using var automation = new UIA3Automation();
             string CurrentDirectory = "../../../../";
-            string executablePathFromSrc = "PointOfSaleSystem/bin/Debug/net6.0-windows/PointOfSaleSystem.exe";
+            string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
             //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
             var app = Application.Launch(RestaurantPosPath);
@@ -151,7 +151,7 @@ namespace TestSystem
         {
             using var automation = new UIA3Automation();
             string CurrentDirectory = "../../../../";
-            string executablePathFromSrc = "PointOfSaleSystem/bin/Debug/net6.0-windows/PointOfSaleSystem.exe";
+            string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
             //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
             var app = Application.Launch(RestaurantPosPath);
@@ -337,7 +337,7 @@ namespace TestSystem
             {
                 using var automation = new UIA3Automation();
                 string CurrentDirectory = "../../../../";
-                string executablePathFromSrc = "PointOfSaleSystem/bin/Debug/net6.0-windows/PointOfSaleSystem.exe";
+                string executablePathFromSrc = "PointOfSaleSystem/bin/Release/net6.0-windows/PointOfSaleSystem.exe";
                 string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
                 //RestaurantPosPath = Path.GetFullPath(RestaurantPosPath);
                 var app = Application.Launch(RestaurantPosPath);
