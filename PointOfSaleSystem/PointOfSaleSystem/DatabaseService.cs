@@ -120,7 +120,7 @@ namespace PointOfSaleSystem
                         var Color = Categories[categoryId - 1].Color;
 
                         // Create a product object and add it to the ObservableCollection
-                        newproducts.Add(new Product(productId, productName, productPrice, categoryId, priority, isCommon, Color));
+                        newproducts.Add(new Product(productId, productName!, productPrice, categoryId, priority, isCommon, Color));
                     }
                 }
 
@@ -265,10 +265,10 @@ namespace PointOfSaleSystem
     // DbContext class for interacting with the database
     public class POSContext : DbContext
     {
-        public DbSet<DatabaseProduct> Products { get; set; }
-        public DbSet<DatabaseCategory> Categories { get; set; }
-        public DbSet<DatabaseOrder> Orders { get; set; }
-        public DbSet<DatabaseProductsInOrder> ProductsInOrder { get; set; }
+        public DbSet<DatabaseProduct> Products { get; set; } = null!;
+        public DbSet<DatabaseCategory> Categories { get; set; } = null!;
+        public DbSet<DatabaseOrder> Orders { get; set; } = null!;
+        public DbSet<DatabaseProductsInOrder> ProductsInOrder { get; set; } = null!;
         public string DbPath { get; }
 
         public POSContext()
@@ -300,7 +300,7 @@ namespace PointOfSaleSystem
         public int CategoryId { get; set; }
         public int Priority { get; set; }
         public bool IsCommon { get; set; }
-        public DatabaseCategory Category { get; set; }
+        public DatabaseCategory Category { get; set; } = null!;
     }
 
     public class DatabaseOrder
@@ -326,6 +326,6 @@ namespace PointOfSaleSystem
         public string? Color { get; set; }
 
         // Navigation property to link categories to products
-        public List<DatabaseProduct> Products { get; set; }
+        public List<DatabaseProduct> Products { get; set; } = null!;
     }
 }
