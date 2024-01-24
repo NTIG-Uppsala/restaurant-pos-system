@@ -3,6 +3,7 @@ using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
 using FlaUI.UIA3;
 using System.Diagnostics;
+using FlaUI.Core.Input;
 
 namespace TestSystem
 {
@@ -153,20 +154,22 @@ namespace TestSystem
             button.Click();
             payButton.Click();
 
-            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
-            if (popup != null)
-            {
-                var okButton = popup.FindFirstDescendant(cf.ByText("OK"));
-                okButton?.Click();
-            }
+            Wait.UntilInputIsProcessed();
+            var popup = window.FindFirstDescendant(cf.ByClassName("#32770")).AsWindow();
+            Trace.Assert(popup != null, "null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            var popupChildren = popup.FindAllChildren();
+            Trace.Assert(popupChildren.Length > 0, "popupChildren!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            var check = popupChildren[1].AsTextBox();
+            Trace.Assert(check.Text == $"Payment successful!", "text not payment successfull!!!!!!!!!!!!!!!!!!!!!");
+            var okButton = popup.FindFirstDescendant(cf.ByName("OK"));
+            okButton.Click();
 
-            Trace.Assert(popup != null);
-            //Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
+            Trace.Assert(totalPrice.Text == "0,00 kr" ^ totalPrice.Text == "0.00 kr");
 
-            //var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+            var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
 
-            //var orderHasBeenPaid = itemTable.Rows.Length == 0;
-            //Trace.Assert(orderHasBeenPaid);
+            var orderHasBeenPaid = itemTable.Rows.Length == 0;
+            Trace.Assert(orderHasBeenPaid);
         }
     }
     [TestClass]
