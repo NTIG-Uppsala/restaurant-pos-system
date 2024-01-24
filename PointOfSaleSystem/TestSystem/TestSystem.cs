@@ -75,7 +75,9 @@ namespace TestSystem
             button.Click();
             resetButton.Click();
 
-            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            Wait.UntilInputIsProcessed();
+            var popup = window.FindFirstDescendant(cf.ByClassName("#32770")).AsWindow();
+            Trace.Assert(popup != null, "popup = null");
             // The automation ID of the yes button is always 6
             var yesButton = popup.FindFirstChild(cf.ByAutomationId("6"));
             yesButton.Click();
@@ -98,7 +100,9 @@ namespace TestSystem
             button.Click();
             resetButton.Click();
 
-            var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+            Wait.UntilInputIsProcessed();
+            var popup = window.FindFirstDescendant(cf.ByClassName("#32770")).AsWindow();
+            Trace.Assert(popup != null, "popup = null");
             // The automation ID of the no button is always 7
             var noButton = popup.FindFirstChild(cf.ByAutomationId("7"));
             noButton.Click();
@@ -156,11 +160,11 @@ namespace TestSystem
 
             Wait.UntilInputIsProcessed();
             var popup = window.FindFirstDescendant(cf.ByClassName("#32770")).AsWindow();
-            Trace.Assert(popup != null, "null!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Trace.Assert(popup != null, "popup = null");
             var popupChildren = popup.FindAllChildren();
-            Trace.Assert(popupChildren.Length > 0, "popupChildren!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            Trace.Assert(popupChildren.Length > 0, "No popupChildren");
             var check = popupChildren[1].AsTextBox();
-            Trace.Assert(check.Text == $"Payment successful!", "text not payment successfull!!!!!!!!!!!!!!!!!!!!!");
+            Trace.Assert(check.Text == $"Payment successful!", "text not payment successfull");
             var okButton = popup.FindFirstDescendant(cf.ByName("OK"));
             okButton.Click();
 
@@ -187,7 +191,8 @@ namespace TestSystem
             string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
 
             var app = Application.Launch(RestaurantPosPath);
-            window = app.GetMainWindow(automation).AsWindow();
+            window = app.GetMainWindow(automation);
+
             cf = new ConditionFactory(new UIA3PropertyLibrary());
         }
 
@@ -291,7 +296,7 @@ namespace TestSystem
         {
             var firstPageItemButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            Trace.Assert(firstPageItemButton != null);
+            Trace.Assert(firstPageItemButton != null, "firstPageItemButton = null!!!!!!!!!!!!!!!!!!!!");
 
             var nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextProductButton")).AsButton();
 
@@ -299,7 +304,7 @@ namespace TestSystem
 
             firstPageItemButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
 
-            Trace.Assert(firstPageItemButton == null);
+            Trace.Assert(firstPageItemButton == null, "firstPageItemButton != null!!!!!!!!!!!!!!!!!!!!");
         }
 
         [TestMethod]
@@ -377,7 +382,8 @@ namespace TestSystem
                 string RestaurantPosPath = Path.Combine(CurrentDirectory, executablePathFromSrc);
 
                 var app = Application.Launch(RestaurantPosPath);
-                window = app.GetMainWindow(automation).AsWindow();
+                window = app.GetMainWindow(automation);
+
                 cf = new ConditionFactory(new UIA3PropertyLibrary());
             }
 
