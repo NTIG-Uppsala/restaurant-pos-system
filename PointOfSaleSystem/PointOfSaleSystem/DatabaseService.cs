@@ -19,22 +19,23 @@ namespace PointOfSaleSystem
             var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
             var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
 
-            // If the database file exists, do nothing
-            if (File.Exists(DbPath))
-            {
-                return;
-            }
-
             var ListOfProducts = await LoadProductsFromTxtAsync(usedData);
             var ListOfCategories = await LoadCategoriesFromTxtAsync(usedData);
 
             try
             {
+                // If the database file exists, do nothing
+                if (File.Exists(DbPath))
+                {
+                    // Create a new POSContext to connect to the database
+                    using var exisitingDatabase = new POSContext();
+                    exisitingDatabase.Database.Migrate();
+                    return;
+                }
+
                 // Create a new POSContext to connect to the database
                 using var db = new POSContext();
                 db.Database.EnsureCreated();
-
-                db.Database.Migrate();
 
                 // Add products to the database
                 foreach (var newProduct in ListOfProducts)
