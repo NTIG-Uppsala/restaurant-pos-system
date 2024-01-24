@@ -14,25 +14,13 @@ namespace PointOfSaleSystem
 
         public async Task GenerateDatabase(string usedData)
         {
-            // Set up paths
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = System.IO.Path.Join(Environment.GetFolderPath(folder), "Restaurant-POS");
-            var DbPath = System.IO.Path.Join(path, $"{usedData}.db");
-
-            // If the database file exists, do nothing
-            if (File.Exists(DbPath))
-            {
-                return;
-            }
-
             var ListOfProducts = await LoadProductsFromTxtAsync(usedData);
             var ListOfCategories = await LoadCategoriesFromTxtAsync(usedData);
 
             try
             {
-                // Create a new POSContext to connect to the database
                 using var db = new POSContext();
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
 
                 // Add products to the database
                 foreach (var newProduct in ListOfProducts)
