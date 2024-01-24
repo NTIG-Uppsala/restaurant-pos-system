@@ -10,8 +10,7 @@ This project is a Point of sale system made with WPF and C#.
 
 * Click the `Restaurant-POS.msi` in the latest release
 * If you have a previous version:
-    * First you need to go to `add or remove programs` on your computer and remove the `Restaurant-POS` program
-    * Then you need to go to `C:\Users\%UserName%\AppData\Local\` and remove the `Restaurant-POS` folder
+    * Go to `add or remove programs` on your computer and remove the `Restaurant-POS` program
 * Run the installer located in your Downloads folder
 * Follow steps in the installer
 * Run the point of sale system app and approve admin privileges
@@ -44,4 +43,4 @@ We use SonarLint for Linting
 * [Getting Started for Development](documentation/startDevelopment.md)
 * [Manage the installer](documentation/manageInstaller.md)
 * [How to run tests](documentation/tests.md)
-* [Setup Database Locally](documentation/setupDatabaseLocally.md)
+* [Update Database Locally](documentation/updateDatabaseLocally.md)

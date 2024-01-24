@@ -1,4 +1,4 @@
-# Setup database
+# Update Database
 
 ## Database from default
 
@@ -10,7 +10,27 @@
 
 * The `.txt` file is chosen by the `.env` file located in the same folder
 
-## DB Browser
+## Update Database
+
+Firstly download the EF Core by using the following command.
+
+```
+dotnet tool install --global dotnet-ef --version 7.0.14
+```
+
+When the database structure is changed you need to create a [migration](https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli) file. use this command in the terminal and change 'NAME OF MIGRATION' to what has been done for example AddCategoryTable.
+
+``` sh
+dotnet ef migrations add 'NAME OF MIGRATION'
+``` 
+
+The database will now update next time the program is run but if you want to manually update the database use the following command.
+
+```
+dotnet ef database update
+```
+
+## Update products and Categories
 
 1. Download DB Browser [Here](https://sqlitebrowser.org/dl/) and install it
 
