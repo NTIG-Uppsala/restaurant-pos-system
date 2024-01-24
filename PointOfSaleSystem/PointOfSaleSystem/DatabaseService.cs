@@ -34,6 +34,8 @@ namespace PointOfSaleSystem
                 using var db = new POSContext();
                 db.Database.EnsureCreated();
 
+                db.Database.Migrate();
+
                 // Add products to the database
                 foreach (var newProduct in ListOfProducts)
                 {
