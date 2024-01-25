@@ -10,6 +10,7 @@ namespace PointOfSaleSystem
         private readonly ButtonDisplayLogicService ButtonDisplayLogic = new();
         private readonly ObservableCollection<DisplayedItem> ProductWindowItems = new();
         private readonly string UsedData;
+        private DisplayedItem CurrentlyEditing = null!;
 
         public MainWindow()
         {
@@ -53,14 +54,17 @@ namespace PointOfSaleSystem
             totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
         }
 
-        private void UpdateProductWindow(string productName, double productPrice, int productId)
+        private void UpdateProductWindow(string productName, double productPrice, int productId, int changeAmountBy = 1)
         {
             // Find the first item in the ProductWindowItems collection where the ProductName matches the specified productName
             var addedItem = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName);
 
             if (addedItem != null)
             {
-                addedItem.ProductAmount += 1;
+                if ((addedItem.ProductAmount + changeAmountBy) >= 1)
+                {
+                    addedItem.ProductAmount += changeAmountBy;
+                }
                 addedItem.ProductPrice = (addedItem.ItemPrice * addedItem.ProductAmount).ToString("0.00") + " kr";
             }
             else
@@ -211,6 +215,96 @@ namespace PointOfSaleSystem
             ResetOrder();
         }
 
+        private void OnDecreaseAmountClick(object sender, RoutedEventArgs e)
+        {
+            // Retrieve the product name and price from the button's tag
+            string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
+            double productPrice = ((DisplayedItem)((Button)sender).DataContext).ItemPrice;
+            int productId = ((DisplayedItem)((Button)sender).DataContext).ProductId;
+
+            UpdateProductWindow(productName, productPrice, productId, -1);
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+        }
+
+        private void OnIncreaseAmountClick(object sender, RoutedEventArgs e)
+        {
+            // Retrieve the product name and price from the button's tag
+            string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
+            double productPrice = ((DisplayedItem)((Button)sender).DataContext).ItemPrice;
+            int productId = ((DisplayedItem)((Button)sender).DataContext).ProductId;
+
+            UpdateProductWindow(productName, productPrice, productId);
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+        }
+
+        private void OnEditButtonClick(object sender, RoutedEventArgs e)
+        {
+            // Gets the item that is currently being edited
+            string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
+            CurrentlyEditing = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName)!;
+
+            if (AmountEditor.Visibility == Visibility.Visible)
+            {
+                AmountEditor.Visibility = Visibility.Hidden;
+            } 
+            else
+            {
+                AmountEditor.Visibility = Visibility.Visible;
+            }
+        }
+        private void OnQuantityKeyClick(object sender, RoutedEventArgs e)
+        {
+            string buttonValue = (e.Source as Button)!.Content.ToString()!;
+
+            QuantityKeypadResult.Text += buttonValue;
+        }
+
+        private void OnQuantityBackClick(object sender, RoutedEventArgs e)
+        {
+            string currentText = QuantityKeypadResult.Text;
+            if (currentText.Length > 0)
+            {
+                QuantityKeypadResult.Text = currentText.Remove(currentText.Length - 1);
+            }
+        }
+
+        private void OnQuantityEnterClick(object sender, RoutedEventArgs e)
+        {
+            // Does nothing if there is no amount in the quantity editor
+            if (QuantityKeypadResult.Text == "" || QuantityKeypadResult.Text == "0")
+            {
+                MessageBox.Show("Please specify an amount before pressing enter");
+                return;
+            }
+
+            // Tries to convert the input to an int
+            try
+            {
+                // Gets the new amount from the input
+                CurrentlyEditing.ProductAmount = Convert.ToInt32(QuantityKeypadResult.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Too many items, no items were added");
+                return;
+            }
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+
+            CurrentlyEditing.ProductPrice = (CurrentlyEditing.ItemPrice * CurrentlyEditing.ProductAmount).ToString("0.00") + " kr";
+
+            productWindow.ItemsSource = ProductWindowItems;
+
+            CurrentlyEditing = null!;
+            AmountEditor.Visibility = Visibility.Hidden;
+
+            QuantityKeypadResult.Text = "";
+        }
     }
 
     // Product class represents a product in the user interface

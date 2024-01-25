@@ -1,8 +1,12 @@
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
+using FlaUI.Core.Input;
 using FlaUI.UIA3;
 using System.Diagnostics;
+using System.Windows.Forms;
+using Application = FlaUI.Core.Application;
+using DataGridViewRow = FlaUI.Core.AutomationElements.DataGridViewRow;
 
 namespace TestSystem
 {
@@ -384,17 +388,15 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
-
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
-                Trace.Assert(itemNameHasBeenAdded);
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
-                Trace.Assert(itemAmountHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
             }
 
             [TestMethod]
@@ -404,19 +406,166 @@ namespace TestSystem
                 button.Click();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
-
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
-                Trace.Assert(itemNameHasBeenAdded);
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "2");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
-                Trace.Assert(itemAmountHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "20,00 kr" ^ itemPriceTextBlock.Name == "20.00 kr");
             }
 
+            [TestMethod]
+            public void TestIncreaseAmountButton()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var plusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseIncreaseAmountButton"));
+                plusButton.Click();
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "2");
+
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "20,00 kr" ^ itemPriceTextBlock.Name == "20.00 kr");
+            }
+
+            [TestMethod]
+            public void TestDecreaseAmountButton()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+                productButton.Click();
+
+                var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
+                minusButton.Click();
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
+
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
+            }
+
+            [TestMethod]
+            public void TestDecreaseAmountButtonStaysAtOne()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
+                minusButton.Click();
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
+
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPad()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                editButton.Click();
+
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+                var quantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
+
+
+                quantityButton1.Click();
+                quantityButton1.Click();
+
+                Trace.Assert(keypadResult.Name == "11");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPadReset()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                editButton.Click();
+
+
+                var quantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
+
+                quantityButton1.Click();
+                quantityButton1.Click();
+
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+
+                Trace.Assert(keypadResult.Name == "11");
+
+                var backAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadBack")).AsButton();
+                backAmount.Click();
+
+                Trace.Assert(keypadResult.Name == "1");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPadEnter()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                editButton.Click();
+
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+
+                var quantityButton3 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad3")).AsButton();
+
+                var enterAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadEnter")).AsButton();
+
+                quantityButton3.Click();
+
+                Trace.Assert(keypadResult.Name == "3");
+
+                enterAmount.Click();
+
+                // Verify the added product details
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "30,00 kr" ^ itemPriceTextBlock.Name == "30.00 kr");
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "3");
+
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
+            }
+
+            [TestMethod]
+            public void TestEnterZeroProducts()
+            {
+                var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                button.Click();
+
+                var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                editButton.Click();
+
+                var quantityButton0 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad0")).AsButton();
+                quantityButton0.Click();
+
+                var enterAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadEnter")).AsButton();
+                enterAmount.Click();
+
+                var popup = window.ModalWindows.FirstOrDefault().AsWindow();
+                var yesButton = popup.FindFirstChild(cf.ByName("OK"));
+                yesButton.Click();
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name != "0");
+
+
+            }
         }
     }
 }
