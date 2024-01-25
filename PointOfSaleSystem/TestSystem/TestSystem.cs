@@ -390,7 +390,7 @@ namespace TestSystem
                 var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[1].Value.ToString() == "10.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
                 var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
@@ -410,7 +410,7 @@ namespace TestSystem
                 var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
                 Trace.Assert(itemNameHasBeenAdded);
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[1].Value.ToString() == "20.00 kr");
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[2].Value.ToString() == "20.00 kr");
                 Trace.Assert(itemPriceHasBeenAdded);
 
                 var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
