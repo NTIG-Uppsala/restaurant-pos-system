@@ -53,14 +53,17 @@ namespace PointOfSaleSystem
             totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
         }
 
-        private void UpdateProductWindow(string productName, double productPrice, int productId)
+        private void UpdateProductWindow(string productName, double productPrice, int productId, int changeAmountBy = 1)
         {
             // Find the first item in the ProductWindowItems collection where the ProductName matches the specified productName
             var addedItem = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName);
 
             if (addedItem != null)
             {
-                addedItem.ProductAmount += 1;
+                if ((addedItem.ProductAmount + changeAmountBy) >= 1)
+                {
+                    addedItem.ProductAmount += changeAmountBy;
+                }
                 addedItem.ProductPrice = (addedItem.ItemPrice * addedItem.ProductAmount).ToString("0.00") + " kr";
             }
             else
@@ -211,6 +214,31 @@ namespace PointOfSaleSystem
             ResetOrder();
         }
 
+        private void OnDecreaseAmountClick(object sender, RoutedEventArgs e)
+        {
+            // Retrieve the product name and price from the button's tag
+            string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
+            double productPrice = ((DisplayedItem)((Button)sender).DataContext).ItemPrice;
+            int productId = ((DisplayedItem)((Button)sender).DataContext).ProductId;
+
+            UpdateProductWindow(productName, productPrice, productId, -1);
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+        }
+
+        private void OnIncreaseAmountClick(object sender, RoutedEventArgs e)
+        {
+            // Retrieve the product name and price from the button's tag
+            string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
+            double productPrice = ((DisplayedItem)((Button)sender).DataContext).ItemPrice;
+            int productId = ((DisplayedItem)((Button)sender).DataContext).ProductId;
+
+            UpdateProductWindow(productName, productPrice, productId);
+
+            double totalFromProductWindow = ProductWindowItems.Sum(x => x.ProductAmount * x.ItemPrice);
+            totalPrice.Content = totalFromProductWindow.ToString("0.00") + " kr";
+        }
     }
 
     // Product class represents a product in the user interface

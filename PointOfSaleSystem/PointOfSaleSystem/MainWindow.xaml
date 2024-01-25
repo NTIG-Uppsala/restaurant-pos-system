@@ -67,9 +67,41 @@
                       HorizontalScrollBarVisibility="Hidden"
                       >
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True"  Header="Product" Binding="{Binding ProductName}" Width="151"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="Amount" Binding="{Binding ProductAmount}" Width="83"/>
-                    <DataGridTextColumn IsReadOnly="True" Header="Price" Binding="{Binding ProductPrice}" Width="83"/>
+                    <DataGridTemplateColumn IsReadOnly="True"  Header="Product" Width="131">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock AutomationProperties.AutomationId="{Binding NameTextBlockId}" Text="{Binding ProductName}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                    <DataGridTemplateColumn Header="Amount" Width="103">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,2">
+                                    <Button AutomationProperties.AutomationId="{Binding DecreaseAmountId}" Height="25" Width="25" Background="Red" Click="OnDecreaseAmountClick">
+                                        <TextBlock Text="-" FontSize="20" Margin="0,-3,0,0" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Button>
+                                    <TextBlock AutomationProperties.AutomationId="{Binding AmountTextBlockId}" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding ProductAmount}" Width="35" Margin="5,0,5,0"></TextBlock>
+                                    <Button AutomationProperties.AutomationId="{Binding IncreaseAmountId}" Height="25" Width="25" Background="Lime" Click="OnIncreaseAmountClick">
+                                        <TextBlock Text="+" FontSize="20" Margin="0,-3,0,0" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn IsReadOnly="True"  Header="Price" Width="83">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock AutomationProperties.AutomationId="{Binding PriceTextBlockId}" Text="{Binding ProductPrice}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Canvas>

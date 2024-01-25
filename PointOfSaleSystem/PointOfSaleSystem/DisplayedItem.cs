@@ -74,6 +74,76 @@ namespace PointOfSaleSystem
             }
         }
 
+        private string decreaseAmountId;
+        public string DecreaseAmountId
+        {
+            get { return decreaseAmountId; }
+            set
+            {
+                if (value != decreaseAmountId)
+                {
+                    decreaseAmountId = value;
+                    OnPropertyChanged(nameof(DecreaseAmountId));
+                }
+            }
+        }
+
+        private string increaseAmountId;
+        public string IncreaseAmountId
+        {
+            get { return increaseAmountId; }
+            set
+            {
+                if (value != increaseAmountId)
+                {
+                    increaseAmountId = value;
+                    OnPropertyChanged(nameof(IncreaseAmountId));
+                }
+            }
+        }
+
+        private string amountTextBlockId;
+        public string AmountTextBlockId
+        {
+            get { return amountTextBlockId; }
+            set
+            {
+                if (value != amountTextBlockId)
+                {
+                    amountTextBlockId = value;
+                    OnPropertyChanged(nameof(AmountTextBlockId));
+                }
+            }
+        }
+
+        private string nameTextBlockId;
+        public string NameTextBlockId
+        {
+            get { return nameTextBlockId; }
+            set
+            {
+                if (value != nameTextBlockId)
+                {
+                    nameTextBlockId = value;
+                    OnPropertyChanged(nameof(NameTextBlockId));
+                }
+            }
+        }
+
+        private string priceTextBlockId;
+        public string PriceTextBlockId
+        {
+            get { return priceTextBlockId; }
+            set
+            {
+                if (value != priceTextBlockId)
+                {
+                    priceTextBlockId = value;
+                    OnPropertyChanged(nameof(PriceTextBlockId));
+                }
+            }
+        }
+
         public DisplayedItem(string? name, string? totalPrice, int amount, double price, int productId)
         {
             ProductName = name;
@@ -81,6 +151,11 @@ namespace PointOfSaleSystem
             ProductAmount = amount;
             ItemPrice = price;
             ProductId = productId;
+            DecreaseAmountId = name + "DecreaseAmountButton";
+            IncreaseAmountId = name + "IncreaseAmountButton";
+            NameTextBlockId = name + "NameTextBlock";
+            AmountTextBlockId = name + "AmountTextBlock";
+            PriceTextBlockId = name + "PriceTextBlock";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
