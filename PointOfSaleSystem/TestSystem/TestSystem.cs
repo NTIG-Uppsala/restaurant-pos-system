@@ -384,17 +384,15 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
-
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
-                Trace.Assert(itemNameHasBeenAdded);
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
-                Trace.Assert(itemAmountHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
             }
 
             [TestMethod]
@@ -404,17 +402,15 @@ namespace TestSystem
                 button.Click();
                 button.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
-
                 // Verify the added product details
-                var itemNameHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[0].Value.ToString() == "Bearnaise");
-                Trace.Assert(itemNameHasBeenAdded);
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
 
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[2].Value.ToString() == "20.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "2");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
-                Trace.Assert(itemAmountHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "20,00 kr" ^ itemPriceTextBlock.Name == "20.00 kr");
             }
 
             [TestMethod]
@@ -426,13 +422,11 @@ namespace TestSystem
                 var plusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseIncreaseAmountButton"));
                 plusButton.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "2");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
-                Trace.Assert(itemAmountHasBeenAdded);
-
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[2].Value.ToString() == "20.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "20,00 kr" ^ itemPriceTextBlock.Name == "20.00 kr");
             }
 
             [TestMethod]
@@ -445,13 +439,11 @@ namespace TestSystem
                 var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
                 minusButton.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
-                Trace.Assert(itemAmountHasBeenAdded);
-
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
             }
 
             [TestMethod]
@@ -463,13 +455,11 @@ namespace TestSystem
                 var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
                 minusButton.Click();
 
-                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "1");
 
-                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
-                Trace.Assert(itemAmountHasBeenAdded);
-
-                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
-                Trace.Assert(itemPriceHasBeenAdded);
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
             }
         }
     }
