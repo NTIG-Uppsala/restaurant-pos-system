@@ -23,7 +23,7 @@ namespace PointOfSaleSystem
                 db.Database.Migrate();
 
                 var productTable = db.Products.ToList();
-                if (productTable.Count() == 0)
+                if (!productTable.Any())
                 {
                     // Add products to the database
                     foreach (var newProduct in ListOfProducts)
@@ -33,7 +33,7 @@ namespace PointOfSaleSystem
                 }
 
                 var categoryTable = db.Categories.ToList();
-                if (categoryTable.Count() == 0)
+                if (!categoryTable.Any())
                 {
                     // Add categories to the database
                     foreach (var newCategory in ListOfCategories)
@@ -304,7 +304,7 @@ namespace PointOfSaleSystem
         public int Id { get; set; }
         public int TableId { get; set; }
         public double Price { get; set; }
-        public bool IsPaid { get; set; } 
+        public bool IsPaid { get; set; }
     }
 
     public class DatabaseProductsInOrder
