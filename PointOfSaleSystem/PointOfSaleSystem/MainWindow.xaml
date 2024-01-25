@@ -104,16 +104,89 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+
         </Canvas>
-        
+
         <!-- Panel for Total Price and Reset Button -->
         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="0,538,0,0" Width="341">
             <Label Content="{Binding TotalPrice, FallbackValue='0,00 kr', StringFormat=\{0:F2\} kr}" x:Name="totalPrice" Height="79" Width="300" FontSize="48" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Content="Pay" x:Name="payButton" Click="OnPayOrderClick" Height="100" Width="150" FontSize="48" Margin="0,0,8,0" Background="Lime"/>
                 <Button Content="Reset" x:Name="resetButton" Click="OnResetButtonClick" Height="100" Width="150" FontSize="48" Margin="0,0,0,0" Background="gold"/>
-             </StackPanel>
+            </StackPanel>
         </StackPanel>
+
+        <!-- Panel for editing how much there is of an item-->
+        <Canvas AutomationProperties.AutomationId="AmountEditor" Visibility="Hidden">
+            <StackPanel Width="499" Canvas.Left="333" Canvas.Top="13">
+                <Border Height="100" Width="499" BorderThickness="1" BorderBrush="Black" Background="WhiteSmoke">
+                    <TextBlock x:Name="QuantityKeypadResult" FontSize="80" TextAlignment="Right" Text="999" Margin="0,0,10,0"/>
+                </Border>
+                <Grid Width="499" Height="480" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="QuantityKeypadDisplay">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Row="0" Grid.Column="0" x:Name="QuantityKeypad1">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="1"/>
+                    </Button>
+
+                    <Button Grid.Row="0" Grid.Column="1" x:Name="QuantityKeypad2">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="2"/>
+                    </Button>
+
+                    <Button Grid.Row="0" Grid.Column="2" x:Name="QuantityKeypad3">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="3"/>
+                    </Button>
+
+                    <Button Grid.Row="1" Grid.Column="0" x:Name="QuantityKeypad4">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="4"/>
+                    </Button>
+
+                    <Button Grid.Row="1" Grid.Column="1" x:Name="QuantityKeypad5">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="5"/>
+                    </Button>
+
+                    <Button Grid.Row="1" Grid.Column="2" x:Name="QuantityKeypad6">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="6"/>
+                    </Button>
+
+                    <Button Grid.Row="2" Grid.Column="0" x:Name="QuantityKeypad7">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="7"/>
+                    </Button>
+
+                    <Button Grid.Row="2" Grid.Column="1" x:Name="QuantityKeypad8">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="8"/>
+                    </Button>
+
+                    <Button Grid.Row="2" Grid.Column="2" x:Name="QuantityKeypad9">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="9"/>
+                    </Button>
+
+                    <Button Grid.Row="3" Grid.Column="1" x:Name="QuantityKeypad0">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="80" Text="0"/>
+                    </Button>
+
+                    <Button Grid.Row="3" Grid.Column="0" x:Name="QuantityKeypadClear">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="66" Text="Clear"/>
+                    </Button>
+
+                    <Button Grid.Row="3" Grid.Column="2" x:Name="QuantityKeypadEnter">
+                        <TextBlock  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="66" Text="Enter"/>
+                    </Button>
+
+                </Grid>
+            </StackPanel>
+        </Canvas>
 
     </Grid>
 </Window>
