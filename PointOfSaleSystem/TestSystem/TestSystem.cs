@@ -1,8 +1,12 @@
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Conditions;
+using FlaUI.Core.Input;
 using FlaUI.UIA3;
 using System.Diagnostics;
+using System.Windows.Forms;
+using Application = FlaUI.Core.Application;
+using DataGridViewRow = FlaUI.Core.AutomationElements.DataGridViewRow;
 
 namespace TestSystem
 {
@@ -460,6 +464,82 @@ namespace TestSystem
 
                 var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
                 Trace.Assert(itemPriceTextBlock.Name == "10,00 kr" ^ itemPriceTextBlock.Name == "10.00 kr");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPad()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var EditButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                EditButton.Click();
+
+                var KeypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+                var QuantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
+
+
+                QuantityButton1.Click();
+                QuantityButton1.Click();
+
+                Trace.Assert(KeypadResult.Name == "11");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPadReset()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var EditButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                EditButton.Click();
+
+
+                var QuantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
+
+                QuantityButton1.Click();
+                QuantityButton1.Click();
+
+                var KeypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+
+                Trace.Assert(KeypadResult.Name == "11");
+
+                var backAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadBack")).AsButton();
+                backAmount.Click();
+
+                Trace.Assert(KeypadResult.Name == "1");
+            }
+
+            [TestMethod]
+            public void TestQuantityKeyPadEnter()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var EditButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
+                EditButton.Click();
+
+                var KeypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+
+                var QuantityButton3 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad3")).AsButton();
+
+                var enterAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadEnter")).AsButton();
+
+                QuantityButton3.Click();
+
+                Trace.Assert(KeypadResult.Name == "3");
+
+                enterAmount.Click();
+
+                // Verify the added product details
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "30,00 kr" ^ itemPriceTextBlock.Name == "30.00 kr");
+
+                var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
+                Trace.Assert(itemAmountTextBlock.Name == "3");
+
+                var itemNameTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseNameTextBlock"));
+                Trace.Assert(itemNameTextBlock.Name == "Bearnaise");
             }
         }
     }
