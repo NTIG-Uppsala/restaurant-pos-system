@@ -275,7 +275,7 @@ namespace PointOfSaleSystem
         private void OnQuantityEnterClick(object sender, RoutedEventArgs e)
         {
             // Does nothing if there is no amount in the quantity editor
-            if (QuantityKeypadResult.Text == "")
+            if (QuantityKeypadResult.Text == "" || QuantityKeypadResult.Text == "0")
             {
                 MessageBox.Show("Please specify an amount before pressing enter");
                 return;
