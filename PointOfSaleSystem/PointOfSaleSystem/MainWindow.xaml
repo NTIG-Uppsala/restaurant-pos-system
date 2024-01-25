@@ -166,7 +166,7 @@
 
                     <Button Grid.Row="3" Grid.Column="1" x:Name="QuantityKeypad0" Click="OnQuantityKeyClick" Content="0" FontSize="66"></Button>
 
-                    <Button Grid.Row="3" Grid.Column="0" x:Name="QuantityKeypadClear" Click="OnQuantityBackClick" Content="&#x232B;" FontSize="66"></Button>
+                    <Button Grid.Row="3" Grid.Column="0" x:Name="QuantityKeypadBack" Click="OnQuantityBackClick" Content="&#x232B;" FontSize="66"></Button>
 
                     <Button Grid.Row="3" Grid.Column="2" x:Name="QuantityKeypadEnter" Click="OnQuantityEnterClick" Content="Enter" FontSize="66"></Button>
 
