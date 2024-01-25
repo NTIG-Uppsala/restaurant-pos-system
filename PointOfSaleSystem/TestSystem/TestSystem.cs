@@ -417,6 +417,60 @@ namespace TestSystem
                 Trace.Assert(itemAmountHasBeenAdded);
             }
 
+            [TestMethod]
+            public void TestIncreaseAmountButton()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var plusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseIncreaseAmountButton"));
+                plusButton.Click();
+
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "2");
+                Trace.Assert(itemAmountHasBeenAdded);
+
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "20,00 kr" ^ row.Cells[2].Value.ToString() == "20.00 kr");
+                Trace.Assert(itemPriceHasBeenAdded);
+            }
+
+            [TestMethod]
+            public void TestDecreaseAmountButton()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+                productButton.Click();
+
+                var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
+                minusButton.Click();
+
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
+                Trace.Assert(itemAmountHasBeenAdded);
+
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
+                Trace.Assert(itemPriceHasBeenAdded);
+            }
+
+            [TestMethod]
+            public void TestDecreaseAmountButtonStaysAtOne()
+            {
+                var productButton = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                productButton.Click();
+
+                var minusButton = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseDecreaseAmountButton"));
+                minusButton.Click();
+
+                var itemTable = window.FindFirstDescendant(cf.ByAutomationId("productWindow")).AsDataGridView();
+
+                var itemAmountHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[1].Value.ToString() == "1");
+                Trace.Assert(itemAmountHasBeenAdded);
+
+                var itemPriceHasBeenAdded = itemTable.Rows.OfType<DataGridViewRow>().Any(row => row.Cells[2].Value.ToString() == "10,00 kr" ^ row.Cells[2].Value.ToString() == "10.00 kr");
+                Trace.Assert(itemPriceHasBeenAdded);
+            }
         }
     }
 }
