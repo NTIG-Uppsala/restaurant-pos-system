@@ -22,16 +22,24 @@ namespace PointOfSaleSystem
                 using var db = new POSContext();
                 db.Database.Migrate();
 
-                // Add products to the database
-                foreach (var newProduct in ListOfProducts)
+                var productTable = db.Products.ToList();
+                if (productTable.Count() == 0)
                 {
-                    db.Add(newProduct);
+                    // Add products to the database
+                    foreach (var newProduct in ListOfProducts)
+                    {
+                        db.Add(newProduct);
+                    }
                 }
 
-                // Add categories to the database
-                foreach (var newCategory in ListOfCategories)
+                var categoryTable = db.Categories.ToList();
+                if (categoryTable.Count() == 0)
                 {
-                    db.Add(newCategory);
+                    // Add categories to the database
+                    foreach (var newCategory in ListOfCategories)
+                    {
+                        db.Add(newCategory);
+                    }
                 }
 
                 // Save changes to the database
