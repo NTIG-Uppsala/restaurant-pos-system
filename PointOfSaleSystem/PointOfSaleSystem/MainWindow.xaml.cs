@@ -255,10 +255,12 @@ namespace PointOfSaleSystem
             if (CurrentlyEditing.ProductName != productName)
             {
                 CurrentlyEditing = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName)!;
+                QuantityKeypadResult.Text = "";
                 return;
             }
 
             CurrentlyEditing = null;
+            QuantityKeypadResult.Text = "";
             AmountEditor.Visibility = Visibility.Hidden;
         }
         private void OnQuantityKeyClick(object sender, RoutedEventArgs e)
