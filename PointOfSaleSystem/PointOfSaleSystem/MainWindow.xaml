@@ -106,7 +106,7 @@
                     <DataGridTemplateColumn IsReadOnly="True" Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button AutomationProperties.AutomationId="EditButton" Height="25" Width="25" Background="CornflowerBlue" Click="OnEditButtonClick">
+                                <Button AutomationProperties.AutomationId="{Binding EditButtonId}" Height="25" Width="25" Background="CornflowerBlue" Click="OnEditButtonClick">
                                     <TextBlock Text="&#x1F58A;" FontSize="20" Margin="0,-3,0,0" FontWeight="Bold" VerticalAlignment="Center"/>
                                 </Button>
                             </DataTemplate>

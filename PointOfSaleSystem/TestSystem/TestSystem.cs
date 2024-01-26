@@ -226,19 +226,15 @@ namespace TestSystem
         public void TestReturn()
         {
             var firstCategoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
-
             firstCategoryButton.Click();
 
             var desiredItemButton = window.FindFirstDescendant(cf.ByName("Calzone")).AsButton();
-
             Trace.Assert(desiredItemButton != null);
 
             var returnButton = window.FindFirstDescendant(cf.ByAutomationId("Return")).AsButton();
-
             returnButton.Click();
 
             var popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
-
             Trace.Assert(popularButton != null);
         }
 
@@ -246,15 +242,12 @@ namespace TestSystem
         public void TestSavePrice()
         {
             var categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
-
             categoryButton.Click();
 
             var desiredItemButton = window.FindFirstDescendant(cf.ByName("Calzone")).AsButton();
-
             desiredItemButton.Click();
 
             var returnButton = window.FindFirstDescendant(cf.ByAutomationId("Return")).AsButton();
-
             returnButton.Click();
 
             var totalPrice = window.FindFirstDescendant(cf.ByAutomationId("totalPrice")).AsLabel();
@@ -265,7 +258,6 @@ namespace TestSystem
         public void TestMostPopularItem()
         {
             var popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
-
             Trace.Assert(popularButton != null);
         }
 
@@ -273,11 +265,9 @@ namespace TestSystem
         public void TestMostPopularItemPriority()
         {
             var popularButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
-
             Trace.Assert(popularButton != null);
 
             var shouldNotExistButton = window.FindFirstDescendant(cf.ByName("Hawaii")).AsButton();
-
             Trace.Assert(shouldNotExistButton == null);
         }
 
@@ -289,11 +279,9 @@ namespace TestSystem
             Trace.Assert(firstPageItemButton != null);
 
             var nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextProductButton")).AsButton();
-
             nextSlideButton.Click();
 
             firstPageItemButton = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
-
             Trace.Assert(firstPageItemButton == null);
         }
 
@@ -305,19 +293,15 @@ namespace TestSystem
             Trace.Assert(newCategoryButton == null);
 
             var categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
-
             Trace.Assert(categoryButton != null);
 
             var nextCategoryButton = window.FindFirstDescendant(cf.ByAutomationId("NextCategoryButton")).AsButton();
-
             nextCategoryButton.Click();
 
             categoryButton = window.FindFirstDescendant(cf.ByName("Pizza")).AsButton();
-
             Trace.Assert(categoryButton == null);
 
             newCategoryButton = window.FindFirstDescendant(cf.ByName("Öl/Cider")).AsButton();
-
             Trace.Assert(newCategoryButton != null);
 
         }
@@ -326,7 +310,6 @@ namespace TestSystem
         public void TestHiddenItem()
         {
             var hiddenProduct = window.FindFirstDescendant(cf.ByName("Sleepy Bulldog Pale Ale")).AsButton();
-
             Trace.Assert(hiddenProduct == null);
         }
 
@@ -338,7 +321,6 @@ namespace TestSystem
             Trace.Assert(pageNumber.Name == "1/2");
 
             var nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextProductButton")).AsButton();
-
             nextSlideButton.Click();
 
             Trace.Assert(pageNumber.Name == "2/2");
@@ -352,11 +334,11 @@ namespace TestSystem
             Trace.Assert(pageNumber.Name == "1/2");
 
             var nextSlideButton = window.FindFirstDescendant(cf.ByAutomationId("NextCategoryButton")).AsButton();
-
             nextSlideButton.Click();
 
             Trace.Assert(pageNumber.Name == "2/2");
         }
+        
         [TestClass]
         public class ProductWindowTests
         {
@@ -475,13 +457,11 @@ namespace TestSystem
                 var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
                 editButton.Click();
 
-                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
                 var quantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
-
-
                 quantityButton1.Click();
                 quantityButton1.Click();
 
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
                 Trace.Assert(keypadResult.Name == "11");
             }
 
@@ -494,14 +474,11 @@ namespace TestSystem
                 var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
                 editButton.Click();
 
-
                 var quantityButton1 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad1")).AsButton();
-
                 quantityButton1.Click();
                 quantityButton1.Click();
 
                 var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
-
                 Trace.Assert(keypadResult.Name == "11");
 
                 var backAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadBack")).AsButton();
@@ -519,16 +496,13 @@ namespace TestSystem
                 var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
                 editButton.Click();
 
-                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
-
                 var quantityButton3 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad3")).AsButton();
-
-                var enterAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadEnter")).AsButton();
-
                 quantityButton3.Click();
 
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
                 Trace.Assert(keypadResult.Name == "3");
 
+                var enterAmount = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadEnter")).AsButton();
                 enterAmount.Click();
 
                 // Verify the added product details
@@ -548,6 +522,9 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "30,00 kr" ^ itemPriceTextBlock.Name == "30.00 kr");
+
                 var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
                 editButton.Click();
 
@@ -563,8 +540,28 @@ namespace TestSystem
 
                 var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
                 Trace.Assert(itemAmountTextBlock.Name != "0");
+            }
 
+            [TestMethod]
+            public void TestEditDifferentItem()
+            {
+                var product1Button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                product1Button.Click();
 
+                var product2Button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+                product2Button.Click();
+                
+                var editbutton1 = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseEditButton")).AsButton();
+                editbutton1.Click();
+
+                var quantityButton3 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad3")).AsButton();
+                quantityButton3.Click();
+
+                var editbutton2 = window.FindFirstDescendant(cf.ByAutomationId("KaffeEditButton")).AsButton();
+                editbutton2.Click();
+
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+                Trace.Assert(keypadResult.Name == "3");
             }
         }
     }

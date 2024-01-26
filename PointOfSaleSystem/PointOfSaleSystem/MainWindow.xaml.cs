@@ -10,7 +10,7 @@ namespace PointOfSaleSystem
         private readonly ButtonDisplayLogicService ButtonDisplayLogic = new();
         private readonly ObservableCollection<DisplayedItem> ProductWindowItems = new();
         private readonly string UsedData;
-        private DisplayedItem CurrentlyEditing = null!;
+        private DisplayedItem? CurrentlyEditing;
 
         public MainWindow()
         {
@@ -243,18 +243,25 @@ namespace PointOfSaleSystem
 
         private void OnEditButtonClick(object sender, RoutedEventArgs e)
         {
-            // Gets the item that is currently being edited
+            // Gets the name of the item which edit button has been pressed
             string productName = ((DisplayedItem)((Button)sender).DataContext).ProductName!;
-            CurrentlyEditing = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName)!;
-
-            if (AmountEditor.Visibility == Visibility.Visible)
+            if (CurrentlyEditing == null)
             {
-                AmountEditor.Visibility = Visibility.Hidden;
-            } 
-            else
-            {
+                CurrentlyEditing = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName)!;
                 AmountEditor.Visibility = Visibility.Visible;
+                return;
             }
+
+            if (CurrentlyEditing.ProductName != productName)
+            {
+                CurrentlyEditing = ProductWindowItems.FirstOrDefault(item => item.ProductName == productName)!;
+                QuantityKeypadResult.Text = "";
+                return;
+            }
+
+            CurrentlyEditing = null;
+            QuantityKeypadResult.Text = "";
+            AmountEditor.Visibility = Visibility.Hidden;
         }
         private void OnQuantityKeyClick(object sender, RoutedEventArgs e)
         {
@@ -300,7 +307,7 @@ namespace PointOfSaleSystem
 
             productWindow.ItemsSource = ProductWindowItems;
 
-            CurrentlyEditing = null!;
+            CurrentlyEditing = null;
             AmountEditor.Visibility = Visibility.Hidden;
 
             QuantityKeypadResult.Text = "";
