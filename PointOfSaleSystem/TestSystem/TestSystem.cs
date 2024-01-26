@@ -522,6 +522,9 @@ namespace TestSystem
                 var button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
                 button.Click();
 
+                var itemPriceTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaisePriceTextBlock"));
+                Trace.Assert(itemPriceTextBlock.Name == "30,00 kr" ^ itemPriceTextBlock.Name == "30.00 kr");
+
                 var editButton = window.FindFirstDescendant(cf.ByAutomationId("EditButton")).AsButton();
                 editButton.Click();
 
@@ -537,8 +540,28 @@ namespace TestSystem
 
                 var itemAmountTextBlock = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseAmountTextBlock"));
                 Trace.Assert(itemAmountTextBlock.Name != "0");
+            }
 
+            [TestMethod]
+            public void TestEditDifferentItem()
+            {
+                var product1Button = window.FindFirstDescendant(cf.ByName("Bearnaise")).AsButton();
+                product1Button.Click();
 
+                var product2Button = window.FindFirstDescendant(cf.ByName("Kaffe")).AsButton();
+                product2Button.Click();
+                
+                var editbutton1 = window.FindFirstDescendant(cf.ByAutomationId("BearnaiseEditButton")).AsButton();
+                editbutton1.Click();
+
+                var quantityButton3 = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypad3")).AsButton();
+                quantityButton3.Click();
+
+                var editbutton2 = window.FindFirstDescendant(cf.ByAutomationId("KaffeEditButton")).AsButton();
+                editbutton2.Click();
+
+                var keypadResult = window.FindFirstDescendant(cf.ByAutomationId("QuantityKeypadResult")).AsTextBox();
+                Trace.Assert(keypadResult.Name == "3");
             }
         }
     }
