@@ -102,6 +102,20 @@ namespace PointOfSaleSystem
             }
         }
 
+        private string editButtonId;
+        public string EditButtonId
+        {
+            get { return editButtonId; }
+            set
+            {
+                if (value != editButtonId)
+                {
+                    editButtonId = value;
+                    OnPropertyChanged(nameof(EditButtonId));
+                }
+            }
+        }
+
         private string amountTextBlockId;
         public string AmountTextBlockId
         {
@@ -156,6 +170,7 @@ namespace PointOfSaleSystem
             NameTextBlockId = name + "NameTextBlock";
             AmountTextBlockId = name + "AmountTextBlock";
             PriceTextBlockId = name + "PriceTextBlock";
+            EditButtonId = name + "EditButton";
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
