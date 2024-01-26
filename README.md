@@ -21,7 +21,7 @@ This project is a Point of sale system made with WPF and C#.
 When the project is run a database is created at `C:\Users\%UserName%\AppData\Local\Restaurant-POS\`
 
 ## Programming languages
-* C# version 12
+* C# version 10
 * .NET version 6.0.202
 
 ## Linting
